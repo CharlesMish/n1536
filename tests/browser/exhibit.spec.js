@@ -367,6 +367,13 @@ test("@mobile portrait and landscape retain reachable, non-overlapping controls"
 
 test("@reduced reduced motion removes morphs while keeping order inspection available", async ({ page }, testInfo) => {
   const findings = await installPageMonitor(page);
+  // Apply this explicitly before navigation as well as through the project
+  // context. This keeps the assertion stable if a Chromium/Playwright pairing
+  // drops the context-level media preference while launching SwiftShader.
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  expect(
+    await page.evaluate(() => matchMedia("(prefers-reduced-motion: reduce)").matches),
+  ).toBe(true);
   const { app } = await openExhibit(page, "webgl2");
 
   await expect(app).toHaveAttribute("data-reduced-motion", "true");
