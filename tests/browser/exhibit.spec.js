@@ -258,6 +258,9 @@ test("@desktop WebGL2 exhibit supports the authored controls and sphere drag", a
   await expect(app).toHaveAttribute("data-method", "fibonacci");
   await page.keyboard.press("t");
   await expect(app).toHaveAttribute("data-theme", "uv");
+  await expect(app).toHaveAttribute("data-transitioning", "false", {
+    timeout: 5_000,
+  });
 
   await expectNoViewportOverflow(page);
   await attachScreenshot(page, testInfo, "controls-and-drag");
@@ -282,6 +285,9 @@ test("@desktop twelve New random interactions stay deterministic and responsive"
 
   expect(observedSeeds).toEqual(EXPECTED_RESEEDS.map(([seed]) => seed));
   expect(observedSeeds).toContain(83407);
+  await expect(app).toHaveAttribute("data-transitioning", "false", {
+    timeout: 5_000,
+  });
   await expectNoViewportOverflow(page);
   await attachScreenshot(page, testInfo, "after-twelve-reseeds");
   await expectCleanPage(page, findings);
@@ -315,6 +321,9 @@ test("@canvas2d forced Canvas2D preserves data and inspection controls", async (
   await page.locator("#themeBtn").click();
   await expect(app).toHaveAttribute("data-theme", "paper");
   await dragSphere(page);
+  await expect(app).toHaveAttribute("data-transitioning", "false", {
+    timeout: 5_000,
+  });
 
   await expectNoViewportOverflow(page);
   await attachScreenshot(page, testInfo, "forced-canvas2d");
@@ -325,12 +334,15 @@ test("@mobile portrait and landscape retain reachable, non-overlapping controls"
   const findings = await installPageMonitor(page);
   const { app } = await openExhibit(page, "webgl2");
 
-  if (page.viewportSize().width <= 700) {
+  const viewport = page.viewportSize();
+  const compactPlate =
+    viewport.width <= 700 || (viewport.width <= 900 && viewport.height <= 500);
+  if (compactPlate) {
     await expect(page.locator("#usePlate")).toBeHidden();
   } else {
     await expect(page.locator("#usePlate")).toBeVisible();
   }
-  if (page.viewportSize().width <= 420) {
+  if (viewport.width <= 420) {
     await expect(page.locator("#paperLabel")).toBeHidden();
     await expect(page.locator("#uvLabel")).toBeHidden();
   } else {
@@ -358,6 +370,9 @@ test("@mobile portrait and landscape retain reachable, non-overlapping controls"
   await page.locator("#themeBtn").click();
   await expect(app).toHaveAttribute("data-theme", "paper");
   await dragSphere(page, { x: 64, y: -36 });
+  await expect(app).toHaveAttribute("data-transitioning", "false", {
+    timeout: 5_000,
+  });
 
   await expectNoViewportOverflow(page);
   await expectBottomControlsDoNotOverlap(page);
