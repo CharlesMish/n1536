@@ -108,6 +108,7 @@ async function openExhibit(page, expectedRenderer) {
   await expect(page.getByText("Same count. Different claims.")).toBeVisible();
   await expect(app).toHaveAttribute("data-seed", String(INITIAL_SEED));
   await expect(app).toHaveAttribute("data-method", "fibonacci");
+  await expect(page.locator("#walkStat")).toBeHidden();
   await page.waitForLoadState("networkidle");
 
   return { app, canvas };
@@ -179,7 +180,7 @@ async function expectBottomControlsDoNotOverlap(page) {
 async function attachScreenshot(page, testInfo, label) {
   const filename = `${testInfo.project.name}-${label}.png`;
   const path = testInfo.outputPath(filename);
-  await page.screenshot({ path, animations: "disabled" });
+  await page.screenshot({ path, animations: "disabled", timeout: 45_000 });
   await testInfo.attach(label, { path, contentType: "image/png" });
 }
 
@@ -219,6 +220,7 @@ test("@desktop WebGL2 exhibit supports the authored controls and sphere drag", a
   await expect(app).toHaveAttribute("data-method", "sobol");
   await expect(page.locator("#methodClaim")).toHaveText("Prefix coverage");
   await expect(page.locator("#methodNote")).toContainText("128 and 512 prefixes");
+  await expect(page.locator("#plateCaption")).toContainText("sits on a pole");
 
   await page.locator("#themeBtn").click();
   await expect(app).toHaveAttribute("data-theme", "paper");
@@ -234,6 +236,7 @@ test("@desktop WebGL2 exhibit supports the authored controls and sphere drag", a
   await expect(page.locator("#walkStat")).toBeVisible();
   await expect.poll(() => app.getAttribute("data-order")).not.toBe(initialOrder);
   await page.locator("#walkBtn").click();
+  await expect(page.locator("#walkStat")).toBeHidden();
 
   const plate = page.locator("#usePlate");
   const stage = page.locator("#stage");

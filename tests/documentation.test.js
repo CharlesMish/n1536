@@ -2,16 +2,17 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-const [readme, limitations, html, headers, wrangler] = await Promise.all([
+const [readme, limitations, html, headers, wrangler, main] = await Promise.all([
   readFile(new URL("../README.md", import.meta.url), "utf8"),
   readFile(new URL("../docs/CLAIMS_AND_LIMITATIONS.md", import.meta.url), "utf8"),
   readFile(new URL("../index.html", import.meta.url), "utf8"),
   readFile(new URL("../public/_headers", import.meta.url), "utf8"),
   readFile(new URL("../wrangler.jsonc", import.meta.url), "utf8"),
+  readFile(new URL("../src/main.js", import.meta.url), "utf8"),
 ]);
 
 test("publication claims remain bounded in source and documentation", () => {
-  const combined = `${readme}\n${limitations}\n${html}`;
+  const combined = `${readme}\n${limitations}\n${html}\n${main}`;
 
   assert.match(combined, /Same count\. Different claims\./);
   assert.match(combined, /local spacing statistic, not a universal quality ranking/i);
@@ -20,6 +21,7 @@ test("publication claims remain bounded in source and documentation", () => {
   assert.match(combined, /canonical zero point/i);
   assert.match(combined, /128[^\n]*512/i);
   assert.match(combined, /initial random seed is `?4217`?/i);
+  assert.match(main, /Square origin \(0,0\) sits on a pole/);
 });
 
 test("strict hosted policy allows only same-origin scripts and styles", () => {
