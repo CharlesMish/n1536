@@ -33,8 +33,8 @@ const METHODS = Object.freeze({
       "A canonical low-discrepancy square, wrapped with equal area. The 128 and 512 prefixes remain nested.",
     plateTitle: "Fig. 02 — generating square",
     plateKey: "unit square + disk",
-    plateCaption: "128 / 512 / 1,536 by generation range.",
-    plateSide: "sequence",
+    plateCaption: "128 / 512 / 1,536. Square origin (0,0) sits on a pole.",
+    plateSide: "origin → pole",
   },
   fibonacci: {
     index: "03",
