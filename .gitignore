@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.wrangler/
+playwright-report/
+test-results/
+*.log
+# The byte-identical source remains in the uploaded workspace; the public
+# repository keeps a deterministic gzip to avoid committing a 1.17 MB bundle.
+archive/same-n-standalone-v1.html
+archive/same-n-standalone-v1.html.gz
+archive/same-n-standalone-v1.html.xz

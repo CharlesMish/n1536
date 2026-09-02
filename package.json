@@ -1,0 +1,26 @@
+{
+  "name": "n1536",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "serve:dist": "node scripts/serve-dist.mjs",
+    "test": "npm run test:unit",
+    "test:unit": "node --test tests/*.test.js",
+    "test:browser": "npm run build && playwright test",
+    "test:browser:ci": "playwright test",
+    "check:csp": "node scripts/check-build.mjs",
+    "validate": "npm test && npm run build && npm run check:csp"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "vite": "^8.0.0",
+    "wrangler": "^4.0.0"
+  }
+}

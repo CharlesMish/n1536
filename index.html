@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0d0b18" />
+    <meta
+      name="description"
+      content="SAME N — three spherical point sets with the same count and different, bounded claims."
+    />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; base-uri 'none'; connect-src 'self'; font-src 'self'; form-action 'none'; img-src 'self'; manifest-src 'self'; media-src 'none'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'none'; upgrade-insecure-requests"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <title>SAME N — v0.2 exhibit</title>
+  </head>
+  <body>
+    <div class="same-n theme-uv" id="app">
+      <section class="field-stage" id="stage" aria-labelledby="study-title">
+        <canvas
+          class="field-canvas"
+          id="field"
+          aria-label="Interactive sphere of 1536 sample points. Drag to rotate."
+        ></canvas>
+
+        <div class="field-loader" id="loader" aria-hidden="false">
+          <span></span>
+          <p>Forming field</p>
+        </div>
+
+        <div class="field-fallback" id="fallback" hidden role="status">
+          <p>The field could not be drawn in this browser.</p>
+          <span data-fallback-detail>
+            The sampling exhibit needs a canvas or hardware-accelerated graphics.
+          </span>
+        </div>
+
+        <header class="study-header">
+          <div class="study-registration">
+            <span>CMISH / FIELD STUDY 02</span>
+            <span>N = 1,536</span>
+            <b>v0.2</b>
+          </div>
+          <h1 id="study-title">SAME N</h1>
+          <p>Same count. Different claims.</p>
+        </header>
+
+        <button type="button" class="theme-switch" id="themeBtn" aria-label="Switch presentation">
+          <span id="paperLabel">Paper</span>
+          <i aria-hidden="true"></i>
+          <span id="uvLabel" class="is-active">UV</span>
+        </button>
+
+        <aside class="method-reading" aria-live="polite">
+          <span class="method-index" id="methodIndex">03</span>
+          <div>
+            <h2 id="methodName">Fibonacci</h2>
+            <div class="method-claim" id="methodClaim">Fixed instrument</div>
+            <p id="methodNote">
+              A lattice organized by the golden angle. The set is the thing you keep.
+            </p>
+            <dl>
+              <div>
+                <dt>
+                  <abbr title="Coefficient of variation of nearest-neighbor chord distances">NN CV</abbr>
+                </dt>
+                <dd id="methodCv">—</dd>
+              </div>
+              <div>
+                <dt>Seed</dt>
+                <dd id="methodSeed">fixed</dd>
+              </div>
+              <div class="walk-stat" id="walkStat" hidden>
+                <dt>Order</dt>
+                <dd id="walkVal">0001 / 1536</dd>
+              </div>
+            </dl>
+          </div>
+        </aside>
+
+        <figure class="use-plate" id="usePlate" tabindex="0">
+          <header>
+            <span id="plateTitle">Fig. 03 — lattice print</span>
+            <span id="plateKey">equal-area disk</span>
+          </header>
+          <canvas id="plate" width="560" height="220"></canvas>
+          <figcaption>
+            <span id="plateCaption">A single N, evenly seated.</span>
+            <span id="plateSide">spiral order</span>
+          </figcaption>
+        </figure>
+
+        <nav class="method-nav" aria-label="Point-placement method">
+          <button type="button" data-method="random"><span>01</span>Random</button>
+          <button type="button" data-method="sobol"><span>02</span>Sobol</button>
+          <button type="button" data-method="fibonacci" class="is-active">
+            <span>03</span>Fibonacci
+          </button>
+        </nav>
+
+        <div class="study-tools">
+          <button type="button" id="spacingBtn" aria-pressed="false">
+            <span class="tool-dot" aria-hidden="true"></span>Spacing
+          </button>
+          <button type="button" id="walkBtn" aria-pressed="false">
+            <span class="tool-dot" aria-hidden="true"></span>Order
+          </button>
+          <button type="button" id="reseedBtn">New random</button>
+          <span class="drag-note">Drag to turn</span>
+        </div>
+
+        <div class="field-keys">
+          <div class="field-key" id="spacingKey" aria-hidden="true">
+            <span class="key-dot key-dot-alert"></span>
+            <p>Below local spacing reference</p>
+          </div>
+          <div class="field-key" id="walkKey" aria-hidden="true">
+            <span class="key-dot key-dot-accent"></span>
+            <p>Generation order</p>
+          </div>
+        </div>
+
+        <div class="registration-corner registration-corner-nw" aria-hidden="true"></div>
+        <div class="registration-corner registration-corner-se" aria-hidden="true"></div>
+        <p class="sr-only" id="live" aria-live="polite"></p>
+        <p class="sr-only" id="method-limitations">
+          Nearest-neighbor coefficient of variation is a local spacing statistic, not a universal
+          ranking. Transitions use a spatially arranged presentation correspondence; they are not
+          mathematical point transport.
+        </p>
+      </section>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
