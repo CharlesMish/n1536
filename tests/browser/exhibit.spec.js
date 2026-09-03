@@ -103,9 +103,15 @@ async function openExhibit(page, expectedRenderer) {
   });
   await expect(canvas).toHaveAttribute("data-renderer", expectedRenderer);
   await expect(page.locator("#loader")).toHaveAttribute("aria-hidden", "true");
+  await expect(page.locator("#stage")).toHaveAttribute("aria-busy", "false");
   await expect(page.locator("#fallback")).toBeHidden();
   await expect(page.getByRole("heading", { level: 1, name: "SAME N" })).toBeVisible();
   await expect(page.getByText("Same count. Different claims.")).toBeVisible();
+  await expect(canvas).toHaveAttribute("tabindex", "0");
+  await expect(canvas).toHaveAttribute("aria-describedby", /field-instructions/);
+  await expect(
+    page.locator('[aria-live]:not([aria-live="off"]), [role="status"], [role="alert"]'),
+  ).toHaveCount(1);
   await expect(app).toHaveAttribute("data-seed", String(INITIAL_SEED));
   await expect(app).toHaveAttribute("data-method", "fibonacci");
   await expect(page.locator("#walkStat")).toBeHidden();
@@ -122,6 +128,7 @@ async function expectNoViewportOverflow(page) {
       ".method-reading",
       ".method-nav",
       ".study-tools",
+      ".field-keys",
       ".use-plate",
     ];
     const visibleRects = selectors.flatMap((selector) => {
@@ -157,24 +164,55 @@ async function expectNoViewportOverflow(page) {
 async function expectBottomControlsDoNotOverlap(page) {
   const boxes = await page.evaluate(() => {
     const read = (selector) => {
-      const rect = document.querySelector(selector).getBoundingClientRect();
+      const element = document.querySelector(selector);
+      if (!element || element.getClientRects().length === 0) return null;
+      const rect = element.getBoundingClientRect();
       return { left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom };
     };
+    const tools = Array.from(
+      document.querySelectorAll(".study-tools button:not([hidden])"),
+      (element) => {
+        const rect = element.getBoundingClientRect();
+        return { left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom };
+      },
+    );
+
     return {
       reading: read(".method-reading"),
-      tools: read(".study-tools"),
+      tools,
       navigation: read(".method-nav"),
+      keys: read(".field-keys"),
     };
   });
 
   const overlaps = (first, second) =>
+    first &&
+    second &&
     first.left < second.right - 1 &&
     first.right > second.left + 1 &&
     first.top < second.bottom - 1 &&
     first.bottom > second.top + 1;
 
-  expect(overlaps(boxes.reading, boxes.tools)).toBe(false);
-  expect(overlaps(boxes.tools, boxes.navigation)).toBe(false);
+  for (const tool of boxes.tools) {
+    expect(overlaps(boxes.reading, tool)).toBe(false);
+    expect(overlaps(tool, boxes.navigation)).toBe(false);
+    expect(overlaps(tool, boxes.keys)).toBe(false);
+  }
+  expect(overlaps(boxes.reading, boxes.keys)).toBe(false);
+}
+
+async function expectOpenPlateClearsTools(page) {
+  const clearance = await page.evaluate(() => {
+    const plate = document.querySelector(".use-plate.is-mobile-open")?.getBoundingClientRect();
+    const toolTops = Array.from(
+      document.querySelectorAll(".study-tools button:not([hidden])"),
+      (element) => element.getBoundingClientRect().top,
+    );
+    return plate && toolTops.length ? Math.min(...toolTops) - plate.bottom : null;
+  });
+
+  expect(clearance, "the open inspection plate should not cover compact controls").not.toBeNull();
+  expect(clearance).toBeGreaterThanOrEqual(8);
 }
 
 async function attachScreenshot(page, testInfo, label) {
@@ -237,6 +275,11 @@ test("@desktop WebGL2 exhibit supports the authored controls and sphere drag", a
   await expect.poll(() => app.getAttribute("data-order")).not.toBe(initialOrder);
   await page.locator("#walkBtn").click();
   await expect(page.locator("#walkStat")).toBeHidden();
+  await page.locator("#walkBtn").focus();
+  await page.keyboard.press("o");
+  await expect(page.locator("#walkStat")).toBeVisible();
+  await page.keyboard.press("o");
+  await expect(page.locator("#walkStat")).toBeHidden();
 
   const plate = page.locator("#usePlate");
   const stage = page.locator("#stage");
@@ -261,6 +304,16 @@ test("@desktop WebGL2 exhibit supports the authored controls and sphere drag", a
   await expect(app).toHaveAttribute("data-method", "fibonacci");
   await page.keyboard.press("t");
   await expect(app).toHaveAttribute("data-theme", "uv");
+  await page.locator("#field").focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(page.locator("#live")).toHaveText("Sphere rotated right.");
+  await page.evaluate(() => {
+    document.activeElement.dispatchEvent(
+      new KeyboardEvent("keydown", { bubbles: true, key: "t", repeat: true }),
+    );
+  });
+  await expect(app).toHaveAttribute("data-theme", "uv");
+  await expect(page.locator("#stage")).toHaveCSS("touch-action", "pinch-zoom");
   await expect(app).toHaveAttribute("data-transitioning", "false", {
     timeout: 5_000,
   });
@@ -342,12 +395,26 @@ test("@mobile portrait and landscape retain reachable, non-overlapping controls"
     viewport.width <= 700 || (viewport.width <= 900 && viewport.height <= 500);
   if (compactPlate) {
     await expect(page.locator("#usePlate")).toBeHidden();
+    await expect(page.locator("#inspectBtn")).toBeVisible();
+    await page.locator("#inspectBtn").click();
+    await expect(page.locator("#inspectBtn")).toHaveAttribute("aria-expanded", "true");
+    await expect(page.locator("#usePlate")).toBeVisible();
+    await expectOpenPlateClearsTools(page);
+    await expectNoViewportOverflow(page);
+    await page.keyboard.press("Escape");
+    await expect(page.locator("#inspectBtn")).toHaveAttribute("aria-expanded", "false");
+    await expect(page.locator("#usePlate")).toBeHidden();
   } else {
     await expect(page.locator("#usePlate")).toBeVisible();
+    await expect(page.locator("#inspectBtn")).toBeHidden();
   }
   if (viewport.width <= 420) {
     await expect(page.locator("#paperLabel")).toBeHidden();
     await expect(page.locator("#uvLabel")).toBeHidden();
+    const themeBox = await page.locator("#themeBtn").boundingBox();
+    expect(themeBox).not.toBeNull();
+    expect(themeBox.width).toBeGreaterThanOrEqual(44);
+    expect(themeBox.height).toBeGreaterThanOrEqual(44);
   } else {
     await expect(page.locator("#paperLabel")).toBeVisible();
     await expect(page.locator("#uvLabel")).toBeVisible();
@@ -363,12 +430,25 @@ test("@mobile portrait and landscape retain reachable, non-overlapping controls"
 
   await page.getByRole("button", { name: /Sobol/ }).click();
   await expect(app).toHaveAttribute("data-method", "sobol");
+  if (viewport.height > 500) {
+    await expect(page.locator("#methodNote")).toBeVisible();
+  } else {
+    await expect(page.locator("#methodNote")).toBeHidden();
+  }
   await page.locator("#spacingBtn").click();
   await expect(page.locator("#spacingBtn")).toHaveAttribute("aria-pressed", "true");
   const firstOrder = await app.getAttribute("data-order");
   await page.locator("#walkBtn").click();
   await expect(page.locator("#walkStat")).toBeVisible();
   await expect.poll(() => app.getAttribute("data-order")).not.toBe(firstOrder);
+  await expectBottomControlsDoNotOverlap(page);
+  if (compactPlate) {
+    await page.locator("#inspectBtn").click();
+    await expect(page.locator("#usePlate")).toBeVisible();
+    await expect(page.locator(".field-keys")).toBeHidden();
+    await page.locator("#inspectBtn").click();
+    await expect(page.locator("#usePlate")).toBeHidden();
+  }
   await page.locator("#walkBtn").click();
   await page.locator("#themeBtn").click();
   await expect(app).toHaveAttribute("data-theme", "paper");

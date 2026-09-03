@@ -12,6 +12,15 @@ import {
   matrix4,
 } from "./renderers.js";
 import { drawUsePlate } from "./plate.js";
+import {
+  applyThemePresentation,
+  hideLoader,
+  isCompactPlateViewport,
+  requiredElement,
+  setPressedState,
+  shouldIgnoreGlobalShortcut,
+  showFallback,
+} from "./shell.js";
 
 const METHODS = Object.freeze({
   random: {
@@ -48,12 +57,6 @@ const METHODS = Object.freeze({
     plateSide: "spiral order",
   },
 });
-
-function requiredElement(id) {
-  const element = document.getElementById(id);
-  if (!element) throw new Error(`Required exhibit element #${id} is missing`);
-  return element;
-}
 
 function afterTwoFrames() {
   return new Promise((resolve) => {
@@ -110,17 +113,6 @@ function formatOrder(value) {
   return `${String(index + 1).padStart(4, "0")} / ${POINT_COUNT}`;
 }
 
-function hideLoader(loader) {
-  loader.classList.add("is-hidden");
-  loader.setAttribute("aria-hidden", "true");
-}
-
-function showFallback(fallback, detail) {
-  fallback.hidden = false;
-  const detailElement = fallback.querySelector("[data-fallback-detail]");
-  if (detailElement && detail) detailElement.textContent = detail;
-}
-
 function isInteractiveTarget(target) {
   return Boolean(
     target.closest?.(
@@ -151,6 +143,7 @@ async function initializeExhibit() {
   const walkKey = requiredElement("walkKey");
   const walkStat = requiredElement("walkStat");
   const walkValue = requiredElement("walkVal");
+  const inspectButton = requiredElement("inspectBtn");
   const reseedButton = requiredElement("reseedBtn");
   const liveRegion = requiredElement("live");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -318,31 +311,33 @@ async function initializeExhibit() {
     updateReading();
   }
 
-  function setTheme(nextTheme) {
+  function setTheme(nextTheme, { announce = true } = {}) {
     theme = nextTheme;
-    app.className = `same-n theme-${theme}`;
-    requiredElement("paperLabel").classList.toggle("is-active", theme === "paper");
-    requiredElement("uvLabel").classList.toggle("is-active", theme === "uv");
-    themeButton.setAttribute(
-      "aria-label",
-      `Switch to ${theme === "uv" ? "Paper" : "UV"} presentation`,
-    );
+    applyThemePresentation({
+      app,
+      button: themeButton,
+      paperLabel: requiredElement("paperLabel"),
+      uvLabel: requiredElement("uvLabel"),
+      theme,
+    });
     updateStateAttributes();
     redrawPlate();
+    if (announce) {
+      liveRegion.textContent = `${theme === "paper" ? "Paper" : "UV"} presentation.`;
+    }
   }
 
   function setSpacing(nextSpacing) {
     spacing = nextSpacing;
-    spacingButton.classList.toggle("is-active", spacing);
-    spacingButton.setAttribute("aria-pressed", String(spacing));
+    setPressedState(spacingButton, spacing);
     spacingKey.classList.toggle("is-visible", spacing);
     spacingKey.setAttribute("aria-hidden", String(!spacing));
+    liveRegion.textContent = `Spacing inspection ${spacing ? "on" : "off"}.`;
   }
 
   function setWalking(nextWalking) {
     walking = nextWalking;
-    walkButton.classList.toggle("is-active", walking);
-    walkButton.setAttribute("aria-pressed", String(walking));
+    setPressedState(walkButton, walking);
     walkKey.classList.toggle("is-visible", walking);
     walkKey.setAttribute("aria-hidden", String(!walking));
     walkStat.hidden = !walking;
@@ -374,18 +369,6 @@ async function initializeExhibit() {
     updateReading();
   });
 
-  window.addEventListener("keydown", (event) => {
-    if (event.altKey || event.ctrlKey || event.metaKey) return;
-    if (event.key === "1") selectMethod("random");
-    if (event.key === "2") selectMethod("sobol");
-    if (event.key === "3") selectMethod("fibonacci");
-    if (event.key.toLowerCase() === "p") setSpacing(!spacing);
-    if (event.key.toLowerCase() === "o") setWalking(!walking);
-    if (event.key.toLowerCase() === "t") {
-      setTheme(theme === "uv" ? "paper" : "uv");
-    }
-  });
-
   reducedMotion.addEventListener?.("change", () => {
     if (reducedMotion.matches && transition.active) {
       sourcePositions.set(targetPositions);
@@ -396,6 +379,10 @@ async function initializeExhibit() {
       transition.pulse = 0;
       uploadPoints();
     }
+    if (reducedMotion.matches) {
+      rotationVelocityX = 0;
+      rotationVelocityY = 0;
+    }
     updateStateAttributes();
   });
 
@@ -403,6 +390,7 @@ async function initializeExhibit() {
   let height = 1;
   let pixelRatio = 1;
   let pointScale = 32;
+  let mobilePlateOpen = false;
   let updatePlateClip = () => {};
 
   function resize() {
@@ -415,6 +403,9 @@ async function initializeExhibit() {
     renderer.resize(canvas.width, canvas.height);
     pointScale = Math.max(22, Math.min(36, Math.min(width, height) * 0.042)) *
       pixelRatio;
+    if (!isCompactPlateViewport(width, height) && mobilePlateOpen) {
+      setMobilePlate(false);
+    }
     updatePlateClip();
   }
 
@@ -444,11 +435,40 @@ async function initializeExhibit() {
     updatePlateClip();
   }
 
-  usePlate.addEventListener("pointerenter", () => setPlateInspection(true));
-  usePlate.addEventListener("pointerleave", () => setPlateInspection(false));
-  usePlate.addEventListener("focusin", () => setPlateInspection(true));
+  let plateHovered = false;
+  let plateFocused = false;
+
+  function syncPlateInspection() {
+    setPlateInspection(plateHovered || plateFocused || mobilePlateOpen);
+  }
+
+  function setMobilePlate(open) {
+    mobilePlateOpen = open && isCompactPlateViewport(width, height);
+    usePlate.classList.toggle("is-mobile-open", mobilePlateOpen);
+    setPressedState(inspectButton, mobilePlateOpen);
+    inspectButton.setAttribute("aria-expanded", String(mobilePlateOpen));
+    syncPlateInspection();
+    liveRegion.textContent = `Inspection plate ${mobilePlateOpen ? "opened" : "closed"}.`;
+  }
+
+  inspectButton.addEventListener("click", () => setMobilePlate(!mobilePlateOpen));
+  usePlate.addEventListener("pointerenter", () => {
+    plateHovered = true;
+    syncPlateInspection();
+  });
+  usePlate.addEventListener("pointerleave", () => {
+    plateHovered = false;
+    syncPlateInspection();
+  });
+  usePlate.addEventListener("focusin", () => {
+    plateFocused = true;
+    syncPlateInspection();
+  });
   usePlate.addEventListener("focusout", (event) => {
-    if (!usePlate.contains(event.relatedTarget)) setPlateInspection(false);
+    if (!usePlate.contains(event.relatedTarget)) {
+      plateFocused = false;
+      syncPlateInspection();
+    }
   });
 
   const plateResizeObserver = new ResizeObserver(updatePlateClip);
@@ -462,12 +482,22 @@ async function initializeExhibit() {
   let previousPointerX = 0;
   let previousPointerY = 0;
   let previousPointerTime = 0;
+  let activePointerId = null;
   const light = [-0.32, 0.48, 0.82];
   const targetLight = [-0.32, 0.48, 0.82];
 
   stage.addEventListener("pointerdown", (event) => {
-    if (event.button !== 0 || isInteractiveTarget(event.target)) return;
+    if (
+      event.button !== 0 ||
+      event.isPrimary === false ||
+      activePointerId !== null ||
+      isInteractiveTarget(event.target)
+    ) {
+      return;
+    }
+    canvas.focus({ preventScroll: true });
     dragging = true;
+    activePointerId = event.pointerId;
     previousPointerX = event.clientX;
     previousPointerY = event.clientY;
     previousPointerTime = performance.now();
@@ -478,6 +508,7 @@ async function initializeExhibit() {
   });
 
   stage.addEventListener("pointermove", (event) => {
+    if (event.isPrimary === false) return;
     const bounds = canvas.getBoundingClientRect();
     targetLight[0] =
       ((event.clientX - bounds.left) / Math.max(1, bounds.width) * 2 - 1) * 0.55;
@@ -486,7 +517,7 @@ async function initializeExhibit() {
     targetLight[2] = 1;
     normalize(targetLight);
 
-    if (!dragging) return;
+    if (!dragging || event.pointerId !== activePointerId) return;
     event.preventDefault();
     const now = performance.now();
     const elapsed = Math.max(8, now - previousPointerTime);
@@ -504,16 +535,64 @@ async function initializeExhibit() {
   });
 
   function endPointer(event) {
-    if (!dragging) return;
+    if (!dragging || event.pointerId !== activePointerId) return;
     dragging = false;
     if (stage.hasPointerCapture(event.pointerId)) {
       stage.releasePointerCapture(event.pointerId);
     }
+    activePointerId = null;
     delete stage.dataset.dragging;
+    if (reducedMotion.matches) {
+      rotationVelocityX = 0;
+      rotationVelocityY = 0;
+    }
   }
 
   stage.addEventListener("pointerup", endPointer);
   stage.addEventListener("pointercancel", endPointer);
+
+  window.addEventListener("keydown", (event) => {
+    const canvasFocused = document.activeElement === canvas;
+    const repeatableCanvasArrow = canvasFocused && event.key.startsWith("Arrow");
+    if (shouldIgnoreGlobalShortcut(event, { allowRepeat: repeatableCanvasArrow })) return;
+
+    const key = event.key.toLowerCase();
+    let handled = true;
+
+    if (event.key === "1") selectMethod("random");
+    else if (event.key === "2") selectMethod("sobol");
+    else if (event.key === "3") selectMethod("fibonacci");
+    else if (key === "p") setSpacing(!spacing);
+    else if (key === "o") setWalking(!walking);
+    else if (key === "t") setTheme(theme === "uv" ? "paper" : "uv");
+    else if (canvasFocused && event.key === "ArrowLeft") {
+      rotationY -= 0.12;
+      rotationVelocityX = 0;
+      rotationVelocityY = 0;
+      if (!event.repeat) liveRegion.textContent = "Sphere rotated left.";
+    } else if (canvasFocused && event.key === "ArrowRight") {
+      rotationY += 0.12;
+      rotationVelocityX = 0;
+      rotationVelocityY = 0;
+      if (!event.repeat) liveRegion.textContent = "Sphere rotated right.";
+    } else if (canvasFocused && event.key === "ArrowUp") {
+      rotationX = Math.max(-1.05, rotationX - 0.1);
+      rotationVelocityX = 0;
+      rotationVelocityY = 0;
+      if (!event.repeat) liveRegion.textContent = "Sphere rotated up.";
+    } else if (canvasFocused && event.key === "ArrowDown") {
+      rotationX = Math.min(1.05, rotationX + 0.1);
+      rotationVelocityX = 0;
+      rotationVelocityY = 0;
+      if (!event.repeat) liveRegion.textContent = "Sphere rotated down.";
+    } else if (event.key === "Escape" && mobilePlateOpen) {
+      setMobilePlate(false);
+    } else {
+      handled = false;
+    }
+
+    if (handled) event.preventDefault();
+  });
 
   function advanceWalk(now, delta) {
     if (!walking) return false;
@@ -632,6 +711,7 @@ async function initializeExhibit() {
       showFallback(
         fallback,
         error instanceof Error ? error.message : "The field failed while drawing.",
+        liveRegion,
       );
       return;
     }
@@ -652,13 +732,14 @@ async function initializeExhibit() {
 
   updateOrderValue();
   updateReading();
-  setTheme(theme);
+  setTheme(theme, { announce: false });
   animationFrame = requestAnimationFrame(drawFrame);
 }
 
 async function start() {
   const loader = requiredElement("loader");
   const fallback = requiredElement("fallback");
+  const liveRegion = requiredElement("live");
 
   try {
     await afterTwoFrames();
@@ -669,6 +750,7 @@ async function start() {
     showFallback(
       fallback,
       error instanceof Error ? error.message : "The field failed to form.",
+      liveRegion,
     );
   }
 }

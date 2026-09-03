@@ -37,6 +37,9 @@ jobs:
           - desktop-canvas2d
           - mobile-portrait
           - mobile-landscape
+          - compact-landscape
+          - narrow-portrait
+          - narrow-landscape
           - reduced-motion
     steps:
       - name: Check out repository

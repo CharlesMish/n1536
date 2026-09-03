@@ -81,6 +81,39 @@ export default defineConfig({
       },
     },
     {
+      name: "compact-landscape",
+      grep: /@mobile/,
+      use: {
+        ...devices["Pixel 5"],
+        browserName: "chromium",
+        viewport: { width: 667, height: 375 },
+        screen: { width: 667, height: 375 },
+        launchOptions: webglLaunchOptions,
+      },
+    },
+    {
+      name: "narrow-portrait",
+      grep: /@mobile/,
+      use: {
+        ...devices["Pixel 5"],
+        browserName: "chromium",
+        viewport: { width: 320, height: 568 },
+        screen: { width: 320, height: 568 },
+        launchOptions: webglLaunchOptions,
+      },
+    },
+    {
+      name: "narrow-landscape",
+      grep: /@mobile/,
+      use: {
+        ...devices["Pixel 5"],
+        browserName: "chromium",
+        viewport: { width: 568, height: 320 },
+        screen: { width: 568, height: 320 },
+        launchOptions: webglLaunchOptions,
+      },
+    },
+    {
       name: "reduced-motion",
       grep: /@reduced/,
       use: {
