@@ -14,7 +14,9 @@ The intended public home is `https://same-n.cmish.dev/`. This branch is a review
 - Toggle **Order** to walk each method's generation order.
 - Use **New random** to advance the deterministic seed by `7,919`.
 - Drag the field to rotate the sphere; pointer position moves the inspection light.
+- On compact screens, use **Inspect** to open and close the figure plate.
 - Keyboard: `1`/`2`/`3` select methods, `P` toggles spacing, `O` toggles order, and `T` switches Paper/UV.
+- When the sphere has keyboard focus, the arrow keys rotate it.
 
 The initial random seed is `4217`. Reloading restores it.
 
@@ -51,6 +53,16 @@ Method-to-method animation is an exhibit device. Each endpoint is independently 
 The primary path is a dependency-free custom WebGL2 renderer. If WebGL2 cannot be created, the same datasets, statistics, controls, and ordering are drawn through Canvas2D. The fallback simplifies lighting and shell effects; it does not change the point-generation or spacing calculations.
 
 Reduced-motion preferences remove method morphs and idle rotation. The explicit order walk remains available and advances discretely.
+
+## SAME series shell
+
+The hosted source separates the reusable exhibit shell from SAME N's scientific implementation:
+
+- `src/styles.css` — shared Paper/UV chrome, responsive layout, inspection disclosure, and accessibility states;
+- `src/shell.js` — shared theme, loader, pressed-state, compact-plate, and shortcut helpers;
+- `src/study-n.css` plus the remaining `src/` modules — SAME N controls, sampling, plates, and renderers.
+
+This boundary is intentionally narrow. Future SAME studies can reuse the shell while keeping their scientific kernels, claims, tests, and transition semantics independently reviewable. See [docs/SERIES_SHELL.md](docs/SERIES_SHELL.md).
 
 ## Run and build
 

@@ -15,15 +15,24 @@
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="/src/styles.css" />
+    <link rel="stylesheet" href="/src/study-n.css" />
     <title>SAME N — v0.2 exhibit</title>
   </head>
   <body>
-    <div class="same-n theme-uv" id="app">
-      <section class="field-stage" id="stage" aria-labelledby="study-title">
+    <div class="same-study same-n theme-uv" id="app">
+      <section
+        class="field-stage"
+        id="stage"
+        aria-labelledby="study-title"
+        aria-busy="true"
+      >
         <canvas
           class="field-canvas"
           id="field"
-          aria-label="Interactive sphere of 1536 sample points. Drag to rotate."
+          tabindex="0"
+          aria-describedby="field-instructions method-limitations"
+          aria-keyshortcuts="ArrowLeft ArrowRight ArrowUp ArrowDown"
+          aria-label="Interactive sphere of 1536 sample points"
         ></canvas>
 
         <div class="field-loader" id="loader" aria-hidden="false">
@@ -31,7 +40,7 @@
           <p>Forming field</p>
         </div>
 
-        <div class="field-fallback" id="fallback" hidden role="status">
+        <div class="field-fallback" id="fallback" hidden>
           <p>The field could not be drawn in this browser.</p>
           <span data-fallback-detail>
             The sampling exhibit needs a canvas or hardware-accelerated graphics.
@@ -48,13 +57,18 @@
           <p>Same count. Different claims.</p>
         </header>
 
-        <button type="button" class="theme-switch" id="themeBtn" aria-label="Switch presentation">
+        <button
+          type="button"
+          class="theme-switch"
+          id="themeBtn"
+          aria-label="Switch to Paper presentation"
+        >
           <span id="paperLabel">Paper</span>
           <i aria-hidden="true"></i>
           <span id="uvLabel" class="is-active">UV</span>
         </button>
 
-        <aside class="method-reading" aria-live="polite">
+        <aside class="method-reading">
           <span class="method-index" id="methodIndex">03</span>
           <div>
             <h2 id="methodName">Fibonacci</h2>
@@ -81,12 +95,18 @@
           </div>
         </aside>
 
-        <figure class="use-plate" id="usePlate" tabindex="0">
+        <figure
+          class="use-plate"
+          id="usePlate"
+          tabindex="0"
+          aria-labelledby="plateTitle"
+          aria-describedby="plateCaption plateSide"
+        >
           <header>
             <span id="plateTitle">Fig. 03 — lattice print</span>
             <span id="plateKey">equal-area disk</span>
           </header>
-          <canvas id="plate" width="560" height="220"></canvas>
+          <canvas id="plate" width="560" height="220" aria-hidden="true"></canvas>
           <figcaption>
             <span id="plateCaption">A single N, evenly seated.</span>
             <span id="plateSide">spiral order</span>
@@ -94,9 +114,18 @@
         </figure>
 
         <nav class="method-nav" aria-label="Point-placement method">
-          <button type="button" data-method="random"><span>01</span>Random</button>
-          <button type="button" data-method="sobol"><span>02</span>Sobol</button>
-          <button type="button" data-method="fibonacci" class="is-active">
+          <button type="button" data-method="random" aria-pressed="false">
+            <span>01</span>Random
+          </button>
+          <button type="button" data-method="sobol" aria-pressed="false">
+            <span>02</span>Sobol
+          </button>
+          <button
+            type="button"
+            data-method="fibonacci"
+            class="is-active"
+            aria-pressed="true"
+          >
             <span>03</span>Fibonacci
           </button>
         </nav>
@@ -107,6 +136,16 @@
           </button>
           <button type="button" id="walkBtn" aria-pressed="false">
             <span class="tool-dot" aria-hidden="true"></span>Order
+          </button>
+          <button
+            type="button"
+            class="shell-inspect-button"
+            id="inspectBtn"
+            aria-controls="usePlate"
+            aria-expanded="false"
+            aria-pressed="false"
+          >
+            <span class="tool-dot" aria-hidden="true"></span>Inspect
           </button>
           <button type="button" id="reseedBtn">New random</button>
           <span class="drag-note">Drag to turn</span>
@@ -125,7 +164,12 @@
 
         <div class="registration-corner registration-corner-nw" aria-hidden="true"></div>
         <div class="registration-corner registration-corner-se" aria-hidden="true"></div>
-        <p class="sr-only" id="live" aria-live="polite"></p>
+        <p class="sr-only" id="live" role="status" aria-live="polite" aria-atomic="true"></p>
+        <p class="sr-only" id="field-instructions">
+          Drag to rotate the sphere. When the sphere is focused, use the arrow keys to rotate it.
+          The 1, 2, and 3 keys select a method; P toggles spacing, O toggles order, and T switches
+          Paper and UV presentations. On compact screens, Inspect opens the figure plate.
+        </p>
         <p class="sr-only" id="method-limitations">
           Nearest-neighbor coefficient of variation is a local spacing statistic, not a universal
           ranking. Transitions use a spatially arranged presentation correspondence; they are not
