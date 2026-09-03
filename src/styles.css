@@ -803,8 +803,8 @@ button:focus-visible {
     z-index: 7;
     display: block;
     width: min(280px, 40vw);
-    max-height: calc(100vh - 164px - var(--safe-top) - var(--safe-bottom));
-    max-height: calc(100svh - 164px - var(--safe-top) - var(--safe-bottom));
+    max-height: calc(100vh - 180px - var(--safe-top) - var(--safe-bottom));
+    max-height: calc(100svh - 180px - var(--safe-top) - var(--safe-bottom));
     overflow-y: auto;
     overscroll-behavior: contain;
     background: var(--panel);
