@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0D0B18">
+  <meta name="description" content="SAME SAMPLES v0.2 — one frozen set of measurements, three exact interpolants. Global, local, and periodic as an exhibit.">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <title>SAME SAMPLES — v0.2.3 exhibit</title>
+  
+<link rel="stylesheet" href="./assets/same-samples-2.css">
+</head>
+<body>
+  <div class="same-samples theme-uv" id="app">
+    <section class="field-stage" id="stage" aria-labelledby="study-title">
+      <canvas class="field-canvas" id="field" aria-label="Nine frozen samples and three exact interpolants. Click a sample to inspect its cardinal influence."></canvas>
+      <div class="field-loader is-hidden" id="loader"><span></span><p>Forming field</p></div>
+      <div class="field-fallback" id="fallback" hidden role="status">
+        <p>The field could not be drawn in this browser.</p>
+        <span>The samples exhibit needs a canvas for the three interpolants.</span>
+      </div>
+<header class="study-header">
+        <div class="study-registration">
+          <a class="series-chip" href="index.html" aria-label="Back to SAME series index">← Series</a>
+<span>CMISH / FIELD STUDY 05</span>
+          <span>N = 9 · Δx = 1/8</span>
+          <b>v0.2.3</b>
+        </div>
+        <h1 id="study-title">SAME SAMPLES</h1>
+        <p>Same samples. Different assumptions.</p>
+      </header>
+
+      <button type="button" class="theme-switch" id="themeBtn" aria-label="Switch presentation">
+        <span id="paperLabel">Paper</span>
+        <i aria-hidden="true"></i>
+        <span id="uvLabel" class="is-active">UV</span>
+      </button>
+
+      <aside class="method-reading">
+        <span class="method-index" id="methodIndex">01</span>
+        <div>
+          <h2 id="methodName">Global</h2>
+          <div class="method-claim" id="methodClaim">One polynomial</div>
+          <p id="methodNote">The unique degree-8 polynomial through every sample. Between nodes it is still one object.</p>
+          <dl>
+            <div>
+              <dt>Resid</dt>
+              <dd id="statResid">—</dd>
+            </div>
+            <div>
+              <dt>Bend</dt>
+              <dd id="statBend">—</dd>
+            </div>
+            <div>
+              <dt>Span</dt>
+              <dd id="statSpan">—</dd>
+            </div>
+            <div>
+              <dt>Sample</dt>
+              <dd id="statPin">4</dd>
+            </div>
+          </dl>
+        </div>
+      </aside>
+
+      <figure class="use-plate" id="usePlate" tabindex="0">
+        <header>
+          <span id="plateTitle">Fig. 01 — cardinal ℓ₄</span>
+          <span id="plateKey">unit impulse at j</span>
+        </header>
+        <canvas id="plate" width="560" height="220"></canvas>
+        <figcaption>
+          <span id="plateCaption">One sample set to 1; the rest to 0.</span>
+          <span id="plateSide">global basis</span>
+        </figcaption>
+      </figure>
+
+      <nav class="method-nav" aria-label="Reconstruction claim">
+        <button type="button" data-method="global" class="is-active"><span>01</span>Global</button>
+        <button type="button" data-method="local"><span>02</span>Local</button>
+        <button type="button" data-method="periodic"><span>03</span>Periodic</button>
+      </nav>
+
+      <div class="study-tools">
+        <button type="button" id="basisBtn" class="is-active" aria-pressed="true"><span class="tool-dot" aria-hidden="true"></span>Influence</button>
+        <button type="button" id="bendBtn" aria-pressed="false"><span class="tool-dot" aria-hidden="true"></span>Bend</button>
+        <span class="drag-note" id="dragNote">Select a sample · compare influence</span>
+      </div>
+
+      <div class="field-keys">
+        <div class="field-key" id="basisKey" aria-hidden="true">
+          <span class="key-dot key-dot-accent"></span>
+          <p>Response to +1 at the selected sample</p>
+        </div>
+        <div class="field-key" id="bendKey" aria-hidden="true">
+          <span class="key-dot key-dot-alert"></span>
+          <p>Spent curvature |y″|</p>
+        </div>
+      </div>
+
+      <div class="registration-corner registration-corner-nw" aria-hidden="true"></div>
+      <div class="registration-corner registration-corner-se" aria-hidden="true"></div>
+      <p class="sr-only" id="live" aria-live="polite"></p>
+      <p class="sr-only" id="method-limitations">
+        One frozen set of nine equally spaced samples on the unit interval, spacing 1/8.
+        Abscissae 0, 1/8, 2/8, …, 1. Ordinates 0.20, 0.72, 0.95, 0.55, 0.10, −0.40, −0.05, 0.50, 0.88.
+        Global is the unique degree-8 interpolant, evaluated with barycentric Lagrange weights
+        for equal abscissae. Local is the natural cubic spline: C2 piecewise cubics with
+        y-double-prime equal to zero at both ends. Periodic is the unique real trigonometric
+        polynomial of order 4 with period 9/8 that meets the same nine samples; the period is
+        one spacing longer than the plotted window so the two endpoints remain independent
+        measurements. All three reconstructions interpolate the nodes. None is ground truth
+        implied by the samples alone. Field transitions between claims are presentation
+        crossfades, not members of any interpolant family.
+      </p>
+    </section>
+  </div>
+  
+
+
+
+<script src="./assets/same-samples-2.1.js"></script>
+<script src="./assets/same-samples-2.2.js"></script>
+</body>
+</html>

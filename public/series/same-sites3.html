@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0D0B18">
+  <meta name="description" content="SAME SITES v0.1.3 — one frozen set of generators, three planar metrics of nearest.">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <title>SAME SITES — v0.1.3 exhibit</title>
+  
+<link rel="stylesheet" href="./assets/same-sites3.css">
+</head>
+<body>
+  <div class="same-sites theme-uv" id="app">
+    <section class="field-stage" id="stage" aria-labelledby="study-title">
+      <canvas class="field-canvas" id="field" aria-label="Nearest-site partition of a frozen generator set. Click a site to inspect it."></canvas>
+      <div class="field-loader" id="loader"><span></span><p>Forming field</p></div>
+<header class="study-header">
+        <div class="study-registration">
+          <a class="series-chip" href="index.html" aria-label="Back to SAME series index">← Series</a>
+<span>CMISH / FIELD STUDY 04</span>
+          <span id="sitesChecksum">N = 7</span>
+          <b>v0.1.3</b>
+        </div>
+        <h1 id="study-title">SAME SITES</h1>
+        <p>Same generators. Different territory.</p>
+      </header>
+
+      <button type="button" class="theme-switch" id="themeBtn" aria-label="Switch presentation">
+        <span id="paperLabel">Paper</span>
+        <i aria-hidden="true"></i>
+        <span id="uvLabel" class="is-active">UV</span>
+      </button>
+
+      <aside class="method-reading">
+        <span class="method-index" id="methodIndex">01</span>
+        <div>
+          <h2 id="methodName">Euclidean</h2>
+          <div class="method-claim" id="methodClaim">Straight line</div>
+          <p id="methodNote">Ownership is ordinary distance. The shortest path is a segment.</p>
+          <dl>
+            <div>
+              <dt>Cell</dt>
+              <dd id="statCell">—</dd>
+            </div>
+            <div>
+              <dt>Neigh</dt>
+              <dd id="statNeigh">—</dd>
+            </div>
+            <div>
+              <dt>Spread</dt>
+              <dd id="statSpread">—</dd>
+            </div>
+            <div>
+              <dt>Site</dt>
+              <dd id="statSite">01</dd>
+            </div>
+          </dl>
+        </div>
+      </aside>
+
+      <figure class="use-plate" id="usePlate" tabindex="0">
+        <header>
+          <span id="plateTitle">Fig. 01 — metric ball</span>
+          <span id="plateKey">L2</span>
+        </header>
+        <canvas id="plate" width="560" height="220"></canvas>
+        <figcaption>
+          <span id="plateCaption">Two balls of radius d/2. Their contact set is equidistant.</span>
+          <span id="plateSide">same sites</span>
+        </figcaption>
+      </figure>
+
+      <nav class="method-nav" aria-label="Nearest-site metric">
+        <button type="button" data-method="euclidean" class="is-active"><span>01</span>Euclidean</button>
+        <button type="button" data-method="taxicab"><span>02</span>Taxicab</button>
+        <button type="button" data-method="chebyshev"><span>03</span>Chebyshev</button>
+      </nav>
+
+      <div class="study-tools">
+        <button type="button" id="ballBtn" aria-pressed="false"><span class="tool-dot" aria-hidden="true"></span>Ball</button>
+        <button type="button" id="marginBtn" aria-pressed="false"><span class="tool-dot" aria-hidden="true"></span>Margin</button>
+        <span class="drag-note" id="dragNote">Select a site</span>
+      </div>
+
+      <div class="field-keys">
+        <div class="field-key" id="ballKey" aria-hidden="true">
+          <span class="key-dot key-dot-warm"></span>
+          <p>Equal balls of radius d/2</p>
+        </div>
+        <div class="field-key" id="marginKey" aria-hidden="true">
+          <span class="key-dot key-dot-alert"></span>
+          <p>Near a rival site</p>
+        </div>
+      </div>
+
+      <div class="registration-corner registration-corner-nw" aria-hidden="true"></div>
+      <div class="registration-corner registration-corner-se" aria-hidden="true"></div>
+      <p class="sr-only" id="live" aria-live="polite"></p>
+      <p class="sr-only" id="method-limitations">
+        One frozen set of seven generators. Territories are nearest-site partitions under L2, L1, and L-infinity.
+        Ties go to the lower site index. The painted field is a finite raster of that partition, not an exact polygonal construction.
+        The field is a unit square drawn with equal x and y units. Transitions continue the Lp family by interpolating 1/p; finite p uses a stable finite-Lp formula, and only the Chebyshev endpoint uses max(|dx|,|dy|).
+        Main readout statistics are withheld during transitions; the inspection plate identifies its selected endpoint.
+      </p>
+    </section>
+  </div>
+  
+
+
+
+<script src="./assets/same-sites3.1.js"></script>
+<script src="./assets/same-sites3.2.js"></script>
+</body>
+</html>

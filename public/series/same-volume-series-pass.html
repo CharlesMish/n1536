@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0D0B18">
+  <meta name="description" content="SAME VOLUME v0.3.2 — one 0.40 material budget, three declared obligations. Carry, Conduct, and Share as the primary exhibit, with a structural appendix.">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <title>SAME VOLUME — v0.3.2 exhibit</title>
+  
+<link rel="stylesheet" href="./assets/same-volume-series-pass.css">
+</head>
+<body>
+  <div class="same-volume theme-uv" id="app">
+    <section class="field-stage" id="stage" aria-labelledby="study-title">
+      <canvas class="field-canvas" id="field" aria-label="Interactive SIMP density field. Same domain for three obligations. Click a cell to inspect it." aria-describedby="method-limitations"></canvas>
+      <div class="field-loader" id="loader" role="status"><span></span><p id="loaderText">Forming field</p></div>
+      <div class="field-fallback" id="fallback" hidden role="status">
+        <p>The field could not be formed in this browser.</p>
+        <span>The volume exhibit needs a canvas and a worker for the SIMP solve.</span>
+      </div>
+<header class="study-header">
+        <div class="study-registration">
+          <a class="series-chip" href="index.html" aria-label="Back to SAME series index">← Series</a>
+<span>CMISH / FIELD STUDY 06</span>
+          <span id="studySpec">TARGET 0.40 · NUMERICAL CONSTRAINT</span>
+          <b>v0.3.2</b>
+          <button type="button" class="study-mode-button" id="studyModeBtn" aria-label="Open SAME FRACTION structural appendix">Structural appendix</button>
+        </div>
+        <h1 id="study-title">SAME VOLUME</h1>
+        <p id="studySubtitle">Same target budget. Different obligations.</p>
+      </header>
+
+      <button type="button" class="theme-switch" id="themeBtn" aria-label="Switch to Paper presentation">
+        <span id="paperLabel">Paper</span>
+        <i aria-hidden="true"></i>
+        <span id="uvLabel" class="is-active">UV</span>
+      </button>
+
+      <aside class="method-reading">
+        <span class="method-index" id="methodIndex">01</span>
+        <div>
+          <h2 id="methodName">Carry</h2>
+          <div class="method-claim" id="methodClaim">Load path</div>
+          <p id="methodNote">The budget spends itself making a path from the support to the force. Here, only mechanical compliance judges it.</p>
+          <p class="method-pending" id="methodPending" hidden>This claim is still being formed.</p>
+          <dl>
+            <div>
+              <dt>Mean ρ</dt>
+              <dd id="statV">—</dd>
+            </div>
+            <div>
+              <dt>Mech / ref</dt>
+              <dd id="statM">—</dd>
+            </div>
+            <div>
+              <dt>Therm / ref</dt>
+              <dd id="statT">—</dd>
+            </div>
+            <div>
+              <dt aria-label="Mean intermediate-density grayness; zero is binary">Gray</dt>
+              <dd id="statGray">—</dd>
+            </div>
+          </dl>
+        </div>
+      </aside>
+
+      <figure class="use-plate" id="usePlate" tabindex="0">
+        <header>
+          <span id="plateTitle">Fig. 01 — one cell</span>
+          <span id="plateKey">rmin = 1.8 h</span>
+        </header>
+        <canvas id="plate" width="560" height="220"></canvas>
+        <figcaption>
+          <span id="plateCaption">Filter neighborhood and local spend.</span>
+          <span id="plateSide">ρ · compliance · dissipation</span>
+        </figcaption>
+      </figure>
+
+      <nav class="method-nav" aria-label="Obligation claim">
+        <button type="button" data-method="carry" class="is-active"><span>01</span>Carry</button>
+        <button type="button" data-method="conduct"><span>02</span>Conduct</button>
+        <button type="button" data-method="share"><span>03</span>Share</button>
+      </nav>
+
+      <div class="study-tools">
+        <button type="button" id="loadBtn" aria-pressed="false" title="Show the mechanical compliance contribution, normalized within this field"><span class="tool-dot" aria-hidden="true"></span>Load</button>
+        <button type="button" id="heatBtn" aria-pressed="false" title="Show relative thermal dissipation, normalized independently within this field"><span class="tool-dot" aria-hidden="true"></span>Heat</button>
+        <span class="drag-note" id="dragNote">Click a cell</span>
+      </div>
+
+      <div class="field-keys">
+        <div class="field-key" id="loadKey" aria-hidden="true">
+          <span class="key-dot key-dot-alert"></span>
+          <p>Mechanical compliance contribution</p>
+        </div>
+        <div class="field-key" id="heatKey" aria-hidden="true">
+          <span class="key-dot key-dot-summary"></span>
+          <p>Relative thermal dissipation</p>
+        </div>
+      </div>
+
+      <div class="registration-corner registration-corner-nw" aria-hidden="true"></div>
+      <div class="registration-corner registration-corner-se" aria-hidden="true"></div>
+      <p class="sr-only" id="live" aria-live="polite"></p>
+      <p class="sr-only" id="method-limitations">
+        In the primary exhibit, one rectangular domain has 56 by 28 Q4 elements and a target mean physical density of 0.40 across the mesh, including four forced-solid patches; individual cells vary in density.
+        Same supports, load, heat source, and heat sink in every claim. Density-filtered SIMP, penalty 3, filter radius 1.8 element lengths.
+        Carry minimizes mechanical compliance. Conduct minimizes thermal compliance. Share is the frozen scalarization
+        one-half mechanical over Carry reference plus one-half thermal over Conduct reference. Its displayed mechanical compliance contribution and thermal dissipation overlays are normalized independently within the current field. No thermal strain.
+        These are local SIMP results, not certified optima. Two-dimensional linear elasticity and steady conduction. Not a manufacturable part.
+        Forced-solid patches are physical density 1 after the filter, in both operators and in V.
+        Field transitions between finished designs morph density only; they are not solved states.
+      </p>
+    </section>
+  </div>
+  
+
+
+
+<script src="./assets/same-volume-series-pass.1.js"></script>
+<script src="./assets/same-volume-series-pass.2.js"></script>
+</body>
+</html>

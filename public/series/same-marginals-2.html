@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0D0B18" id="themeColor">
+  <meta name="description" content="SAME MARGINALS v0.1.2 — same x, same y, three exact pairings. Align, Oppose, and Scramble as an exhibit.">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <title>SAME MARGINALS — v0.1.2 exhibit</title>
+  
+<link rel="stylesheet" href="./assets/same-marginals-2.css">
+</head>
+<body>
+  <div class="same-marginals theme-uv" id="app">
+    <section class="field-stage" id="stage" aria-labelledby="study-title">
+      <canvas class="field-canvas" id="field" aria-label="Interactive coupling field. Frozen x and y samples, three pairings. Click a point to inspect its token."></canvas>
+      <div class="field-loader" id="loader"><span></span><p>Forming field</p></div>
+      <div class="field-fallback" id="fallback" hidden role="status">
+        <p>The field could not be formed in this browser.</p>
+        <span>The coupling exhibit needs a canvas for the frozen marginals.</span>
+      </div>
+<header class="study-header">
+        <div class="study-registration">
+          <a class="series-chip" href="index.html" aria-label="Back to SAME series index">← Series</a>
+<span>CMISH / FIELD STUDY 07</span>
+          <span>N = 256 · X̃ and Ỹ frozen</span>
+          <b>v0.1.2</b>
+        </div>
+        <h1 id="study-title">SAME MARGINALS</h1>
+        <p>Same x. Same y. Different pairing.</p>
+      </header>
+
+      <button type="button" class="theme-switch" id="themeBtn" aria-label="Switch presentation">
+        <span id="paperLabel">Paper</span>
+        <i aria-hidden="true"></i>
+        <span id="uvLabel" class="is-active">UV</span>
+      </button>
+
+      <aside class="method-reading">
+        <span class="method-index" id="methodIndex">01</span>
+        <div>
+          <h2 id="methodName">Align</h2>
+          <div class="method-claim" id="methodClaim">Comonotone ranks</div>
+          <p id="methodNote">Each x-rank keeps the y of the same rank. The two lists never move. Only the contract does.</p>
+          <p class="method-pending" id="methodPending" hidden>Presentation only — not a coupling.</p>
+          <dl>
+            <div>
+              <dt>Spearman ρ</dt>
+              <dd id="statRho">+1.000</dd>
+            </div>
+            <div>
+              <dt>Pearson r</dt>
+              <dd id="statR">—</dd>
+            </div>
+            <div>
+              <dt>Token</dt>
+              <dd id="statTok">x#128</dd>
+            </div>
+            <div>
+              <dt>Pair</dt>
+              <dd id="statPair">→ y#128</dd>
+            </div>
+          </dl>
+        </div>
+      </aside>
+
+      <figure class="use-plate" id="usePlate" tabindex="0">
+        <header>
+          <span id="plateTitle">Fig. 01 — rank wiring</span>
+          <span id="plateKey">π(i) = i</span>
+        </header>
+        <canvas id="plate" width="560" height="220"></canvas>
+        <figcaption>
+          <span id="plateCaption">Sorted x-rank to sorted y-rank.</span>
+          <span id="plateSide">one-to-one</span>
+        </figcaption>
+      </figure>
+
+      <nav class="method-nav" aria-label="Pairing claim">
+        <button type="button" data-method="align" class="is-active"><span>01</span>Align</button>
+        <button type="button" data-method="oppose"><span>02</span>Oppose</button>
+        <button type="button" data-method="scramble"><span>03</span>Scramble</button>
+      </nav>
+
+      <div class="study-tools">
+        <button type="button" id="ranksBtn" aria-pressed="false"><span class="tool-dot" aria-hidden="true"></span>Ranks</button>
+        <button type="button" id="pairsBtn" aria-pressed="false"><span class="tool-dot" aria-hidden="true"></span>Pairs</button>
+        <span class="drag-note" id="dragNote">Click a token</span>
+      </div>
+
+      <div class="field-keys">
+        <div class="field-key" id="ranksKey" aria-hidden="true">
+          <span class="key-dot key-dot-warm"></span>
+          <p>Rank coordinates</p>
+        </div>
+        <div class="field-key" id="pairsKey" aria-hidden="true">
+          <span class="key-dot key-dot-accent"></span>
+          <p>Token correspondence</p>
+        </div>
+      </div>
+
+      <div class="registration-corner registration-corner-nw" aria-hidden="true"></div>
+      <div class="registration-corner registration-corner-se" aria-hidden="true"></div>
+      <p class="sr-only" id="live" aria-live="polite"></p>
+      <p class="sr-only" id="method-limitations">
+        The x sample and y sample are frozen exactly. Each claim changes only the one-to-one pairing between them.
+        X is 128 mid-quantiles of N(−1.55, 0.42²) union 128 mid-quantiles of N(+1.55, 0.42²), then sorted.
+        Y is 256 mid-quantiles of Gamma(shape 2, rate 1), then sorted.
+        Align pairs x-rank i with y-rank i. Oppose pairs i with 255 − i.
+        Scramble is the fixed bijection y-rank = (99 · i + 7) mod 256, Spearman ρs = −0.00023.
+        That map is a deterministic low-rank-correlation permutation, not a claim of statistical independence.
+        Field transitions are a presentation crossfade of two finished pairings; in-between frames are not couplings
+        and do not own the printed statistics. Color follows x-rank and is a token, not a third variable.
+        Two-dimensional scatter of a finite sample. Not a copula estimator and not a data product.
+      </p>
+    </section>
+  </div>
+  
+
+
+
+<script src="./assets/same-marginals-2.1.js"></script>
+<script src="./assets/same-marginals-2.2.js"></script>
+</body>
+</html>

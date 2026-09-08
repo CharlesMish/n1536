@@ -13,7 +13,8 @@
     "test:browser": "npm run build && playwright test",
     "test:browser:ci": "playwright test",
     "check:csp": "node scripts/check-build.mjs",
-    "validate": "npm test && npm run build && npm run check:csp"
+    "validate": "npm test && npm run test:series && npm run build && npm run check:csp",
+    "test:series": "node scripts/verify-series.cjs"
   },
   "engines": {
     "node": ">=22.12.0"
