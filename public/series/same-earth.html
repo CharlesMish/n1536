@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0D0B18">
+  <meta name="description" content="SAME EARTH v0.2.1 — one sampled surface, three claims. Globe, Mercator, and Equal Earth as an exhibit.">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <title>SAME EARTH — v0.2.1 exhibit</title>
+  
+<link rel="stylesheet" href="./assets/same-earth.css">
+</head>
+<body>
+  <div class="same-earth theme-uv" id="app">
+    <section class="field-stage" id="stage" aria-labelledby="study-title">
+      <canvas class="field-canvas" id="field" aria-label="Interactive Earth sampled as 1536 equal geodesic disks. Drag to turn the globe."></canvas>
+      <div class="field-loader" id="loader"><span></span><p>Forming field</p></div>
+<header class="study-header">
+        <div class="study-registration">
+          <a class="series-chip" href="index.html" aria-label="Back to SAME series index">← Series</a>
+<span>CMISH / FIELD STUDY 03</span>
+          <span>N = 1,536</span>
+          <b>v0.2.1</b>
+        </div>
+        <h1 id="study-title">SAME EARTH</h1>
+        <p>Same planet. Different frames.</p>
+      </header>
+
+      <button type="button" class="theme-switch" id="themeBtn" aria-label="Switch presentation">
+        <span id="paperLabel">Paper</span>
+        <i aria-hidden="true"></i>
+        <span id="uvLabel" class="is-active">UV</span>
+      </button>
+
+      <aside class="method-reading">
+        <span class="method-index" id="methodIndex">01</span>
+        <div>
+          <h2 id="methodName">Globe</h2>
+          <div class="method-claim" id="methodClaim">True measure</div>
+          <p id="methodNote">The sphere is the reference surface. This globe view is an orthographic projection: equal disks foreshorten toward its rim.</p>
+          <dl>
+            <div>
+              <dt>Area ×</dt>
+              <dd id="statScale">1.00×</dd>
+            </div>
+            <div>
+              <dt>Axis ratio</dt>
+              <dd id="statShape">1.00</dd>
+            </div>
+            <div>
+              <dt>Latitude</dt>
+              <dd id="statLat">00.0°</dd>
+            </div>
+            <div>
+              <dt id="statPinLab">Pin</dt>
+              <dd id="statPin">none</dd>
+            </div>
+          </dl>
+        </div>
+        <div class="earth-split-readout" hidden id="splitReadout">
+          <p><b>Mercator</b> · area <span id="mercArea">—</span> · axis ratio <span id="mercShape">—</span></p>
+          <p><b>Equal Earth</b> · area <span id="equalArea">—</span> · axis ratio <span id="equalShape">—</span></p>
+        </div>
+        <p class="measurement-scope" id="measureScope">Local orthographic scale · unit sphere</p>
+      </aside>
+
+      <figure class="use-plate" id="usePlate" tabindex="0">
+        <header>
+          <span id="plateTitle">Fig. 01 — sphere kept</span>
+          <span id="plateKey">geodesic disk</span>
+        </header>
+        <canvas id="plate" width="560" height="220"></canvas>
+        <figcaption>
+          <span id="plateCaption">One N, seated on the sphere.</span>
+          <span id="plateSide">orthographic</span>
+        </figcaption>
+      </figure>
+
+      <nav class="method-nav" aria-label="Projection claim">
+        <button type="button" data-method="globe" class="is-active"><span>01</span>Globe</button>
+        <button type="button" data-method="mercator"><span>02</span>Mercator</button>
+        <button type="button" data-method="equalearth"><span>03</span>Equal Earth</button>
+      </nav>
+
+      <div class="study-tools">
+        <button type="button" id="scaleBtn" aria-pressed="false"><span class="tool-dot" aria-hidden="true"></span>Scale</button>
+        <button type="button" id="bandBtn" aria-pressed="false"><span class="tool-dot" aria-hidden="true"></span>Band</button>
+        <button type="button" id="splitBtn" aria-pressed="false"><span class="tool-dot" aria-hidden="true"></span>Split</button>
+        <button type="button" id="lockBtn" aria-pressed="false"><span class="tool-dot" aria-hidden="true"></span>Lock pin</button>
+        <span class="drag-note" id="dragNote">Drag to turn</span>
+      </div>
+
+      <div class="field-keys">
+        <div class="field-key" id="scaleKey" aria-hidden="true">
+          <span class="key-dot key-dot-alert"></span>
+          <p>Area scale above 1</p>
+        </div>
+        <div class="field-key" id="bandKey" aria-hidden="true">
+          <span class="key-dot key-dot-summary"></span>
+          <p>Latitude band</p>
+        </div>
+      </div>
+
+      <div class="registration-corner registration-corner-nw" aria-hidden="true"></div>
+      <div class="registration-corner registration-corner-se" aria-hidden="true"></div>
+      <p class="sr-only" id="live" aria-live="polite"></p>
+    </section>
+  </div>
+  
+
+
+
+<script src="./assets/same-earth.1.js"></script>
+<script src="./assets/same-earth.2.js"></script>
+</body>
+</html>

@@ -1,3 +1,13 @@
+# SAME series / n1536
+
+The repository now includes the ten-study SAME series at **`/series/`**, with its index, book of plates, SAME LAW, SAME AVERAGE, and the revised earlier studies. The maintained modular SAME N exhibit remains at **`/`**; its header links back to the series. The series N entry redirects to that implementation, preserving its newer shell and accessibility work.
+
+Run `npm run dev` and open `/series/index.html`, or build with `npm run validate`. The expanded studies live in `public/series/`: each page has external same-origin styles and scripts, shared specimen image files, and external Volume workers. No inline-code CSP exception is required. See [the integration notes](docs/series/INTEGRATION.md) and [editorial rationale](docs/series/EDITORIAL_NOTES.md).
+
+This GitHub update does not deploy a production route. Existing Cloudflare review settings remain unchanged.
+
+---
+
 # SAME N
 
 **Same count. Different claims.**
@@ -80,7 +90,7 @@ npm run validate
 npm run preview
 ```
 
-The Vite build is written to `dist/`. Cloudflare Pages/Workers Static Assets reads `public/_headers` into that build and applies a same-origin policy with no `unsafe-inline` or `unsafe-eval`.
+The Vite build is written to `dist/`. Cloudflare Pages/Workers Static Assets reads `public/_headers` into that build and applies a same-origin policy (including same-origin workers for Volume) with no `unsafe-inline` or `unsafe-eval`.
 
 ## Review-only Cloudflare upload
 

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0D0B18">
+  <meta name="description" content="SAME SHADOW v0.1 — one orthographic occupancy, three bodies. Prism, Grade, and Well as an exhibit.">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <title>SAME SHADOW — v0.1.2 exhibit</title>
+  
+<link rel="stylesheet" href="./assets/same-shadow-2.css">
+</head>
+<body>
+  <div class="same-shadow theme-uv" id="app">
+    <section class="field-stage" id="stage" aria-labelledby="study-title">
+      <canvas class="field-canvas" id="field" aria-label="Interactive orthographic field. Three bodies share one canonical shadow. Drag to turn."></canvas>
+      <div class="field-loader" id="loader"><span></span><p id="loaderText">Forming field</p></div>
+      <div class="field-fallback" id="fallback" hidden role="status">
+        <p>The field could not be formed in this browser.</p>
+        <span>The shadow exhibit needs a canvas to draw the three occupancy solids.</span>
+      </div>
+<header class="study-header">
+        <div class="study-registration">
+          <a class="series-chip" href="index.html" aria-label="Back to SAME series index">← Series</a>
+<span>CMISH / FIELD STUDY 02</span>
+          <span>ORTHO −Z · 256²</span>
+          <b>v0.1.2</b>
+        </div>
+        <h1 id="study-title">SAME SHADOW</h1>
+        <p>Same projection. Different bodies.</p>
+      </header>
+
+      <button type="button" class="theme-switch" id="themeBtn" aria-label="Switch presentation">
+        <span id="paperLabel">Paper</span>
+        <i aria-hidden="true"></i>
+        <span id="uvLabel" class="is-active">UV</span>
+      </button>
+
+      <aside class="method-reading">
+        <span class="method-index" id="methodIndex">01</span>
+        <div>
+          <h2 id="methodName">Prism</h2>
+          <div class="method-claim" id="methodClaim">Constant interval</div>
+          <p id="methodNote">The silhouette is given one depth and kept. Every ray through the mask meets a single slab.</p>
+          <dl>
+            <div>
+              <dt>Mask Δ</dt>
+              <dd id="statMask">0 px</dd>
+            </div>
+            <div>
+              <dt>Volume</dt>
+              <dd id="statVol">—</dd>
+            </div>
+            <div>
+              <dt>Ray</dt>
+              <dd id="statRay">—</dd>
+            </div>
+            <div>
+              <dt>View</dt>
+              <dd id="statView">FACE</dd>
+            </div>
+          </dl>
+        </div>
+      </aside>
+
+      <figure class="use-plate" id="usePlate" tabindex="0">
+        <header>
+          <span id="plateTitle">Fig. 01 — depth ray</span>
+          <span id="plateKey">same (x, y)</span>
+        </header>
+        <canvas id="plate" width="560" height="220"></canvas>
+        <figcaption>
+          <span id="plateCaption">What the shadow discarded.</span>
+          <span id="plateSide">occupied z</span>
+        </figcaption>
+      </figure>
+
+      <nav class="method-nav" aria-label="Body claim">
+        <button type="button" data-method="prism" class="is-active"><span>01</span>Prism</button>
+        <button type="button" data-method="grade"><span>02</span>Grade</button>
+        <button type="button" data-method="well"><span>03</span>Well</button>
+      </nav>
+
+      <div class="study-tools">
+        <button type="button" id="faceBtn" class="is-active" aria-pressed="true" aria-label="Return to canonical projection"><span class="tool-dot" aria-hidden="true"></span>Face</button>
+        <button type="button" id="ghostBtn" class="is-active" aria-pressed="true"><span class="tool-dot" aria-hidden="true"></span>Ghost</button>
+        <span class="drag-note" id="dragNote">Drag to turn</span>
+      </div>
+
+      <div class="field-keys">
+        <div class="field-key is-visible" id="faceKey">
+          <span class="key-dot key-dot-summary"></span>
+          <p>Canonical occupancy</p>
+        </div>
+        <div class="field-key is-visible" id="ghostKey">
+          <span class="key-dot key-dot-warm"></span>
+          <p>Locked shadow lamina</p>
+        </div>
+      </div>
+
+      <div class="registration-corner registration-corner-nw" aria-hidden="true"></div>
+      <div class="registration-corner registration-corner-se" aria-hidden="true"></div>
+      <p class="sr-only" id="live" aria-live="polite"></p>
+      <p class="sr-only" id="method-limitations">
+        Three different bodies are subsets of the same extruded cylinder S × ℝ.
+        S is a rounded cross with a circular hub, defined by a shared signed-distance mask.
+        Canonical projection is orthographic along −Z, up +Y. Occupancy of a pixel is the binary
+        test that the ray through that pixel meets any occupied z-interval. By construction the
+        three masks agree exactly on any raster of S. Off-axis views are inspection; the invariant
+        applies only to that named projection. Paper and UV change presentation, not geometry.
+        Not a manufacturable part. The field is a 64² column tessellation of those intervals,
+        not a second geometry. Seams are the raster of S.
+      </p>
+    </section>
+  </div>
+  
+
+
+
+
+<script src="./assets/same-shadow-2.1.js"></script>
+<script src="./assets/same-shadow-2.2.js"></script>
+</body>
+</html>
