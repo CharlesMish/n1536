@@ -14,7 +14,7 @@ const STUDIES = [
       "Fibonacci"
     ],
     "focus": "Fibonacci",
-    "version": "v0.2.2",
+    "version": "v0.2 · hosted",
     "cost": null,
     "plate": "Fig. 03 — lattice print",
     "question": "What can a shared count promise?",

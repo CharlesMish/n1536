@@ -27,3 +27,5 @@ Cloudflare configuration and production routes are unchanged. No Wrangler deploy
 CI browser coverage adds series navigation, page initialization under the real response CSP, initial state, Average regrouping and bars, LAW play/restart, and Volume worker completion on the desktop WebGL2 project. The existing eight-project SAME N browser matrix is retained.
 
 Earlier editorial and repair reports are historical records of the standalone editions. Their file-layout and validation descriptions do not supersede this integration note.
+
+The first CI browser run exposed the newly introduced N return link being captured by the scene drag handler. Interactive-target filtering now includes native links and form controls. Average grouping buttons also have explicit accessible names, so their names do not depend on spacing between the numeric span and label.

@@ -116,7 +116,7 @@ function formatOrder(value) {
 function isInteractiveTarget(target) {
   return Boolean(
     target.closest?.(
-      ".use-plate, .method-nav, .study-tools, .theme-switch, .field-fallback",
+      "a, button, input, select, textarea, [contenteditable], .use-plate, .method-nav, .study-tools, .theme-switch, .field-fallback",
     ),
   );
 }
