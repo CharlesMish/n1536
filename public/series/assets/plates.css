@@ -177,7 +177,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-off
 
 .pixelated{image-rendering:pixelated}
 
-/* The fifteen-plate rail wraps; anchor offsets follow its measured height. */
+/* The eighteen-plate rail wraps; anchor offsets follow its measured height. */
 .leaf,.spread{scroll-margin-top:var(--rail-height,180px)}
 .plate{margin:0;padding:22px 18px}
 .plate-stage img{display:block;width:100%;height:auto}

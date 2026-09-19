@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en" class="same-study same-residual" data-theme="uv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0d0b18">
+  <meta name="description" content="SAME RESIDUAL — Same residual size. Different error. Rotate a unit residual through one fixed linear system and see its solution error trace an ellipse.">
+  <title>SAME RESIDUAL — Field study 17</title>
+  <link rel="stylesheet" href="./assets/same-law.css">
+  <link rel="stylesheet" href="./assets/same-residual.css">
+</head>
+<body>
+<main class="wrap">
+  <nav class="utility" aria-label="Series"><a href="index.html">← Series</a><button id="theme" type="button">Paper</button></nav>
+  <div class="eyebrow">CMISH / Field study 17 · v0.1</div>
+  <header class="hero">
+    <div><h1>SAME RESIDUAL</h1><p class="subtitle">Same residual size. Different error.</p></div>
+    <p class="intro">The equation misses by the same amount. Turn the direction of that miss, and the solution can move a hundred times farther from the answer.</p>
+  </header>
+  <div class="contract">
+    <span><strong>Frozen</strong> · matrix A, right-hand side b, residual norm 1</span>
+    <span><strong>Free</strong> · residual direction θ</span>
+    <span class="retained">A = diag(100, 1) &nbsp; · &nbsp; b = (100, 0) &nbsp; · &nbsp; κ₂(A) = 100</span>
+  </div>
+  <fieldset class="controls direction-controls">
+    <legend class="small-label">Turn the miss · keep its length</legend>
+    <div class="presets" role="group" aria-label="Residual direction presets">
+      <button type="button" data-angle="0" aria-pressed="false">0° <span>First axis</span></button>
+      <button type="button" data-angle="45" aria-pressed="true">45° <span>Diagonal</span></button>
+      <button type="button" data-angle="90" aria-pressed="false">90° <span>Second axis</span></button>
+    </div>
+    <div class="direction-slider"><label for="angle">Direction θ</label><input id="angle" type="range" min="0" max="360" step="1" value="45" aria-describedby="directionHint"><output id="angleOut" for="angle">45°</output></div>
+  </fieldset>
+  <section class="scene" aria-labelledby="sceneTitle">
+    <div class="scene-header"><h2 id="sceneTitle">A circle of misses. A narrow ellipse of errors.</h2><p>Fixed axes · Euclidean norms · direct algebra</p></div>
+    <p id="directionHint" class="direction-hint">Drag around the residual circle, or use the direction slider and its arrow keys. The error point follows through A⁻¹.</p>
+    <div class="residual-plots">
+      <figure><figcaption><span>Residual r = b − A x̂</span><span>Equation-space units</span></figcaption>
+        <svg id="residualPlot" viewBox="0 0 360 360" role="img" aria-labelledby="residualTitle residualDesc" aria-describedby="directionHint">
+          <title id="residualTitle">A unit residual rotates on a circle</title><desc id="residualDesc">At 45 degrees, the residual is (0.707107, 0.707107). Both axes use the same fixed scale.</desc>
+          <path class="grid-line" d="M56 56V304 M118 56V304 M242 56V304 M304 56V304 M56 56H304 M56 118H304 M56 242H304 M56 304H304"/>
+          <path class="axis-line" d="M40 180H322 M180 38V322"/>
+          <circle class="residual-locus" cx="180" cy="180" r="124"/>
+          <path class="tick-line" d="M56 176V184 M304 176V184 M176 56H184 M176 304H184"/>
+          <g class="axis-labels"><text x="56" y="203" text-anchor="middle">−1</text><text x="304" y="203" text-anchor="middle">1</text><text x="168" y="62" text-anchor="end">1</text><text x="168" y="310" text-anchor="end">−1</text><text x="330" y="175">r₁</text><text x="189" y="29">r₂</text><text x="166" y="202" text-anchor="end">0</text></g>
+          <path id="residualVector" class="residual-vector" d="M180 180L267.681 92.319"/>
+          <circle id="residualPoint" class="residual-point" cx="267.681" cy="92.319" r="6"/>
+          <circle class="origin-point" cx="180" cy="180" r="2.5"/>
+        </svg>
+        <p class="plot-foot"><span class="residual-key">Circle · ‖r‖₂ = 1</span><span>Equal scale on both axes</span></p>
+      </figure>
+      <figure><figcaption><span>Error e = x − x̂ = A⁻¹r</span><span>Solution-space units</span></figcaption>
+        <svg id="errorPlot" viewBox="0 0 360 360" role="img" aria-labelledby="errorTitle errorDesc">
+          <title id="errorTitle">The corresponding error traces a narrow ellipse</title><desc id="errorDesc">At 45 degrees, the error is (0.007071, 0.707107). The ellipse has horizontal semiaxis 0.01 and vertical semiaxis 1. Both axes use the same fixed scale.</desc>
+          <path class="grid-line" d="M56 56V304 M118 56V304 M242 56V304 M304 56V304 M56 56H304 M56 118H304 M56 242H304 M56 304H304"/>
+          <path class="axis-line" d="M40 180H322 M180 38V322"/>
+          <ellipse class="error-locus" cx="180" cy="180" rx="1.24" ry="124"/>
+          <path class="tick-line" d="M56 176V184 M304 176V184 M176 56H184 M176 304H184"/>
+          <g class="axis-labels"><text x="56" y="203" text-anchor="middle">−1</text><text x="304" y="203" text-anchor="middle">1</text><text x="168" y="62" text-anchor="end">1</text><text x="168" y="310" text-anchor="end">−1</text><text x="330" y="175">e₁</text><text x="189" y="29">e₂</text><text x="166" y="202" text-anchor="end">0</text></g>
+          <path id="errorVector" class="error-vector" d="M180 180L180.877 92.319"/>
+          <path id="errorPoint" class="error-point" d="M180.877 86.319l6 6-6 6-6-6Z"/>
+          <circle class="origin-point" cx="180" cy="180" r="2.5"/>
+        </svg>
+        <p class="plot-foot"><span class="error-key">Ellipse · horizontal radius 0.01</span><span>Equal scale on both axes</span></p>
+      </figure>
+    </div>
+    <div class="map-equation"><span>e₁ = r₁ / 100</span><span>e₂ = r₂</span><span>The first component shrinks; the second passes through.</span></div>
+  </section>
+  <section class="readout">
+    <div><h2>The bound stays. The error moves.</h2><p id="currentReading">At 45°, the relative residual is 1% and the relative solution error is 70.714%. The condition-number bound remains 100%.</p><p>A condition number bounds relative amplification. It does not say that every residual direction attains that bound.</p><p class="mathematics">r = b − A x̂ &nbsp; · &nbsp; e = x − x̂<br>‖e‖₂ / ‖x‖₂ ≤ κ₂(A) · ‖r‖₂ / ‖b‖₂</p></div>
+    <div class="metric-panel"><dl class="values"><div><dt>Relative residual · fixed</dt><dd id="relativeResidual">1.000%</dd></div><div><dt>Relative error · actual</dt><dd id="relativeError">70.714%</dd></div><div><dt>Relative amplification</dt><dd id="amplification">70.714×</dd></div><div><dt>Condition-number bound</dt><dd id="errorBound">100.000%</dd></div></dl><p class="metric-note">Relative amplification = relative error / relative residual. It ranges from 1× to 100× in this specimen.</p></div>
+  </section>
+  <div class="audit-table" aria-label="Current vector values"><dl><div><dt>Residual r</dt><dd id="residualValue">(0.707107, 0.707107)</dd></div><div><dt>Error e</dt><dd id="errorValue">(0.007071, 0.707107)</dd></div><div><dt>Approximation x̂</dt><dd id="approxValue">(0.992929, −0.707107)</dd></div><div><dt>Exact answer x · fixed</dt><dd>(1, 0)</dd></div><div><dt>Residual norm ‖r‖₂ · fixed</dt><dd id="residualNorm">1.000000</dd></div><div><dt>Error norm ‖e‖₂</dt><dd id="errorNorm">0.707142</dd></div></dl></div>
+  <p id="announcement" class="sr-only" aria-live="polite"></p>
+  <noscript><p class="fallback">The figures show the 45° specimen. Interactive direction controls need JavaScript. On the first axis, r = (1, 0) gives error (0.01, 0). On the second axis, r = (0, 1) gives error (0, 1). Both residuals have norm 1 in this same fixed system.</p></noscript>
+  <details class="study-notes"><summary>Read the study</summary><div class="notes-grid">
+    <section><h3>One equation, one fixed scale</h3><p>A = diag(100, 1), b = (100, 0), and the exact solution x = (1, 0) never change. The singular values of A are 100 and 1, so its Euclidean condition number κ₂(A) is 100. Coordinates and norms are fixed throughout.</p><p>The residual r = (cos θ, sin θ) has norm 1. Since ‖b‖₂ = 100, its relative size is always 1%. Each panel uses equal horizontal and vertical units and never rescales. The panels represent different spaces: residuals in equation space, errors in solution space.</p></section>
+    <section><h3>A residual is not the solution error</h3><p>The residual is what remains when an approximate solution is substituted into the equation: r = b − A x̂. The error is the difference from the exact solution: e = x − x̂. Because Ax = b, Ae = r and e = A⁻¹r.</p><p>Here A⁻¹ = diag(0.01, 1). The residual circle maps to an error ellipse with horizontal radius 0.01 and vertical radius 1. It is drawn at that true aspect ratio, even though it looks almost like a line. Point markers are enlarged for visibility.</p></section>
+    <section><h3>What the condition number promises</h3><p>For an invertible A and nonzero b, ‖e‖₂ / ‖x‖₂ ≤ κ₂(A) ‖r‖₂ / ‖b‖₂. This follows from e = A⁻¹r, b = Ax, and the two operator-norm bounds. The inequality holds for every residual direction.</p><p>This specimen attains the upper bound on the second axis. On the first axis, the relative error is 1%, a hundred times smaller. The measured relative amplification is direction-dependent; κ₂ is the uniform bound. Absolute error/residual ratios here instead range from 0.01 to 1.</p></section>
+    <section><h3>What this exhibit does not test</h3><p>The page constructs x̂ directly as x − A⁻¹r. It does not run an iterative solver, inject rounding errors, compare algorithms, or measure their stability. The varying error is a property of this fixed equation and these residual directions.</p><p>All states follow the stated algebra. Ordinary floating-point trigonometry and rounded readouts are used for display. Equality of residual norms is mathematical; the displayed values agree to the shown precision.</p></section>
+  </div></details>
+  <footer class="footer"><a href="same-distances.html">← Same Distances</a><a href="plates.html#p17">Book of plates</a><a href="same-fit.html">Same Fit →</a></footer>
+</main>
+<script type="module" src="./assets/same-residual.js"></script>
+</body>
+</html>

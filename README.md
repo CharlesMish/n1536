@@ -1,6 +1,6 @@
 # SAME series / n1536
 
-The repository now includes the fifteen-study SAME series at **`/series/`**, with its index, book of plates, and five additions: SAME MOVES, SAME DIVERGENCE, SAME DEGREES, SAME IMPULSE, and SAME EIGENVALUES. The maintained modular SAME N exhibit remains at **`/`**; its header links back to the series. The series N entry redirects to that implementation, preserving its newer shell and accessibility work.
+The repository now includes the eighteen-study SAME series at **`/series/`**, with its index, book of plates, and the latest additions: SAME DISTANCES, SAME RESIDUAL, and SAME FIT. SAME MOVES, SAME DIVERGENCE, SAME DEGREES, SAME IMPULSE, and SAME EIGENVALUES remain part of the collection. The maintained modular SAME N exhibit remains at **`/`**; its header links back to the series. The series N entry redirects to that implementation, preserving its newer shell and accessibility work.
 
 Run `npm run dev` and open `/series/index.html`, or build with `npm run validate`. The expanded studies live in `public/series/`: each page has external same-origin styles and scripts, shared specimen image files, and external Volume workers. No inline-code CSP exception is required. See [the integration notes](docs/series/INTEGRATION.md) and [editorial rationale](docs/series/EDITORIAL_NOTES.md).
 
