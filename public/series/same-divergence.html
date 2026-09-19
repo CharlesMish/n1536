@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d0b18">
+<meta name="description" content="SAME DIVERGENCE — one divergence, three flows. Quiet, Slide, and Spin as an exhibit.">
+<title>SAME DIVERGENCE — SAME series</title>
+<link rel="icon" type="image/svg+xml" href="assets/same-divergence-icon.svg">
+<link rel="stylesheet" href="assets/same-divergence.css">
+</head>
+<body>
+<div class="same-study same-divergence theme-uv" id="app">
+<section class="field-stage" id="stage" aria-labelledby="study-title">
+<canvas class="field-canvas" id="field" tabindex="0" role="img" aria-describedby="field-instructions method-limitations" aria-label="Periodic unit square. One source field under three flows that share its divergence. Drag inside the square to move the pin."></canvas>
+<header class="study-header">
+<div class="study-registration">
+<a class="series-chip" href="index.html" aria-label="Back to SAME series index">← Series</a><a class="series-chip" href="plates.html#p12">Plate 12</a>
+<span>CMISH / FIELD STUDY 12</span>
+<span>flux 1/π²</span>
+<b>v0.2</b>
+</div>
+<h1 id="study-title">SAME DIVERGENCE</h1>
+<p>Same divergence. Different flows.</p>
+</header>
+<button type="button" class="theme-switch" id="themeBtn" aria-label="Switch presentation"><span id="paperLabel">Paper</span><i aria-hidden="true"></i><span id="uvLabel" class="is-active">UV</span></button>
+<aside class="method-reading">
+<span class="method-index" id="methodIndex">01</span>
+<div>
+<h2 id="methodName">Quiet</h2>
+<div class="method-claim" id="methodClaim">Curl free</div>
+<p id="methodNote">Only the potential flow. Curl is identically zero. Every arrow serves a source or a sink.</p>
+<dl>
+<div><dt>Source</dt><dd id="statSource">—</dd></div>
+<div><dt>Curl</dt><dd id="statCurl">—</dd></div>
+<div><dt>Flux</dt><dd id="statFlux">1/π²</dd></div>
+<div><dt>Turn</dt><dd id="statTurn">—</dd></div>
+<div><dt>t = 3</dt><dd id="statTravel">—</dd></div>
+</dl>
+</div>
+</aside>
+<figure class="use-plate" id="usePlate" tabindex="0">
+<header><span id="plateTitle">Fig. 01 — curl free</span><span id="plateKey">flux kept · y ↓</span></header>
+<canvas id="plate" width="680" height="236" aria-label="Unit square in miniature. Source tint is shared. Arrows belong to the current flow."></canvas>
+<figcaption><span id="plateCaption">Flux held at 1/π².</span><span id="plateSide">same divergence</span></figcaption>
+</figure>
+<nav class="method-nav" aria-label="Flow construction">
+<button type="button" data-method="quiet" class="is-active" aria-pressed="true"><span>01</span>Quiet</button>
+<button type="button" data-method="slide" aria-pressed="false"><span>02</span>Slide</button>
+<button type="button" data-method="spin" aria-pressed="false"><span>03</span>Spin</button>
+</nav>
+<div class="study-tools">
+<button type="button" id="marksBtn" aria-pressed="true" class="is-active"><span class="tool-dot" aria-hidden="true"></span>Marks</button>
+<button type="button" id="loopBtn" aria-pressed="true" class="is-active"><span class="tool-dot" aria-hidden="true"></span>Loop</button>
+<button type="button" id="pauseBtn" aria-pressed="false">Pause</button>
+<button type="button" class="read-study" id="readBtn" aria-haspopup="dialog">Read the study</button>
+<span class="drag-note" id="dragNote">Drag in the square</span>
+</div>
+<div class="field-keys" aria-hidden="true">
+<div class="field-key"><span class="key-dot key-dot-warm"></span><p>Source · expands</p></div>
+<div class="field-key"><span class="key-dot key-dot-summary"></span><p>Sink · contracts</p></div>
+<div class="field-key"><span class="key-line"></span><p>Arrow · speed × 0.26</p></div>
+</div>
+<div class="registration-corner registration-corner-nw" aria-hidden="true"></div>
+<div class="registration-corner registration-corner-se" aria-hidden="true"></div>
+<p class="sr-only" id="field-instructions">Focus this field and use arrow keys to move the pin by 0.01; hold Shift for steps of 0.05. Opposite edges join. Global keys: 1–3 flow, T theme, L loop, M marks, Space pause. The Pause button stops moving marks.</p>
+<p class="sr-only" id="live" aria-live="polite"></p>
+<p class="sr-only" id="method-limitations">Coordinates use y increasing downward. Source, curl, and circulation are analytic; trajectories use numerical RK4 integration and wrap at the frame. Read the study for the formulas and limitations.</p>
+<p class="check-fail" id="checkFail" hidden>The divergence check failed. Do not read the fluxes as exact.</p>
+</section>
+</div>
+<dialog class="study-dialog" id="dialog" aria-labelledby="reading-title">
+<button class="close-reading" type="button" id="closeReading">Close</button>
+<h2 id="reading-title">A divergence fixes the flux. It does not fix the flow.</h2>
+<h3>What stays the same</h3>
+<p>The periodic unit square, and ρ(x, y) = cos(2πx) cos(2πy). The outward flux of every closed curve is the integral of ρ over its interior. On the witness square [1/4, 3/4]² that integral is exactly 1/π².</p>
+<h3>What changes</h3>
+<p>The stream function. Quiet is the gradient of the potential, and its curl is identically zero. Slide adds the shear (−0.20 cos(2πy), 0). Spin adds a lattice of eddies. Curl at the pin, circulation of the turn rectangle, and the position at time 3 all change.</p>
+<h3>Try this</h3>
+<p>Press 2, then 3, without moving the pin. Source and flux stay. Curl changes sign. Drag the pin to the bright center. Curl is zero there in all three flows. That agreement is a node of these stream functions, not a match of the fields. Press L if you want the witness without the turn rectangle. Focus the field and use arrow keys to move the pin; hold Shift for larger steps. Pause stops the moving marks.</p>
+<h3>Reading the measurements</h3>
+<p>Source is ρ at the pin. Curl is ∂v/∂x − ∂u/∂y at the pin. Flux is 1/π², the analytic integral of ρ over the witness, not a count of painted pixels. Turn is the analytic integral of curl over the rectangle [0.78, 1] × [0.08, 0.42]. The t = 3 figure is where a mark that started at the pin is after three units of time, wrapped into the square. Arrow length on screen is speed × 0.26, in square units. Opposite edges join. There is no wall on the right edge of the turn rectangle. Arrow glyphs are clipped at the display frame; trajectories wrap across it. Coordinates use y increasing downward on screen, so positive mathematical curl appears clockwise.</p>
+<h3>What this does not decide</h3>
+<p>A matching divergence is not a matching velocity, pressure, or energy. These are kinematic fields. They are not solutions of Navier–Stokes, and they are not a weather map. Electrostatics would have required the curl to stay zero. Zero curl is a physical constraint in electrostatics, not a gauge choice. Quiet alone satisfies it; the three velocity fields here are distinct kinematic constructions.</p>
+<p>The witness square’s own circulation is zero in Quiet, Slide, and Spin, because Quiet has zero curl, Slide’s curl is odd across the horizontal centerline, and Spin’s curl is odd across either individual centerline. That square can certify the flux. It cannot certify the flow. Use the pin, or the turn rectangle, for the part that changes. Agreement of curl at one point does not imply agreement of the fields.</p>
+<p>A blend between methods remains a legal flow. Divergence is linear, so every intermediate field keeps ρ. The numbers stay live during the blend because they still describe the field on screen. Until the blend ends, they are not yet the numbers of the named method.</p>
+<h3>Selected state</h3>
+<div class="focus-values" id="focusValues"></div>
+<canvas id="readingFigure" width="680" height="236" aria-label="Snapshot of the plate when this note opened"></canvas>
+<p>The plate above is captured when this note opens. It is not a live view.</p>
+<details>
+<summary>Construction notes</summary>
+<p>φ = −cos(2πx) cos(2πy) / (8π²), so Δφ = ρ and the Quiet velocity is ∇φ. Slide adds (−A cos(2πy), 0) with A = 0.20. Spin adds (−B sin(2πx) cos(2πy), B cos(2πx) sin(2πy)) with B = 0.16. Both additions are divergence-free on the torus. At load, the page samples a finite-difference divergence of all three fields and of a blend. Flux and turn are closed-form integrals, not line samples. Trails use RK4 with step 0.01 through time 3, then wrap each step into the square. </p>
+</details>
+</dialog>
+<script src="assets/same-divergence-1.js"></script>
+</body>
+</html>

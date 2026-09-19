@@ -1,15 +1,17 @@
-# Integration into n1536 — 2026-09-08
+# Integration into n1536 — 2026-09-19
 
-The accepted ten-study archive is now integrated under `/series/`. The repository's newer modular SAME N remains at `/`; `/series/same-n.html` redirects to it. Its header returns to the collection. We deliberately preserve the hardened renderer, compact inspection disclosure, keyboard controls, and source/test boundary rather than replacing them with the earlier standalone N.
+The fifteen-study collection is integrated under `/series/`, including the corrected Moves and Divergence pages and three new studies. The repository's newer modular SAME N remains at `/`; `/series/same-n.html` redirects to it. Its header returns to the collection. We deliberately preserve the hardened renderer, compact inspection disclosure, keyboard controls, and source/test boundary rather than replacing them with the earlier standalone N.
 
 ## Source layout
 
-- `public/series/*.html`: index, book, nine studies, and the N redirect.
+- `public/series/*.html`: index, book, fourteen studies, and the N redirect.
 - `public/series/assets/*.css`: external authored styles.
 - `public/series/assets/*.js`: scientific kernels, rendering/control code, and explanation helpers, preserving their original script order.
 - `volume-*.worker.js`: exactly the expanded solver worker strings from the input, now served from the same origin.
 - `specimen-*.png`: deduplicated raster specimens extracted from the original SVG data URLs.
-- `scripts/verify-series.cjs`: the 38 checks adapted to read external scripts.
+- `specimen-*.svg`: shared vector specimens loaded lazily by the index and book. The three tiny raster-backed SVG wrappers stay inline so their PNG references remain visible.
+- `scripts/verify-series.cjs`: series links, classic/module script syntax, catalog correspondence, and original numerical checks.
+- `tests/series-*.test.js`: independent invariant and response checks for the five additions.
 - `archive/same-series-expanded.zip`: byte-preserved source package; excluded from the deployed build.
 
 The collection retains its existing authored layouts. The original N uses the newer shared shell; the imported studies retain their own isolated styles and explanation helpers. Consolidating those shells is separate from this content integration.
@@ -22,10 +24,35 @@ Cloudflare configuration and production routes are unchanged. No Wrangler deploy
 
 ## Validation
 
-`npm run validate` runs the existing unit suite, all 38 series checks, the build, and static/CSP checks for the root and all twelve collection pages. The hosted checks require each referenced script and stylesheet to exist, reject inline styles and scripts, and verify external image/worker handling.
+`npm run validate` runs the existing unit suite, the series checks, the build, and static/CSP checks for the root and all seventeen collection pages. The hosted checks require each referenced script, stylesheet, and image to exist, reject inline styles and scripts, and verify external image/worker handling.
 
 CI browser coverage adds series navigation, page initialization under the real response CSP, initial state, Average regrouping and bars, LAW play/restart, and Volume worker completion on the desktop WebGL2 project. The existing eight-project SAME N browser matrix is retained.
 
 Earlier editorial and repair reports are historical records of the standalone editions. Their file-layout and validation descriptions do not supersede this integration note.
 
 The first CI browser run exposed the newly introduced N return link being captured by the scene drag handler. Interactive-target filtering now includes native links and form controls. Average grouping buttons also have explicit accessible names, so their names do not depend on spacing between the numeric span and label.
+
+## Studies 11–15
+
+| Study | Frozen contract | Variable |
+| --- | --- | --- |
+| Moves | Six move identities, lengths, scaled turns and their sum at a selected λ | Permutation; λ is an explicit control shared by all orders |
+| Divergence | Analytic source field and outward flux through the same loop | Divergence-free additions to the flow |
+| Degrees | Twelve labeled vertices, fixed positions, degree three at each vertex, eighteen edges | Adjacency and source-relative graph reachability |
+| Impulse | One mass–spring–damper, starting rest, applied impulse 1 N·s within [0,3] s | Smooth force schedule and split-pulse spacing |
+| Eigenvalues | Eigenvalues −1 and −2, starting vector (0,1), fixed coordinate units and Euclidean norm | Upper-triangular coupling k ∈ [0,12] |
+
+The three new pages reuse LAW’s Paper/UV typography and layout with separate study-specific styles. Their pure model modules are shared by rendering, specimen generation and numerical tests. Degrees uses exact integer graph data and breadth-first distances. Impulse evaluates closed-form raised-cosine pulse responses, with a common residual-envelope measurement at 3 s. Eigenvalues uses the analytic exponential solution and checks all stationary candidates for the peak of its one fixed starting vector.
+
+Moves and Divergence retain their authored field layouts. Their CSS and icons are external, canvas shortcuts are scoped to focused inspection surfaces, paused studies stop idle rendering, and hidden pages stop playback. Moves exposes the turn-scale slider and measured heading residual. Divergence keeps its corrected potential, curl/flux formulas and backing-store-aware reading plate. Shadow also invalidates its draw cache on resize, preventing a cleared canvas from staying blank.
+
+The index and book contain all fifteen entries as static HTML, so links and specimens remain available without JavaScript. Navigation enhancement is optional. Original vector specimens are shared assets instead of duplicated multi-megabyte JavaScript strings; catalog and book images load lazily. Existing raster-backed specimen wrappers remain inline because browsers block nested external images inside an SVG loaded as an image.
+
+Browser coverage exercises the five additions with the real response CSP, native range/select keyboard controls, Paper/UV themes, reduced motion, and compact viewports. Numerical tests separate applied impulse from net momentum change and the selected-start eigenvalue peak from worst-case operator amplification.
+
+### Recorded validation for this addition
+
+- `npm run validate`: 46 unit tests, 48 series checks, production build, and CSP/static checks for all 17 collection pages passed.
+- Local Chromium 153 browser run: 36 checks passed across desktop, 320px portrait, 667px landscape, and reduced-motion projects. This includes existing studies, Volume workers, and catalog/book with JavaScript disabled.
+- Each of the five added pages was also inspected at 375, 750, 1280 and 1920 px in both Paper and UV, with the real response CSP; no horizontal overflow or browser/CSP errors remained.
+- The checked-in GitHub Actions matrix continues to use its pinned Playwright Chromium installation and runs all eight projects.

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en" class="same-study same-eigenvalues" data-theme="uv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0d0b18">
+  <meta name="description" content="SAME EIGENVALUES — Same eventual stability. Different excursions. Change a linear system’s coupling while its eigenvalues stay fixed.">
+  <title>SAME EIGENVALUES — Field study 15</title>
+  <link rel="stylesheet" href="./assets/same-law.css">
+  <link rel="stylesheet" href="./assets/same-eigenvalues.css">
+</head>
+<body>
+<main class="wrap">
+  <nav class="utility" aria-label="Series"><a href="index.html">← Series</a><button id="theme" type="button">Paper</button></nav>
+  <div class="eyebrow">CMISH / Field study 15 · v0.1</div>
+  <header class="hero">
+    <div><h1>SAME EIGENVALUES</h1><p class="subtitle">Same eventual stability. Different excursions.</p></div>
+    <p class="intro">Every start is the same. Every system eventually returns toward zero. Change the coupling and watch how far the disturbance travels first.</p>
+  </header>
+  <div class="contract">
+    <span><strong>Frozen</strong> · eigenvalues −1, −2; start (0, 1); units and norm</span>
+    <span><strong>Free</strong> · coupling k</span>
+    <span class="retained">ẋ₁ = −x₁ + kx₂ &nbsp; · &nbsp; ẋ₂ = −2x₂</span>
+  </div>
+  <fieldset class="controls coupling-controls">
+    <legend class="small-label">Coupling k · from x₂ into x₁</legend>
+    <div class="presets" role="group" aria-label="Coupling presets">
+      <button type="button" data-k="0" aria-pressed="false">0 <span>Uncoupled</span></button>
+      <button type="button" data-k="4" aria-pressed="false">4 <span>Small excursion</span></button>
+      <button type="button" data-k="12" aria-pressed="true">12 <span>Large excursion</span></button>
+    </div>
+    <div class="coupling-slider"><label for="coupling">Set k</label><input id="coupling" type="range" min="0" max="12" step="0.1" value="12"><output id="couplingOut" for="coupling">12.0</output></div>
+  </fieldset>
+  <section class="scene" aria-labelledby="sceneTitle">
+    <div class="scene-header"><h2 id="sceneTitle">Stable can still mean a detour.</h2><p>One start · two fixed scales · exact trajectories</p></div>
+    <div class="plot-legend"><span class="selected-key">Solid · selected k</span><span class="reference-key">Dashed · k = 0 reference</span><span class="small-label">Bright trail = elapsed time</span></div>
+    <div class="plots">
+      <figure class="phase-figure"><figcaption><span>State space</span><span>Equal units on x₁ and x₂</span></figcaption><div id="phasePlot"></div></figure>
+      <figure class="norm-figure"><figcaption><span>Distance from zero</span><span>Euclidean norm ‖x‖₂</span></figcaption><div id="normPlot"></div></figure>
+    </div>
+    <div class="time-controls">
+      <button id="play" type="button" aria-pressed="false">Play</button>
+      <button id="restart" type="button">Restart</button>
+      <label class="sr-only" for="time">Elapsed time</label><input id="time" type="range" min="0" max="6" step="0.01" value="0.69">
+      <output id="timeOut" for="time">t = 0.69 / 6</output>
+    </div>
+    <p class="time-hint" id="motionHint">Start paused near the large excursion. Restart to release the same disturbance from t = 0, or scrub time.</p>
+  </section>
+  <section class="readout">
+    <div><h2>The eigenvalues stay put.</h2><p id="currentReading"></p><p>The second coordinate decays while feeding the first. Stronger coupling can carry the state farther from zero before both coordinates fade.</p><p class="mathematics">λ₁ = −1 &nbsp; λ₂ = −2<br>x(0) = (0, 1) &nbsp; ‖x(0)‖₂ = 1</p></div>
+    <div><dl class="values"><div><dt>Norm now</dt><dd id="currentNorm">—</dd></div><div><dt>Peak / initial norm</dt><dd id="peakNorm">—</dd></div><div><dt>Time of peak</dt><dd id="peakTime">—</dd></div></dl><p class="metric-note">Peak over all t ≥ 0 for this fixed starting vector. It is not the largest possible amplification over other starting directions.</p><p class="coordinates" id="currentState"></p><button id="showPeak" type="button">Inspect peak</button></div>
+  </section>
+  <p id="announcement" class="sr-only" aria-live="polite"></p>
+  <noscript><p class="fallback">This interactive study needs JavaScript. Its exact solution is x₁(t) = k(e⁻ᵗ − e⁻²ᵗ), x₂(t) = e⁻²ᵗ. The eigenvalues remain −1 and −2. At k = 12, the norm rises from 1 to about 3.011 before returning toward zero.</p></noscript>
+  <details class="study-notes">
+    <summary>Read the study</summary>
+    <div class="notes-grid">
+      <section><h3>What stays the same</h3><p>These continuous linear systems satisfy ẋ = Ax, with A = [[−1, k], [0, −2]]. The triangular matrix always has eigenvalues −1 and −2. The initial vector is always (0, 1). Both coordinates use the same fixed dimensionless units, and distance always means the Euclidean norm √(x₁² + x₂²).</p><p>State-space units are equal horizontally and vertically. Neither plot rescales with k or time. The time unit is fixed. The faint complete curves extend to t = 6; the formulas continue to zero as t → ∞.</p></section>
+      <section><h3>What changes</h3><p>Only the off-diagonal coupling k varies, from 0 to 12. The matrix norm and eigenvector geometry are not fixed. This is a different system in the same coordinates, not a change of units applied to one system.</p><p>For k ≠ 0 the matrix is nonnormal: AAᵀ ≠ AᵀA. Its stable eigenvalues establish asymptotic decay, but do not determine the norm at every earlier time. Nonnormality alone does not guarantee a transient rise for every k or initial vector.</p></section>
+      <section><h3>Exact motion, no integrator</h3><p class="mathematics">x₁(t) = k(e⁻ᵗ − e⁻²ᵗ)<br>x₂(t) = e⁻²ᵗ</p><p>Each displayed state is evaluated directly from this solution. Curves are sampled for drawing; time scrubbing does not accumulate integration error. At t = 0 the norm initially decreases for every k. The stronger cases then grow before their eventual decay.</p><p>The norm is a geometric distance. This exhibit does not assert a mechanical energy interpretation or demonstrate an unstable system.</p></section>
+      <section><h3>Which peak?</h3><p>The readout maximizes ‖x(t)‖₂ / ‖x(0)‖₂ for the single stated initial vector over all t ≥ 0. It checks t = 0 and every positive stationary time analytically; the limit at infinity is zero. The maximum can remain 1 at t = 0.</p><p>This differs from optimizing over all initial directions, which would require the operator norm of eᴬᵗ. Context: <a href="https://www.cs.ox.ac.uk/pseudospectra/intro.html">Oxford’s introduction to pseudospectra and nonnormal behavior</a>.</p></section>
+    </div>
+  </details>
+  <footer class="footer"><a href="same-impulse.html">← Same Impulse</a><a href="plates.html#p15">Book of plates</a><a href="index.html">Series →</a></footer>
+</main>
+<script type="module" src="./assets/same-eigenvalues.js"></script>
+</body>
+</html>

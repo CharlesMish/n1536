@@ -65,7 +65,7 @@ console.log(`CSP/static build check passed (${files.length} deployed files).`);
 
 // Check every added route, not just the original Vite entry.
 const seriesPages=files.filter(file=>file.endsWith('.html')&&file.includes(`${path.sep}series${path.sep}`));
-assert.equal(seriesPages.length,12,'series index, book, N redirect and nine exhibits are deployed');
+assert.equal(seriesPages.length,17,'series index, book, N redirect and fourteen exhibits are deployed');
 for(const file of seriesPages){
  const page=await readFile(file,'utf8');
  assert.doesNotMatch(page,/<style(?:\s|>)|\sstyle\s*=|\son[a-z]+\s*=/i,`${file}: no inline styles or handlers`);
@@ -73,6 +73,9 @@ for(const file of seriesPages){
   const src=match[1].match(/\bsrc="([^"]+)"/);assert.ok(src,`${file}: scripts are external`);assert.equal(match[2].trim(),'');assert.ok(!/^(https?:|data:|blob:|\/\/)/.test(src[1]));await stat(path.resolve(path.dirname(file),src[1]));
  }
  for(const match of page.matchAll(/<link\b[^>]*href="([^"]+)"/g)){
+  assert.ok(!/^(https?:|data:|blob:|\/\/)/.test(match[1]));await stat(path.resolve(path.dirname(file),match[1]));
+ }
+ for(const match of page.matchAll(/<(?:img|image)\b[^>]*(?:src|href)="([^"]+)"/g)){
   assert.ok(!/^(https?:|data:|blob:|\/\/)/.test(match[1]));await stat(path.resolve(path.dirname(file),match[1]));
  }
 }

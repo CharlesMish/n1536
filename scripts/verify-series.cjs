@@ -1,9 +1,16 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const {execFileSync}=require('node:child_process');
 const root=require('path').join(__dirname,'../public/series/');let checks=0;const pass=(name,fn)=>{fn();checks++;console.log('PASS '+name);};
-function sourceHTML(file){return fs.readFileSync(root+file,'utf8').replace(/<script src="([^"]+)"><\/script>/g,(_,src)=>'<script>'+fs.readFileSync(require('path').join(root,src),'utf8')+'</script>');}
+function sourceHTML(file){return fs.readFileSync(root+file,'utf8').replace(/<script\b([^>]*)><\/script>/g,(tag,attrs)=>{
+ const src=attrs.match(/\bsrc="([^"]+)"/);if(!src||/\btype="module"/.test(attrs))return tag;
+ return '<script>'+fs.readFileSync(require('path').join(root,src[1]),'utf8')+'</script>';
+});}
 const files=fs.readdirSync(root).filter(f=>f.endsWith('.html'));
-for(const file of files){const html=sourceHTML(file);pass(file+' inline JavaScript parses',()=>{for(const m of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g))new vm.Script(m[1]);});
- pass(file+' local links resolve',()=>{for(const m of html.matchAll(/href="([^"#]+\.html)(?:#[^"]*)?"/g))assert(fs.existsSync(root+m[1]),m[1]);});}
+for(const file of files){const html=sourceHTML(file);pass(file+' JavaScript parses',()=>{for(const m of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)){
+ const src=m[1].match(/\bsrc="([^"]+)"/);
+ if(src)execFileSync(process.execPath,['--check',require('path').join(root,src[1])]);else new vm.Script(m[2]);
+ }});
+ pass(file+' local links resolve',()=>{for(const m of html.matchAll(/href="([^"#]+\.html)(?:#[^"]*)?"/g))if(!/^(?:https?:|\/\/)/.test(m[1]))assert(fs.existsSync(root+m[1]),m[1]);});}
 function ctx(file){let s=sourceHTML(file).match(/<script>([\s\S]*?)<\/script>/)[1];s=s.slice(0,s.indexOf('function I()'));if(s.includes('(function () {'))s=s.replace('(function () {','');const c={atob:s=>Buffer.from(s,'base64').toString('binary')};vm.createContext(c);vm.runInContext(s,c);return c;}
 const earth=ctx('same-earth.html');
 pass('Equal Earth unit area and analytic axis ratio agree with finite differences',()=>{
@@ -25,11 +32,11 @@ pass('LAW exact modular updates invert for every displayed state',()=>assert(vm.
 pass('LAW starts have the declared distance and remain distinct',()=>assert(vm.runInContext(`(()=>{for(const bits of [12,24,40]){const p=trajectories(bits);for(const j of [1,2]){if(distance(p[0][0],p[j][0])!==2**-bits)return false;for(let i=0;i<=80;i++)if(p[0][i].every((v,k)=>v===p[j][i][k]))return false;}}return true;})()`,law)));
 pass('AVERAGE preserves each record and reconstructs every declared cell',()=>assert(vm.runInContext(`(()=>{const base=records(GROUPS[0]);for(const state of GROUPS){const rr=records(state);if(rr.length!==400||new Set(rr.map(r=>r.id)).size!==400)return false;for(let i=0;i<400;i++)if(['id','category','success'].some(k=>rr[i][k]!==base[i][k]))return false;for(let g=0;g<2;g++)for(let c=0;c<2;c++){const rows=rr.filter(r=>r.group===g&&r.category===c),[k,n]=state.cells[g][c];if(rows.length!==n||rows.filter(r=>r.success).length!==k)return false;}}return true;})()`,average)));
 pass('AVERAGE pooled counts and within-group comparisons agree exactly',()=>assert(vm.runInContext(`(()=>{for(let j=0;j<3;j++){const cells=GROUPS[j].cells;for(let c=0;c<2;c++){if(cells[0][c][0]+cells[1][c][0]!==[120,80][c]||cells[0][c][1]+cells[1][c][1]!==200)return false;}for(const [a,b] of cells){const numerator=a[0]*b[1]-b[0]*a[1],denominator=a[1]*b[1];if(j===0&&numerator*5!==denominator||j===1&&numerator!==0||j===2&&numerator*10!==-denominator)return false;}}return true;})()`,average)));
-pass('Ten numbered studies have matching book entries and valid specimens',()=>{
+pass('Fifteen numbered studies have matching book entries and valid specimens',()=>{
  const index=sourceHTML('index.html'),book=sourceHTML('plates.html');
  const a=JSON.parse(index.match(/const STUDIES = (\[[\s\S]*?\n\]);/)[1]),b=JSON.parse(book.match(/const PLATES = (\[[\s\S]*?\n\]);/)[1]);
  const figs=JSON.parse(book.match(/^const FIGS = (.*);$/m)[1]),specs=JSON.parse(index.match(/^const SPECIMENS = (.*);$/m)[1]);
- assert(a.length===10&&b.length===10);for(let i=0;i<10;i++){const n=String(i+1).padStart(2,'0');assert(a[i].study===n&&b[i].n===n&&a[i].file===b[i].file);assert(fs.readFileSync(root+a[i].file,'utf8').toUpperCase().includes('FIELD STUDY '+n));assert(figs['p'+n]===specs[n]&&!specs[n].includes('undefined'));}
+ assert(a.length===15&&b.length===15);for(let i=0;i<15;i++){const n=String(i+1).padStart(2,'0');assert(a[i].study===n&&b[i].n===n&&a[i].file===b[i].file);assert(fs.readFileSync(root+a[i].file,'utf8').toUpperCase().includes('FIELD STUDY '+n));assert(figs['p'+n]===specs[n]&&!specs[n].includes('undefined'));}
 });
 // A small event harness exercises the actual new-page scripts without a browser or layout engine.
 function interfaceHarness(file){const html=sourceHTML(file),nodes=new Map();

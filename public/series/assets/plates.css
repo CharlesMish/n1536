@@ -176,3 +176,10 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-off
   .plate-stage{display:block;height:auto}.plate{min-height:0;padding:22px 18px 70px}.plate-stage svg{max-height:none;width:100%;height:auto}.caption{font-size:12px;letter-spacing:.02em;line-height:1.5}.inv,.domain,.enter,.leaf-meta{font-size:12px}.spread{grid-template-columns:minmax(240px,.34fr) minmax(0,.66fr)}@media(max-width:860px){.spread{grid-template-columns:1fr}.plate{min-height:0}.plate-stage{display:block}.caption{font-size:11px}.spread{padding:32px 0}.plate{padding-bottom:70px}}.question{font-size:20px;font-weight:400;line-height:1.25;color:var(--summary);margin:16px 0 10px}.explanation{font-size:15px;line-height:1.55;color:var(--ink-muted);margin:0 0 18px}.toc{flex-wrap:wrap}.enter{font-size:12px}
 
 .pixelated{image-rendering:pixelated}
+
+/* The fifteen-plate rail wraps; anchor offsets follow its measured height. */
+.leaf,.spread{scroll-margin-top:var(--rail-height,180px)}
+.plate{margin:0;padding:22px 18px}
+.plate-stage img{display:block;width:100%;height:auto}
+.caption{position:static;margin-top:18px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}

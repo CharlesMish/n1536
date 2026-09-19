@@ -14,20 +14,20 @@ async function monitor(page) {
 test('@desktop series index, book and canonical N link together',async({page})=>{
   const check=await monitor(page);
   await page.goto('/series/index.html');
-  await expect(page.locator('.card')).toHaveCount(10);
+  await expect(page.locator('.card')).toHaveCount(15);
   await expect(page.locator('.card').first()).toContainText('Field study 01');
-  await expect(page.locator('.card').last()).toContainText('Field study 10');
+  await expect(page.locator('.card').last()).toContainText('Field study 15');
   await check();
   await page.getByRole('link',{name:'book of plates →',exact:true}).focus();
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/\/series\/plates\.html$/);
-  await expect(page.locator('.spread')).toHaveCount(10);
+  await expect(page.locator('.spread')).toHaveCount(15);
   await check();
   await page.goto('/series/same-n.html');
   await expect(page).toHaveURL(/\/$/);
   await expect(page.getByRole('heading',{name:'SAME N',exact:true})).toBeVisible();
   await page.getByRole('link',{name:'Back to SAME series',exact:true}).click();
-  await expect(page.locator('.card')).toHaveCount(10);
+  await expect(page.locator('.card')).toHaveCount(15);
   await check();
 });
 

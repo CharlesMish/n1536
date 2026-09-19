@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0D0B18">
+  <meta name="description" content="SAME MOVES — one frozen catalogue of six rigid motions, 720 orderings, one endpoint each.">
+  <link rel="icon" type="image/svg+xml" href="assets/same-moves-icon.svg">
+  <title>SAME MOVES — SAME series</title>
+  <link rel="stylesheet" href="assets/same-moves.css">
+</head>
+<body>
+  <div class="same-study same-moves theme-uv" id="app">
+    <section aria-busy="true" class="field-stage" id="stage" aria-labelledby="study-title">
+      <canvas class="field-canvas" id="field" tabindex="0" role="img" aria-describedby="field-instructions method-limitations" aria-label="A six-leg path built from one frozen catalogue of moves. With Trace on, every one of the 720 orderings is marked by its endpoint; click one to select it."></canvas>
+      <div class="field-loader" id="loader"><span></span><p>Enumerating orderings</p></div>
+
+      <header class="study-header">
+        <div class="study-registration">
+          <a class="series-chip" href="index.html" aria-label="Back to SAME series index">← Series</a><a class="series-chip" href="plates.html#p11">Plate 11</a>
+          <span>CMISH / FIELD STUDY 11</span>
+          <span id="movesChecksum">720 orderings</span>
+          <b>v0.2</b>
+        </div>
+        <h1 id="study-title">SAME MOVES</h1>
+        <p>Same moves. Different place.</p>
+      </header>
+
+      <button type="button" class="theme-switch" id="themeBtn" aria-label="Switch presentation">
+        <span id="paperLabel">Paper</span>
+        <i aria-hidden="true"></i>
+        <span id="uvLabel" class="is-active">UV</span>
+      </button>
+
+      <aside class="method-reading">
+        <span class="method-index" id="methodIndex">01</span>
+        <div>
+          <h2 id="methodName">Given</h2>
+          <div class="method-claim" id="methodClaim">Catalogue order</div>
+          <p id="methodNote">The six moves applied in the order the catalogue lists them.</p>
+          <dl>
+            <div>
+              <dt>Net turn</dt>
+              <dd id="statTurn">—</dd>
+            </div>
+            <div>
+              <dt>Heading residual</dt><dd id="statResidual">—</dd></div><div><dt>Length</dt>
+              <dd id="statLen">—</dd>
+            </div>
+            <div>
+              <dt>End</dt>
+              <dd id="statEnd">—</dd>
+            </div>
+            <div>
+              <dt>Spread</dt>
+              <dd id="statSpread">—</dd>
+            </div>
+            <div>
+              <dt>Order</dt>
+              <dd id="statOrder">—</dd>
+            </div>
+          </dl>
+        </div>
+      </aside>
+
+      <figure class="use-plate" id="usePlate" tabindex="0">
+        <header>
+          <span id="plateTitle">Fig. 01 — commutator square</span>
+          <span id="plateKey" class="greek">λ 1</span>
+        </header>
+        <canvas id="plate" width="560" height="220" aria-label="Selected pair of moves applied in both orders, their endpoint gap, and total endpoint spread."></canvas>
+        <figcaption>
+          <span id="plateCaption">Two moves in both orders from a common start. The dashed span is their gap.</span>
+          <span id="plateSide">catalogue order</span>
+        </figcaption>
+      </figure>
+
+      <div class="lambda-row"><label for="lambdaIn">Turn scale λ</label><input id="lambdaIn" type="range" min="0" max="1" step="0.01" value="1"><output id="lambdaOut" for="lambdaIn">1.00</output></div>
+      <nav class="method-nav" aria-label="Ordering">
+        <button type="button" data-method="given" class="is-active"><span>01</span>Given</button>
+        <button type="button" data-method="reversed"><span>02</span>Reversed</button>
+        <button type="button" data-method="shuffled"><span>03</span>Shuffled</button>
+      </nav>
+
+      <div class="study-tools">
+        <button type="button" id="traceBtn" aria-pressed="false"><span class="tool-dot" aria-hidden="true"></span>Trace</button>
+        <button type="button" id="commuteBtn" aria-pressed="false"><span class="tool-dot" aria-hidden="true"></span>Commute</button>
+        <span class="drag-note" id="dragNote">Turn on Trace</span>
+      </div>
+
+      <div class="step-row">
+        <span class="small-label">Step</span>
+        <button type="button" id="playBtn" aria-pressed="false">Play</button>
+        <input type="range" id="stepRange" min="0" max="6" step="1" value="6" aria-label="Move step">
+        <output id="stepOut" for="stepRange">step 6 / 6</output>
+      </div>
+
+      <div class="field-keys">
+        <div class="field-key" id="traceKey" aria-hidden="true">
+          <span class="key-dot key-dot-warm"></span>
+          <p>All 720 endpoints · same heading</p>
+        </div>
+        <div class="field-key" id="commuteKey" aria-hidden="true">
+          <span class="key-dot key-dot-alert"></span>
+          <p>λ = 0 · every ordering agrees</p>
+        </div>
+      </div>
+
+      <div class="registration-corner registration-corner-nw" aria-hidden="true"></div>
+      <div class="registration-corner registration-corner-se" aria-hidden="true"></div>
+      <p class="sr-only" id="field-instructions">With Trace on, focus this field and use Left or Right to select one of all 720 orderings; Shift changes by ten. Use the Step slider to inspect individual moves. Global keys: 1–3 ordering, R trace, C commute, T theme, Space play, brackets step.</p>
+<p class="sr-only" id="live" aria-live="polite"></p>
+      <p class="sr-only" id="method-limitations">
+        One frozen catalogue of six rigid motions of the plane. Move k turns in place by its angle, then walks its
+        radius straight ahead along the new heading. Composition runs left to right in the body frame.
+        The six turn angles are 120, 30, 20, 40, 60 and 90 degrees and sum to 360 exactly; the six radii are
+        0.26, 0.41, 0.26, 0.28, 0.59 and 0.30 field units and sum to 2.10 exactly. Every one of the 720 orderings
+        at the original λ = 1 therefore turns through the same total angle, ends on the starting heading, and walks the same total length;
+        only the endpoint differs. Net turn is printed to twelve decimals as a check and is order-independent to
+        machine precision, with a maximum deviation of 8.9e-16 radians across all 720 orderings.
+        Trace is a complete enumeration of 6 factorial orderings, not a sample. At λ = 1, all 720 endpoints are distinct:
+        the closest pair is separated by 0.00829 field units against a trace diameter of 2.15599, a ratio of about
+        1 to 260, so the closest pair can render within a few pixels of each other. Spread is the exact diameter of
+        that endpoint set, computed by brute force over all 258,840 pairs. Shuffled is one permutation fixed in the
+        source, not a draw made on load. Commute rescales all six turn angles by a factor λ and is a control rather
+        than a fourth ordering: it changes the moves. At λ = 0 the moves are pure translations, the group is abelian,
+        and every ordering ends at (2.100000, 0.000000); the 720 computed endpoints agree there to within
+        5e-16 units, the residue of floating-point summation order rather than a property of the geometry. At
+        intermediate λ the net turn is 360λ degrees, so all orderings still share a final heading, which differs from the starting heading except at integer λ. During a reordering the
+        drawn path is a straight-line interpolation between two vertex lists and is not itself a realisable
+        ordering; readout statistics are withheld until it settles. The field is drawn with equal x and y units in a
+        single fixed window that accommodates every path at every λ, so no comparison is rescaled.
+      </p>
+    </section>
+  </div>
+
+  <script src="assets/same-moves-1.js"></script>
+
+<script src="assets/same-moves-2.js"></script>
+</body>
+</html>

@@ -503,6 +503,7 @@ function I() {
   }
 
   function resize() {
+    lastDrawKey = "";
     const r = stage.getBoundingClientRect();
     W = Math.max(1, Math.round(r.width));
     H = Math.max(1, Math.round(r.height));
