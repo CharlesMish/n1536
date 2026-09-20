@@ -93,7 +93,7 @@ function expectStrictCsp(response) {
 }
 
 async function openExhibit(page, expectedRenderer) {
-  const response = await page.goto("/", { waitUntil: "domcontentloaded" });
+  const response = await page.goto("/same-n.html", { waitUntil: "domcontentloaded" });
   expectStrictCsp(response);
 
   const app = page.locator("#app");

@@ -1,6 +1,6 @@
-# SAME series / n1536
+# SAME — Field studies
 
-The repository now includes the eighteen-study SAME series at **`/series/`**, with its index, book of plates, and the latest additions: SAME DISTANCES, SAME RESIDUAL, and SAME FIT. SAME MOVES, SAME DIVERGENCE, SAME DEGREES, SAME IMPULSE, and SAME EIGENVALUES remain part of the collection. The maintained modular SAME N exhibit remains at **`/`**; its header links back to the series. The series N entry redirects to that implementation, preserving its newer shell and accessibility work.
+The repository now includes the eighteen-study SAME series at **`/series/`**, with its index, book of plates, and the latest additions: SAME DISTANCES, SAME RESIDUAL, and SAME FIT. SAME MOVES, SAME DIVERGENCE, SAME DEGREES, SAME IMPULSE, and SAME EIGENVALUES remain part of the collection. The maintained modular SAME N exhibit lives at **`/same-n.html`**; its header links back to the series. The series N entry redirects to that implementation, preserving its newer shell and accessibility work.
 
 Run `npm run dev` and open `/series/index.html`, or build with `npm run validate`. The expanded studies live in `public/series/`: each page has external same-origin styles and scripts, shared specimen image files, and external Volume workers. No inline-code CSP exception is required. See [the integration notes](docs/series/INTEGRATION.md) and [editorial rationale](docs/series/EDITORIAL_NOTES.md).
 
@@ -14,7 +14,7 @@ The collection is configured for Cloudflare Workers Static Assets. See the hosti
 
 SAME N is a full-screen visual exhibit of three ways to place the same number of points on a sphere: seeded pseudorandom surface draws, a canonical two-dimensional Sobol prefix mapped with equal area, and a fixed-size spherical Fibonacci lattice. The exhibit keeps `N = 1,536` constant so the methods can be inspected without pretending that they make the same promise.
 
-The intended public home is `https://same-n.cmish.dev/`. Workers serves the built collection directly; a Custom Domain can be attached in the Cloudflare dashboard.
+The suggested public home for the collection is `https://same.cmish.dev/`. Workers serves the built collection directly; a Custom Domain can be attached in the Cloudflare dashboard.
 
 ## Exhibit controls
 
@@ -107,9 +107,9 @@ Connect this repository to the existing Worker in **Settings > Build**:
 
 For checks before each deployment, use `npm run validate` as the build command; it already includes the build. Install development dependencies, since they contain Vite and Wrangler. Workers reads the output directory `./dist` from `wrangler.jsonc`; there is no separate Pages output-directory setting.
 
-The configured Worker name is `same-n`. Use that Worker in the dashboard, or change `name` in `wrangler.jsonc` to match your existing Worker before deploying. `workers_dev: true` enables its public workers.dev address, and `preview_urls: true` keeps version previews available. Custom domains are managed in **Settings > Domains & Routes**; attach `same-n.cmish.dev` to this Worker if it is not already attached. No domain is automatically claimed by this repository configuration.
+The configured Worker name is `same-n`. Use that Worker in the dashboard, or change `name` in `wrangler.jsonc` to match your existing Worker before deploying. `workers_dev: true` enables its public workers.dev address, and `preview_urls: true` keeps version previews available. Custom domains are managed in **Settings > Domains & Routes**; attach `same.cmish.dev` to this Worker if it is not already attached. No domain is automatically claimed by this repository configuration. The internal Worker name can stay `same-n` while the public address is `same.cmish.dev`; keep the old domain attached as an alias if existing links should continue to work.
 
-Browse `/series/` for all eighteen studies, `/series/plates.html` for the book, and `/` for SAME N. Host the whole `dist` directory at the domain root so absolute asset links resolve.
+The homepage `/` redirects to `/series/` for all eighteen studies. Browse `/series/plates.html` for the book and `/same-n.html` for SAME N. Host the whole `dist` directory at the domain root so absolute asset links resolve. Keep `assets.html_handling` set to `auto-trailing-slash`: directory indexes need their trailing slash so relative styles, scripts, images, and links resolve inside `/series/`.
 
 For a manual deployment after authenticated Wrangler setup:
 

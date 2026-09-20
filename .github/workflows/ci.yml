@@ -67,3 +67,19 @@ jobs:
             test-results/
           if-no-files-found: warn
           retention-days: 14
+
+  workers-routing:
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - name: Check deployed URL behavior in Workers Static Assets
+        run: npx playwright test --config=playwright.workers.config.js

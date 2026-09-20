@@ -34,8 +34,17 @@ function safePathname(requestUrl) {
   return absolute === root || absolute.startsWith(`${root}${path.sep}`) ? absolute : null;
 }
 
+const redirects = (await readFile(path.join(root, "_redirects"), "utf8"))
+  .trim().split("\n").map(line => line.trim().split(/\s+/));
+
 const server = createServer(async (request, response) => {
   try {
+    const url = new URL(request.url ?? "/", "http://localhost");
+    const redirect = redirects.find(([from]) => from === url.pathname);
+    if (redirect) {
+      response.writeHead(Number(redirect[2]), { ...responseHeaders, Location: redirect[1] + url.search }).end();
+      return;
+    }
     let absolute = safePathname(request.url ?? "/");
     if (!absolute) {
       response.writeHead(400, responseHeaders).end("Bad request");
@@ -44,9 +53,16 @@ const server = createServer(async (request, response) => {
 
     try {
       const metadata = await stat(absolute);
-      if (metadata.isDirectory()) absolute = path.join(absolute, "index.html");
+      if (metadata.isDirectory()) {
+        if (!url.pathname.endsWith("/")) {
+          response.writeHead(307, { ...responseHeaders, Location: url.pathname + "/" + url.search }).end();
+          return;
+        }
+        absolute = path.join(absolute, "index.html");
+      }
     } catch {
-      absolute = path.join(root, "index.html");
+      response.writeHead(404, responseHeaders).end("Not found");
+      return;
     }
 
     const body = await readFile(absolute);
@@ -63,5 +79,5 @@ const server = createServer(async (request, response) => {
 });
 
 server.listen(port, host, () => {
-  console.log(`SAME N review server listening on http://${host}:${port}`);
+  console.log(`SAME review server listening on http://${host}:${port}`);
 });
