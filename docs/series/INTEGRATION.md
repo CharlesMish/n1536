@@ -1,6 +1,6 @@
 # Integration into n1536 — 2026-09-19
 
-The eighteen-study collection is integrated under `/series/`, including the corrected Moves and Divergence pages and the new Distances, Residual, and Fit studies. The repository's newer modular SAME N remains at `/`; `/series/same-n.html` redirects to it. Its header returns to the collection. We deliberately preserve the hardened renderer, compact inspection disclosure, keyboard controls, and source/test boundary rather than replacing them with the earlier standalone N.
+The eighteen-study collection is integrated under `/series/`, including the corrected Moves and Divergence pages and the new Distances, Residual, and Fit studies. The repository's newer modular SAME N lives at `/same-n.html`; `/series/same-n.html` redirects to it. The domain root redirects to `/series/`, and its header returns to the collection. We deliberately preserve the hardened renderer, compact inspection disclosure, keyboard controls, and source/test boundary rather than replacing them with the earlier standalone N.
 
 ## Source layout
 
@@ -80,3 +80,7 @@ The 61-test unit suite includes independent arithmetic checks for the new geomet
 All three pages were inspected at 375, 750, 1280, and 1920 px in both themes under the real CSP. Browser coverage exercises their primary actions, native keyboard controls, precision audit, and narrow/reduced-motion layouts. The root implementation and hosting policy are unchanged.
 
 Recorded local validation: `npm run validate` passed all 61 unit tests, 54 series checks, the production build, and CSP/static checks for 20 collection pages. The 17 targeted Playwright checks passed on Chromium 153 across desktop, 320px portrait, 667px landscape, and reduced-motion projects. Catalog/book QA also passed with and without JavaScript at 375, 750, 1280, and 1920px. GitHub Actions retains the full eight-project browser matrix with its Playwright-installed Chromium.
+
+## Workers entry routes
+
+The collection is named SAME; SAME N remains study 01. The root redirects to `/series/` through `public/_redirects`, with an external-script and ordinary-link fallback for local Vite previews. `auto-trailing-slash` preserves directory URLs and prevents the index from resolving its relative resources at the domain root. SAME N is a separate Vite entry at `/same-n.html`; the historical `/series/same-n.html` link preserves its query and fragment when redirecting there. Custom domain `same.cmish.dev` can be attached to the existing `same-n` Worker without renaming that Worker.

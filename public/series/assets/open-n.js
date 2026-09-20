@@ -1,1 +1,1 @@
-location.replace('../'+location.search+location.hash);
+location.replace('../same-n.html'+location.search+location.hash);

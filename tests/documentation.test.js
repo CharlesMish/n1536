@@ -6,7 +6,7 @@ const [readme, limitations, html, headers, wrangler, main, shell, shellStyles, s
   await Promise.all([
     readFile(new URL("../README.md", import.meta.url), "utf8"),
     readFile(new URL("../docs/CLAIMS_AND_LIMITATIONS.md", import.meta.url), "utf8"),
-    readFile(new URL("../index.html", import.meta.url), "utf8"),
+    readFile(new URL("../same-n.html", import.meta.url), "utf8"),
     readFile(new URL("../public/_headers", import.meta.url), "utf8"),
     readFile(new URL("../wrangler.jsonc", import.meta.url), "utf8"),
     readFile(new URL("../src/main.js", import.meta.url), "utf8"),
@@ -63,6 +63,7 @@ test("Workers hosting enables public access and version previews", () => {
   const config = JSON.parse(wrangler);
   assert.equal(config.workers_dev, true);
   assert.equal(config.assets.directory, "./dist");
+  assert.equal(config.assets.html_handling, "auto-trailing-slash");
   assert.equal(config.preview_urls, true);
   assert.equal(config.routes, undefined);
   assert.equal(config.route, undefined);

@@ -24,7 +24,7 @@ test('@desktop series index, book and canonical N link together',async({page})=>
   await expect(page.locator('.spread')).toHaveCount(18);
   await check();
   await page.goto('/series/same-n.html');
-  await expect(page).toHaveURL(/\/$/);
+  await expect(page).toHaveURL(/\/same-n(?:\.html)?$/);
   await expect(page.getByRole('heading',{name:'SAME N',exact:true})).toBeVisible();
   await page.getByRole('link',{name:'Back to SAME series',exact:true}).click();
   await expect(page.locator('.card')).toHaveCount(18);

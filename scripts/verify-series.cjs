@@ -10,7 +10,7 @@ for(const file of files){const html=sourceHTML(file);pass(file+' JavaScript pars
  const src=m[1].match(/\bsrc="([^"]+)"/);
  if(src)execFileSync(process.execPath,['--check',require('path').join(root,src[1])]);else new vm.Script(m[2]);
  }});
- pass(file+' local links resolve',()=>{for(const m of html.matchAll(/href="([^"#]+\.html)(?:#[^"]*)?"/g))if(!/^(?:https?:|\/\/)/.test(m[1]))assert(fs.existsSync(root+m[1]),m[1]);});}
+ pass(file+' local links resolve',()=>{for(const m of html.matchAll(/href="([^"#]+\.html)(?:#[^"]*)?"/g))if(!/^(?:https?:|\/\/)/.test(m[1]))assert(fs.existsSync(root+m[1]) || (m[1]==='../same-n.html' && fs.existsSync(require('path').join(__dirname,'../same-n.html'))),m[1]);});}
 function ctx(file){let s=sourceHTML(file).match(/<script>([\s\S]*?)<\/script>/)[1];s=s.slice(0,s.indexOf('function I()'));if(s.includes('(function () {'))s=s.replace('(function () {','');const c={atob:s=>Buffer.from(s,'base64').toString('binary')};vm.createContext(c);vm.runInContext(s,c);return c;}
 const earth=ctx('same-earth.html');
 pass('Equal Earth unit area and analytic axis ratio agree with finite differences',()=>{
