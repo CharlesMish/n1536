@@ -1,0 +1,94 @@
+/* Shared presentation only. Each study owns its specimen geometry and layout. */
+body.exhibit-page {
+  margin: 0;
+  background: var(--field, #0d0b18);
+  color: var(--ink, #f6f2ff);
+}
+.exhibit-page > .wrap { max-width: none; margin: 0; padding: 0; }
+.exhibit-page .exhibit-stage {
+  position: relative;
+  isolation: isolate;
+  min-height: 100svh;
+  padding: clamp(20px, 3.8vw, 72px);
+}
+.exhibit-page .exhibit-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 38% 44%, color-mix(in srgb, var(--accent) 6%, transparent), transparent 65%),
+    linear-gradient(color-mix(in srgb, var(--rule) 12%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--rule) 12%, transparent) 1px, transparent 1px);
+  background-size: auto, 110px 110px, 110px 110px;
+  mask-image: radial-gradient(ellipse at center, #000 25%, transparent 80%);
+}
+.exhibit-page .exhibit-switcher {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  padding: 0;
+  border: 0;
+  border-top: 1px solid var(--rule);
+}
+.exhibit-page .exhibit-switcher > button {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 52px;
+  padding: 13px 12px;
+  margin: -1px 0 0;
+  border: 0;
+  border-top: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  text-align: left;
+  color: var(--faint);
+}
+.exhibit-page .exhibit-switcher > button[aria-pressed="true"] {
+  border-top-color: var(--ink);
+  background: transparent;
+  color: var(--ink);
+}
+.exhibit-page .exhibit-switcher > button:hover { color: var(--ink); }
+.exhibit-page .exhibit-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 18px;
+}
+.exhibit-page .exhibit-tools a[href="#study-notes"] {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font: 11px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.exhibit-page .exhibit-reading { min-width: 0; }
+.exhibit-page .exhibit-reading h2 {
+  font-size: clamp(24px, 2.2vw, 38px);
+  font-weight: 400;
+  letter-spacing: -.04em;
+  line-height: 1.1;
+}
+.exhibit-page .exhibit-reading p { color: var(--muted); }
+.exhibit-page .exhibit-stage + #study-notes,
+.exhibit-page .wrap > #study-notes,
+.exhibit-page .wrap > .footer {
+  margin-inline: clamp(20px, 3.8vw, 72px);
+}
+.exhibit-page #study-notes { scroll-margin-top: 24px; }
+.exhibit-page #study-notes > summary { min-height: 44px; }
+.exhibit-page [hidden] { display: none !important; }
+@media (max-width: 760px) {
+  .exhibit-page .exhibit-stage { padding: 20px 18px; }
+  .exhibit-page .exhibit-switcher > button { padding-inline: 6px; font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .exhibit-page *, .exhibit-page *::before, .exhibit-page *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0s !important;
+  }
+}

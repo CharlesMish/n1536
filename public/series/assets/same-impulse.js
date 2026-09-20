@@ -2,11 +2,13 @@ import { SYSTEM, SPACING, histories, appliedForce, accumulatedImpulse, response,
 
 const $ = id => document.getElementById(id);
 const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
-const plot = { left: 40, right: 306, top: 16, bottom: 153 };
-const px = t => plot.left + (plot.right - plot.left) * t / SYSTEM.duration;
-const forceY = force => plot.bottom - (plot.bottom - plot.top) * force / 4;
-const displacementY = x => (plot.top + plot.bottom) / 2 - (plot.bottom - plot.top) * x / 0.72;
+const compactPlot = matchMedia('(max-width: 760px)');
+const plots = { force: { left: 40, right: 306, top: 16, bottom: 153, width: 320, height: 184 }, displacement: { left: compactPlot.matches ? 45 : 55, right: compactPlot.matches ? 415 : 735, top: 20, bottom: 238, width: compactPlot.matches ? 440 : 760, height: 270 } };
+const px = (t, type = 'force') => plots[type].left + (plots[type].right - plots[type].left) * t / SYSTEM.duration;
+const forceY = force => plots.force.bottom - (plots.force.bottom - plots.force.top) * force / 4;
+const displacementY = x => (plots.displacement.top + plots.displacement.bottom) / 2 - (plots.displacement.bottom - plots.displacement.top) * x / 0.72;
 let spacing = SPACING.initial, time = 0, cases = histories(spacing);
+let activeCase = 'pair';
 let frame = null, timer = null, playing = false, last = null;
 
 function theme(value) {
@@ -22,15 +24,16 @@ $('theme').addEventListener('click', () => theme(document.documentElement.datase
 
 function chart(history, type) {
   const force = type === 'force', y = force ? forceY : displacementY;
+  const plot = plots[type], px = t => plot.left + (plot.right - plot.left) * t / SYSTEM.duration;
   const evaluate = t => force ? appliedForce(history, t) : response(history, t).x;
   const points = Array.from({ length: 1201 }, (_, index) => {
     const t = SYSTEM.duration * index / 1200;
     return `${index ? 'L' : 'M'}${px(t).toFixed(3)},${y(evaluate(t)).toFixed(3)}`;
   }).join(' ');
   const ticks = force ? [0, 2, 4] : [-0.3, 0, 0.3];
-  let result = `<svg class="impulse-chart" viewBox="0 0 320 184" role="img" aria-label="${history.name}: ${force ? 'applied force from zero to four newtons' : 'displacement from minus to plus 0.36 meters'}, over zero to eight seconds. All cases use this same scale.">`;
-  result += ticks.map(value => `<path class="${value === 0 ? 'zero' : 'grid'}" d="M${plot.left} ${y(value)}H${plot.right}"/><text x="34" y="${y(value) + 4}" text-anchor="end">${value}</text>`).join('');
-  result += [0, 2, 4, 6, 8].map(t => `<text x="${px(t)}" y="174" text-anchor="middle">${t}</text>`).join('');
+  let result = `<svg class="impulse-chart" viewBox="0 0 ${plot.width} ${plot.height}" role="img" aria-label="${history.name}: ${force ? 'applied force from zero to four newtons' : 'displacement from minus to plus 0.36 meters'}, over zero to eight seconds. All cases use this same scale.">`;
+  result += ticks.map(value => `<path class="${value === 0 ? 'zero' : 'grid'}" d="M${plot.left} ${y(value)}H${plot.right}"/><text x="${plot.left - 6}" y="${y(value) + 4}" text-anchor="end">${value}</text>`).join('');
+  result += [0, 2, 4, 6, 8].map(t => `<text x="${px(t)}" y="${plot.bottom + 21}" text-anchor="middle">${t}</text>`).join('');
   if (force) result += `<path class="area" d="${points} L${plot.right},${forceY(0)}L${plot.left},${forceY(0)}Z"/>`;
   result += `<path class="forcing-end" d="M${px(3)} ${plot.top}V${plot.bottom}"/><path class="curve" d="${points}"/>`;
   result += `<path class="cursor" id="${history.id}-${type}-cursor" d="M${px(time)} ${plot.top}V${plot.bottom}"/><circle class="cursor-dot" id="${history.id}-${type}-dot" cx="${px(time)}" cy="${y(evaluate(time))}" r="3.5"/>`;
@@ -54,17 +57,31 @@ function build() {
   $('cases').innerHTML = cases.map(history => {
     const peak = peakDisplacement(history), residual = residualAmplitude(history);
     const support = history.id === 'early' ? 'One 0.6 s pulse · 1 N·s' : history.id === 'broad' ? 'One 3 s push · 1 N·s' : `Two 0.6 s pulses · 0.5 N·s each`;
-    return `<article class="impulse-case case-${history.id}"><h3><span>${history.letter} · ${history.name}</span><b>J = 1</b></h3><p class="case-support">${support}</p>
-      ${mechanicalView(history)}
-      <div class="case-plots"><div><div class="chart-title"><span>Applied force · N</span><output id="${history.id}-force" aria-live="off">0.000 N</output></div>${chart(history, 'force')}</div>
-      <div><div class="chart-title"><span>Displacement · m</span><output id="${history.id}-displacement" aria-live="off">0.000 m</output></div>${chart(history, 'displacement')}</div></div>
-      <dl class="case-metrics"><div><dt>Peak |x| · 0–8 s</dt><dd title="At ${peak.time.toFixed(3)} s">${peak.magnitude.toFixed(3)} <small>m</small></dd></div><div><dt>Residual at 3 s</dt><dd>${residual.toFixed(3)} <small>m</small></dd></div><div class="impulse-constant"><dt>Total applied impulse</dt><dd>1.000 <small>N·s</small></dd></div></dl>
+    const reading = history.id === 'early' ? 'One concentrated push sets the mass in motion. The spring keeps moving it after the applied force has ended.' : history.id === 'broad' ? 'The same force–time area arrives over three seconds. The mass responds while the push is still being delivered.' : `Two equal pushes, ${spacing.toFixed(2)} seconds apart. The second meets a mass already moving; change the gap to reinforce or quiet it.`;
+    return `<article class="impulse-case case-${history.id}" id="case-${history.id}" ${history.id === activeCase ? '' : 'hidden'} aria-label="${history.name}">
+      <figure class="motion-specimen">${mechanicalView(history)}</figure>
+      <figure class="displacement-specimen exhibit-visual"><figcaption class="chart-title"><span>Displacement · m / time · s</span><output id="${history.id}-displacement" aria-live="off">0.000 m</output></figcaption>${chart(history, 'displacement')}</figure>
+      <figure class="force-specimen"><figcaption class="chart-title"><span>Applied force · N</span><output id="${history.id}-force" aria-live="off">0.000 N</output></figcaption>${chart(history, 'force')}</figure>
+      <section class="exhibit-reading"><span class="small-label">${history.letter} / Applied impulse 1 N·s</span><h2>${history.name}</h2><p>${reading}</p><p class="case-support">${support}</p>
+      <dl class="case-metrics"><div><dt>Peak |x| · 0–8 s</dt><dd title="At ${peak.time.toFixed(3)} s">${peak.magnitude.toFixed(3)} <small>m</small></dd></div><div><dt>Residual at 3 s</dt><dd>${residual.toFixed(3)} <small>m</small></dd></div><div class="impulse-constant"><dt>Total applied impulse</dt><dd>1.000 <small>N·s</small></dd></div></dl></section>
       <p class="sr-only" id="${history.id}-now"></p></article>`;
   }).join('');
   const pairResidual = residualAmplitude(cases[2]), earlyResidual = residualAmplitude(cases[0]);
   $('currentReading').textContent = `With C’s pulses ${spacing.toFixed(2)} s apart, its residual envelope at 3 s is ${pairResidual.toFixed(3)} m, compared with ${earlyResidual.toFixed(3)} m after A’s early pulse. Try spacings of 1 s and 2 s, then inspect the force and displacement at the second push.`;
+  selectCase(activeCase, false);
   drawTime();
 }
+
+function selectCase(id, announce = true) {
+  activeCase = id;
+  document.querySelectorAll('[data-case]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.case === id)));
+  for (const history of cases) $('case-' + history.id).hidden = history.id !== id;
+  document.querySelector('.exhibit-stage').dataset.activeCase = id;
+  document.querySelector('.timing-panel').hidden = id !== 'pair';
+  if (announce) $('announcement').textContent = cases.find(history => history.id === id).name + '. Applied impulse remains 1 newton second. The time and scales are unchanged.';
+}
+
+document.querySelectorAll('[data-case]').forEach(button => button.addEventListener('click', () => selectCase(button.dataset.case)));
 
 function drawTime() {
   $('time').value = time;
@@ -83,8 +100,9 @@ function drawTime() {
     $(`${history.id}-force`).value = `${force.toFixed(3)} N`;
     $(`${history.id}-displacement`).value = `${Math.abs(state.x) < 0.0005 ? '0.000' : state.x.toFixed(3)} m`;
     for (const [type, y] of [['force', forceY(force)], ['displacement', displacementY(state.x)]]) {
-      $(`${history.id}-${type}-cursor`).setAttribute('d', `M${px(time).toFixed(3)} ${plot.top}V${plot.bottom}`);
-      $(`${history.id}-${type}-dot`).setAttribute('cx', px(time).toFixed(3));
+      const plot = plots[type];
+      $(`${history.id}-${type}-cursor`).setAttribute('d', `M${px(time, type).toFixed(3)} ${plot.top}V${plot.bottom}`);
+      $(`${history.id}-${type}-dot`).setAttribute('cx', px(time, type).toFixed(3));
       $(`${history.id}-${type}-dot`).setAttribute('cy', y.toFixed(3));
     }
     $(`${history.id}-now`).textContent = `At ${time.toFixed(2)} seconds: displacement ${state.x.toFixed(3)} meters, velocity ${state.v.toFixed(3)} meters per second; applied impulse so far ${accumulatedImpulse(history, time).toFixed(3)} newton seconds.`;
@@ -96,7 +114,7 @@ function stop() {
   if (frame !== null) cancelAnimationFrame(frame);
   if (timer !== null) clearTimeout(timer);
   frame = timer = last = null;
-  $('play').textContent = 'Play';
+  $('play').textContent = motionPreference.matches ? 'Step +0.25' : 'Play';
   $('play').setAttribute('aria-pressed', 'false');
 }
 
@@ -109,20 +127,16 @@ function advance(timestamp) {
   else frame = requestAnimationFrame(advance);
 }
 
-function reducedAdvance() {
-  if (!playing) return;
-  time = Math.min(SYSTEM.duration, time + 0.25); drawTime();
-  if (time >= SYSTEM.duration) stop();
-  else timer = setTimeout(reducedAdvance, 250);
-}
-
 $('play').addEventListener('click', () => {
+  if (motionPreference.matches) {
+    stop(); time = time >= SYSTEM.duration ? 0 : Math.min(SYSTEM.duration, time + 0.25); drawTime();
+    $('announcement').textContent = `Time ${time.toFixed(2)} seconds.`; return;
+  }
   if (playing) { stop(); return; }
   if (time >= SYSTEM.duration) { time = 0; drawTime(); }
   playing = true;
   $('play').textContent = 'Pause'; $('play').setAttribute('aria-pressed', 'true');
-  if (motionPreference.matches) timer = setTimeout(reducedAdvance, 250);
-  else frame = requestAnimationFrame(advance);
+  frame = requestAnimationFrame(advance);
 });
 $('restart').addEventListener('click', () => { stop(); time = 0; drawTime(); });
 $('time').addEventListener('input', event => { stop(); time = Number(event.target.value); drawTime(); });
@@ -137,4 +151,10 @@ for (const [id, value] of [['halfPeriod', 1], ['fullPeriod', 2]]) $(id).addEvent
 document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); });
 window.addEventListener('pagehide', stop);
 motionPreference.addEventListener('change', stop);
+compactPlot.addEventListener('change', () => {
+  // Change only drawing dimensions; every history keeps the same physical axes.
+  Object.assign(plots.displacement, { left: compactPlot.matches ? 45 : 55, right: compactPlot.matches ? 415 : 735, width: compactPlot.matches ? 440 : 760 });
+  build();
+});
 build();
+stop();

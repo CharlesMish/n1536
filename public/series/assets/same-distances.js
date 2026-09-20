@@ -16,7 +16,7 @@ const xy = point => `${point[0].toFixed(3)} ${point[1].toFixed(3)}`;
 
 function fieldSVG(source, rms) {
   const target2 = TARGET.map(project), source2 = source.map(project);
-  let svg = `<svg viewBox="0 0 620 440" role="img" aria-labelledby="fieldTitle fieldDescription"><title id="fieldTitle">Labeled target and moving tetrahedron</title><desc id="fieldDescription">The current three-dimensional RMS mismatch is ${fmt(rms)} units. Target vertices are open circles with dashed edges; moving vertices are filled diamonds with solid edges. Both centers coincide. The ${reflectionAllowed ? 'reflected' : 'original mirrored'} moving body has signed volume ${signed(signedVolume(source))} cubic units.</desc>`;
+  let svg = `<svg viewBox="80 0 460 460" role="img" aria-labelledby="fieldTitle fieldDescription"><title id="fieldTitle">Labeled target and moving tetrahedron</title><desc id="fieldDescription">The current three-dimensional RMS mismatch is ${fmt(rms)} units. Target vertices are open circles with dashed edges; moving vertices are filled diamonds with solid edges. Both centers coincide. The ${reflectionAllowed ? 'reflected' : 'original mirrored'} moving body has signed volume ${signed(signedVolume(source))} cubic units.</desc>`;
   const center = project([0, 0, 0]);
   svg += `<path class="field-center" d="M${center[0] - 6} ${center[1]}h12 M${center[0]} ${center[1] - 6}v12"/>`;
   for (let i = 0; i < 4; i++) svg += `<path class="tetra-connector" d="M${xy(target2[i])}L${xy(source2[i])}"/>`;
@@ -30,8 +30,8 @@ function fieldSVG(source, rms) {
     if (rms > 1e-9) svg += `<text class="tetra-label" x="${sx + 13}" y="${sy + 23}">${LABELS[i]}</text>`;
   }
   // A one-unit screen-plane scale, unchanged by all controls.
-  svg += `<path class="field-scale" d="M32 396v8 m0 -4h65 m0 -4v8"/><text class="field-note" x="32" y="426">1 unit · screen plane</text>`;
-  const axisOrigin = [546, 375];
+  svg += `<path class="field-scale" d="M112 426v8 m0 -4h65 m0 -4v8"/><text class="field-note" x="112" y="453">1 unit · screen plane</text>`;
+  const axisOrigin = [486, 404];
   for (let j = 0; j < 3; j++) {
     const axis = [0, 0, 0]; axis[j] = 1;
     const d = transform(camera, axis);
@@ -49,6 +49,14 @@ function draw() {
   $('bestRms').textContent = `${fmt(BEST_PROPER_RMS)} units`;
   $('targetVolume').textContent = signed(signedVolume(TARGET));
   $('sourceVolume').textContent = signed(signedVolume(source));
+  const atBest = !reflectionAllowed && Math.abs(rms - BEST_PROPER_RMS) < 1e-10;
+  $('reset').setAttribute('aria-pressed', String(!reflectionAllowed && !atBest));
+  $('distanceCaseNumber').textContent = `${reflectionAllowed ? '03' : atBest ? '02' : '01'} / Three operations`;
+  $('distanceCaseTitle').textContent = reflectionAllowed ? 'Reflection allowed' : atBest ? 'Best proper fit' : 'Mirror';
+  $('distanceCaseDescription').textContent = reflectionAllowed
+    ? 'One reflection changes the hand. The same six distances now permit an exact fit.'
+    : atBest ? 'Even the globally best proper rotation leaves a gap. Distance alone did not name the hand.'
+    : 'Six matching edges. Opposite hands. Drag the body and try to close the gap.';
   $('reflect').setAttribute('aria-pressed', String(reflectionAllowed));
   $('bestFit').setAttribute('aria-pressed', String(!reflectionAllowed && Math.abs(rms - BEST_PROPER_RMS) < 1e-10));
   $('fitState').textContent = rms < 1e-9 ? 'Every label coincides. Reflection changed the hand.'
@@ -78,10 +86,10 @@ $('bestFit').addEventListener('click', () => {
   announce('Best proper rotation reached. Three-dimensional RMS 1 unit. No rotation or translation can reduce it further for this labeled mirror pair.');
 });
 $('reflect').addEventListener('click', () => {
-  reflectionAllowed = !reflectionAllowed;
+  reflectionAllowed = true;
   angles = [0, 0, 0];
   draw();
-  announce(reflectionAllowed ? 'Reflection allowed. Corresponding labels align exactly, RMS zero. The signed volumes now match.' : 'Reflection excluded. Returned to the best proper rotation, RMS 1 unit.');
+  announce('Reflection allowed. Corresponding labels align exactly, RMS zero. The signed volumes now match.');
 });
 $('reset').addEventListener('click', () => { angles = [...INITIAL_ANGLES]; reflectionAllowed = false; draw(); announce('Opening orientation restored. Reflection excluded.'); });
 

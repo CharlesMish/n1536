@@ -26,14 +26,33 @@ function distanceSVG(paths,t=32){let s='<svg viewBox="0 0 920 230" role="img" ar
 }
 function averageSpecimen(state){let s='<svg viewBox="0 0 600 300" role="img" aria-label="Reversal: A leads pooled sixty to forty percent; B leads within both groups"><g font-size="14" fill="var(--ink)">';const rows=[['Pooled',[[120,200],[80,200]]],['Group 1',state.cells[0]],['Group 2',state.cells[1]]];for(let i=0;i<3;i++){const y=32+i*88;s+=`<text x="18" y="${y}">${rows[i][0]}</text>`;for(let c=0;c<2;c++){const [k,n]=rows[i][1][c],yy=y+9+c*25;s+=`<text x="130" y="${yy+12}" fill="${c?'var(--summary)':'var(--accent)'}">${c?'B':'A'}</text><rect x="151" y="${yy}" width="290" height="13" fill="var(--grid)"/><rect x="151" y="${yy}" width="${290*k/n}" height="13" fill="${c?'var(--summary)':'var(--accent)'}"/><text x="452" y="${yy+12}">${Math.round(100*k/n)}% · ${k}/${n}</text>`;}}return s+'</g></svg>';}
 
+function lawFieldSVG(paths,t,selected){
+ const colors=['var(--accent)','var(--summary)','var(--warm)'],names=['A','B','C'],low=Math.max(0,t-12),to=p=>[60+Number(p[0])/Number(Q)*480,540-Number(p[1])/Number(Q)*480];
+ let svg=`<svg viewBox="0 0 600 600" role="img" aria-label="Start ${names[selected]} emphasized at step ${t} on a shared wrapped square. Other starts remain faint. Dots are discrete states, not a continuous path."><rect x="60" y="60" width="480" height="480" fill="var(--panel)" fill-opacity=".35" stroke="var(--rule)"/>`;
+ for(let i=1;i<4;i++){const v=60+i*120;svg+=`<path d="M${v} 60V540 M60 ${v}H540" fill="none" stroke="var(--grid)"/>`;}
+ svg+='<g fill="var(--faint)" font-size="12"><text x="57" y="566">0</text><text x="535" y="566">1</text><text x="35" y="65">1</text><text x="300" y="576" text-anchor="middle">x · opposite edges join</text><text x="21" y="306">y</text></g>';
+ const glyph=(j,x,y,r,color,opacity)=>j===0?`<circle cx="${x}" cy="${y}" r="${r}" fill="${color}" opacity="${opacity}"/>`:j===1?`<rect x="${x-r}" y="${y-r}" width="${2*r}" height="${2*r}" fill="${color}" opacity="${opacity}"/>`:`<path d="M${x} ${y-r*1.3}L${x+r*1.3} ${y}L${x} ${y+r*1.3}L${x-r*1.3} ${y}Z" fill="${color}" opacity="${opacity}"/>`;
+ for(const j of [0,1,2].filter(j=>j!==selected).concat(selected)){
+  for(let i=low;i<=t;i++){const [x,y]=to(paths[j][i]),current=i===t,alpha=j===selected?(current?1:.22+.5*(i-low)/13):(current?.5:.12);svg+=glyph(j,x,y,current?6:3.5,colors[j],alpha);}
+  const [x,y]=to(paths[j][t]);svg+=`<circle cx="${x}" cy="${y}" r="${j===selected?16:12}" fill="none" stroke="${colors[j]}" opacity="${j===selected?1:.35}" ${j!==selected?'stroke-dasharray="3 4"':''}/><text x="${x+(x>510?-23:23)}" y="${y+5}" fill="${colors[j]}" font-size="15" opacity="${j===selected?1:.6}" text-anchor="${x>510?'end':'start'}">${names[j]}</text>`;
+ }
+ return svg+'</svg>';
+}
+
 const themeButton=document.getElementById('theme');
 function setTheme(value){document.documentElement.dataset.theme=value;themeButton.textContent=value==='uv'?'Paper':'UV';themeButton.setAttribute('aria-label','Switch to '+(value==='uv'?'Paper':'UV')+' presentation');try{localStorage.setItem('same-reading-theme',value);}catch{}}
 let saved='uv';try{saved=localStorage.getItem('same-reading-theme')||'uv';}catch{}setTheme(saved==='paper'?'paper':'uv');themeButton.addEventListener('click',()=>setTheme(document.documentElement.dataset.theme==='paper'?'uv':'paper'));
 
-let bits=40,t=32,paths=trajectories(bits),timer=null;
+let bits=40,t=32,paths=trajectories(bits),timer=null,selectedStart=0;
 const $=id=>document.getElementById(id);
 function stop(){if(timer!==null)clearInterval(timer);timer=null;$('play').textContent='Play';$('play').setAttribute('aria-pressed','false');}
 function drawLaw(){
+ const names=['Reference A','Near B','Near C'],readings=['One frozen start. Compare its history with two nearby starts.','Only the initial x coordinate changes by ε. Every later step uses the same rule.','Only the initial y coordinate changes by ε. Every later step uses the same rule.'];
+ $('lawField').innerHTML=lawFieldSVG(paths,t,selectedStart);
+ $('caseNumber').textContent=`0${selectedStart+1} / START`;$('caseName').textContent=names[selectedStart];$('caseReading').textContent=readings[selectedStart];
+ $('selectedX').textContent=(Number(paths[selectedStart][t][0])/Number(Q)).toFixed(9);$('selectedY').textContent=(Number(paths[selectedStart][t][1])/Number(Q)).toFixed(9);
+ $('selectedDistance').textContent=selectedStart===0?'0 (reference)':distance(paths[0][t],paths[selectedStart][t]).toExponential(3);
+ document.querySelectorAll('[data-start]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.start)===selectedStart)));
  const labels=['A · reference','B · x + ε','C · y + ε'],colors=['var(--accent)','var(--summary)','var(--warm)'];
  $('orbits').innerHTML=paths.map((p,j)=>`<figure class="spec trajectory-${j}"><h3>${labels[j]}<span>${j===0?'one frozen start':'one coordinate changed'}</span></h3>${torusSVG(p,t,colors[j],labels[j])}<figcaption class="coordinates">x ${Number(p[t][0])/Number(Q)}<br>y ${Number(p[t][1])/Number(Q)}</figcaption></figure>`).join('');
  $('plot').innerHTML=distanceSVG(paths,t);$('time').value=t;$('timeOut').value=`Step ${String(t).padStart(2,'0')} / 80`;
@@ -50,5 +69,6 @@ $('play').addEventListener('click',play);
 $('restart').addEventListener('click',()=>{stop();t=0;drawLaw();});
 $('time').addEventListener('input',e=>{stop();t=Number(e.target.value);drawLaw();});
 document.querySelectorAll('[data-bits]').forEach(b=>b.addEventListener('click',()=>{stop();bits=Number(b.dataset.bits);paths=trajectories(bits);drawLaw();}));
+document.querySelectorAll('[data-start]').forEach(b=>b.addEventListener('click',()=>{selectedStart=Number(b.dataset.start);drawLaw();$('announcement').textContent=$('caseName').textContent+'. '+$('caseReading').textContent+' Time and starting separation are unchanged.';}));
 document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});
 drawLaw();

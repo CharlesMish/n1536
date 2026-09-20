@@ -99,8 +99,11 @@
   new ResizeObserver(()=>{sourceCache=null;fitCanvas();wake();}).observe(canvas);
   function layoutSquare() {
     const w = canvas.clientWidth, h = canvas.clientHeight;
-    const side = w>1500 ? Math.max(160,Math.min(w*0.4,h-350)) : Math.min(w, h) * (w < 700 ? 0.88 : 0.68);
-    square = {x:(w - side) / 2 + (w >= 980 ? Math.min(48, w * 0.03) : 0), y:w>1500 ? 230+(h-350-side)/2 : (h-side)/2, side, w, h};
+    // Compact mode gives the specimen its own stage. Never apply desktop
+    // overlay clearances to that shorter stage (the former tiny-square bug).
+    const compact = document.documentElement.classList.contains("mobile-reading");
+    const side = compact ? Math.min(w, h) * 0.90 : Math.min(w * 0.44, h - 160);
+    square = {x:(w - side) / 2, y:compact ? (h - side) / 2 : (h - 110 - side) / 2, side, w, h};
   }
   function fitCanvas() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -482,7 +485,7 @@
     n.before(marker);
     homes.set(n, marker);
   }
-  const mq = matchMedia("(max-width:1500px), (max-height:800px)");
+  const mq = matchMedia("(max-width:1099px), (max-height:619px)");
   const layoutMobile = () => {
     document.documentElement.classList.toggle("mobile-reading", mq.matches);
     if (mq.matches) {

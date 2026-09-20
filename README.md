@@ -6,6 +6,8 @@ Run `npm run dev` and open `/series/index.html`, or build with `npm run validate
 
 The collection is configured for Cloudflare Workers Static Assets. See the hosting settings below.
 
+The studies open as interactive specimens: choose a case in the bottom rail, inspect its response, and open **Read the study** for equations, source data, and audits. SAME FIT retains all four Anscombe datasets; the other updated exhibits use three authored cases. The index and book remain available from each study.
+
 ---
 
 # SAME N

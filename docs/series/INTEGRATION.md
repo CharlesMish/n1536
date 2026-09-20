@@ -69,7 +69,7 @@ Distances distinguishes the current three-dimensional alignment error from the p
 
 Residual keeps the entire linear system fixed. With r = b − A x̂, the solution error is x − x̂ = A⁻¹r. Its equal-unit panels show the fixed residual circle and the error ellipse; relative residual, relative error, directional amplification, and the condition-number bound remain separate quantities. It is an exact sensitivity construction, not a test of a numerical solver or a claim about roundoff.
 
-Fit draws actual per-dataset least-squares lines and computes every statistic from the published decimal values. The shared summary declares its rounding precision; the numerical audit reveals the differences. All four datasets appear together with fixed axes, and residuals use each dataset’s own computed line. There is no fabricated exact equality or data morph.
+Fit draws actual per-dataset least-squares lines and computes every statistic from the published decimal values. The shared summary declares its rounding precision; the numerical audit reveals the differences. The opening view selects one dataset, while the study retains the four-dataset comparison with fixed axes. Residuals use each dataset’s own computed line. There is no fabricated exact equality or data morph.
 
 All three use external same-origin modules and the established Paper/UV styles. Study 15 links onward to 16; the index, book, and no-JavaScript navigation include all eighteen entries. Production hosting remains a separate action.
 
@@ -84,3 +84,15 @@ Recorded local validation: `npm run validate` passed all 61 unit tests, 54 serie
 ## Workers entry routes
 
 The collection is named SAME; SAME N remains study 01. The root redirects to `/series/` through `public/_redirects`, with an external-script and ordinary-link fallback for local Vite previews. `auto-trailing-slash` preserves directory URLs and prevents the index from resolving its relative resources at the domain root. SAME N is a separate Vite entry at `/same-n.html`; the historical `/series/same-n.html` link preserves its query and fragment when redirecting there. Custom domain `same.cmish.dev` can be attached to the existing `same-n` Worker without renaming that Worker.
+
+## Specimen-first presentation
+
+AVERAGE, LAW, DEGREES, IMPULSE, EIGENVALUES, DISTANCES, RESIDUAL, and FIT now start with a large active specimen, an authored case rail, concise current readings, and immediately available scene controls. Their derivations, full comparisons, source data, and audits sit inside a closed native “Read the study” disclosure. FIT has four real Anscombe datasets; it is deliberately not reduced to three cases. The other seven pages have three authored selections, with continuous/custom controls retained where applicable.
+
+`exhibit-shell.css` and `exhibit-shell.js` provide presentation-only conventions and disclosure/keyboard navigation. The study controllers still own their models, precise scales, live metrics, and selected state. Number keys select cases outside editable controls; arrow keys navigate a focused case rail. Native range/field keyboard interaction is preserved. A reading link opens the disclosure and focuses its summary; closing returns focus to the link.
+
+DIVERGENCE retains its existing immersive shell and study dialog. Its CSS breakpoint and canvas clearance now use the same compact-layout state, so a wide but short window cannot shrink the mathematical field by applying desktop clearances twice.
+
+`tests/browser/immersive-studies.spec.js` checks desktop, shorter laptop, and phone compositions, actual visual changes on case selection, case controls, disclosures, keyboard use, and runtime/CSP behavior. Its DIVERGENCE check measures painted canvas bounds, rather than assuming that a large canvas means a large specimen.
+
+Recorded local validation for this pass: all 61 unit tests, 54 series checks, the production build, and CSP/static checks passed. The 27 new browser checks passed at 1920×900, 1440×800, and 390×844. Another 37 existing study checks passed across desktop, 320px portrait, 667px landscape, and reduced motion. Visual review covered both Paper and UV. The six pure model/math modules are unchanged; the LAW and AVERAGE mathematical definitions are also unchanged.

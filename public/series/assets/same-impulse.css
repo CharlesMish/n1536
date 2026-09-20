@@ -1,25 +1,58 @@
-.same-impulse .wrap{padding-bottom:max(60px,env(safe-area-inset-bottom));padding-left:max(clamp(18px,4vw,52px),env(safe-area-inset-left));padding-right:max(clamp(18px,4vw,52px),env(safe-area-inset-right))}
-.same-impulse .hero{grid-template-columns:1.2fr 1fr}
-.timing-panel{border:1px solid var(--rule);background:var(--panel);padding:18px 22px;margin-bottom:28px}
-.timing-heading{display:flex;justify-content:space-between;gap:20px;align-items:center}
-.timing-heading label{font-size:16px;color:var(--warm)}
-.timing-heading output{font:20px ui-monospace,monospace;white-space:nowrap}
-.timing-panel input{display:block;width:100%;min-height:42px;accent-color:var(--warm);margin:7px 0}
-.timing-presets{display:flex;align-items:center;gap:10px}
-.timing-presets p{font-size:12px;color:var(--muted);margin:0 0 0 8px;max-width:47ch}
-.timing-presets button{font-size:13px;white-space:nowrap;padding:8px 12px}
-.same-impulse .time-controls{margin-top:6px;margin-bottom:8px}
-.same-impulse #scrub-help{margin:0 0 22px}
-.impulse-cases{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-.impulse-case{border:1px solid var(--rule);background:var(--panel);padding:16px 14px;min-width:0;--case-color:var(--accent)}
-.impulse-case.case-broad{--case-color:var(--summary)}
-.impulse-case.case-pair{--case-color:var(--warm)}
-.impulse-case h3{font-size:18px;color:var(--case-color);margin:0 0 5px;display:flex;align-items:baseline;justify-content:space-between;gap:8px}
-.impulse-case h3 b{font:12px ui-monospace,monospace}
-.impulse-case .case-support{color:var(--muted);font-size:12px;min-height:36px;margin:0 0 8px}
-.impulse-case .motion{margin:8px 0 16px}
-.chart-title{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:12px;margin:12px 0 2px}
-.chart-title output{font-variant-numeric:tabular-nums;color:var(--ink)}
+
+/* One active specimen, with the instrument and its reading held on fixed scales. */
+.same-impulse.exhibit-page .wrap{max-width:none;padding:0}
+.same-impulse .exhibit-stage{position:relative;min-height:760px;height:100svh;padding:34px 4.2vw 28px}
+.same-impulse .utility{position:relative;z-index:2;justify-content:flex-start;gap:24px;font:11px ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase}
+.same-impulse .utility #theme{margin-left:auto;border:0}
+.same-impulse .hero{display:block;position:absolute;left:4.2vw;top:95px;z-index:1;margin:0;pointer-events:none}
+.same-impulse .eyebrow{margin:0 0 23px;font-size:10px}
+.same-impulse .hero h1{font-size:clamp(44px,5.1vw,96px);letter-spacing:-.055em;line-height:1;margin:0 0 20px}
+.same-impulse .subtitle{font-size:clamp(15px,1.15vw,21px)}
+.same-impulse .exhibit-tools{position:absolute;left:4.2vw;right:4.2vw;bottom:100px;display:grid;grid-template-columns:minmax(0,650px) 1fr;gap:0 25px;align-items:center}
+.same-impulse .time-controls{margin:0;gap:12px;grid-template-columns:auto auto minmax(80px,1fr) auto}
+.same-impulse .time-controls button,.same-impulse .exhibit-reading button{padding:5px 10px;border:0;border-bottom:1px solid var(--rule);border-radius:0;font:11px ui-monospace,monospace}
+.same-impulse .time-controls input{grid-column:auto;grid-row:auto}
+.same-impulse .time-controls output{min-width:95px;font-size:11px}
+.same-impulse .exhibit-tools>p{grid-column:1;margin:2px 0;font:10px/1.4 ui-monospace,monospace;color:var(--faint)}
+.same-impulse .study-link{grid-column:2;grid-row:1;justify-self:end;font:11px ui-monospace,monospace;text-decoration:none}
+.same-impulse .exhibit-switcher{position:absolute;left:4.2vw;right:4.2vw;bottom:25px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.same-impulse .exhibit-switcher button{display:flex;gap:20px;text-align:left;align-items:center;border:0;border-top:1px solid var(--rule);border-radius:0;min-height:55px;padding:12px 0;background:none;font-size:14px}
+.same-impulse .exhibit-switcher button[aria-pressed=true]{border-top:2px solid var(--ink);color:var(--ink)}
+.same-impulse .exhibit-switcher button span{font:10px ui-monospace,monospace;color:var(--accent)}
+.same-impulse .exhibit-reading h2{font-size:clamp(25px,2.3vw,40px);line-height:1.15;margin:12px 0}
+.same-impulse .exhibit-reading p{font-size:13px;line-height:1.6;color:var(--muted);margin:9px 0}
+.same-impulse .exhibit-reading .small-label{font-size:10px;color:var(--summary)}
+.same-impulse .study-notes,.same-impulse .footer,.same-impulse noscript{margin-left:4.2vw;margin-right:4.2vw;max-width:1400px}
+.same-impulse .study-notes{margin-top:0;padding-top:12px}
+.same-impulse .study-notes[open]{padding-bottom:24px}
+.same-impulse .footer{margin-bottom:35px}
+@media(max-width:1050px){
+.same-impulse .exhibit-stage{min-height:760px}
+.same-impulse .hero h1{font-size:clamp(36px,5.2vw,60px)}
+.same-impulse .exhibit-tools{grid-template-columns:minmax(0,580px) 1fr}
+.same-impulse .exhibit-reading p{font-size:12px}
+.same-impulse .exhibit-reading h2{font-size:27px}
+}
+@media(max-width:760px){
+.same-impulse .exhibit-stage{height:auto;min-height:100svh;padding:16px 20px 26px;display:flex;flex-direction:column}
+.same-impulse .utility{gap:14px}
+.same-impulse .hero{position:static;order:1;margin:22px 0 10px;pointer-events:auto}
+.same-impulse .hero h1{font-size:clamp(30px,7vw,52px);margin-bottom:12px;overflow-wrap:anywhere}
+.same-impulse .eyebrow{margin-bottom:18px;font-size:9px}
+.same-impulse .subtitle{font-size:15px}
+.same-impulse .exhibit-tools{position:static;order:7;display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 10px}
+.same-impulse .time-controls{width:100%;grid-template-columns:auto auto 1fr;gap:8px}
+.same-impulse .time-controls input{grid-column:1/-1;grid-row:2}
+.same-impulse .time-controls output{min-width:70px}
+.same-impulse .exhibit-tools>p{width:100%;font-size:10px}
+.same-impulse .study-link{margin-left:auto;min-height:36px;display:flex;align-items:center}
+.same-impulse .exhibit-switcher{position:static;order:8;gap:10px}
+.same-impulse .exhibit-switcher button{font-size:12px;gap:8px;align-items:flex-start;flex-direction:column}
+.same-impulse .exhibit-reading{position:static!important;width:auto!important;order:5;max-width:none;margin:16px 0 0}
+.same-impulse .exhibit-reading h2{font-size:28px}
+.same-impulse .exhibit-reading p{font-size:13px}
+.same-impulse .study-notes,.same-impulse .footer{margin-left:20px;margin-right:20px}
+}
 .impulse-chart text{font:11px ui-monospace,monospace;fill:var(--muted)}
 .impulse-chart .grid{stroke:var(--grid);stroke-width:1}
 .impulse-chart .zero{stroke:var(--rule);stroke-width:1}
@@ -35,18 +68,61 @@
 .motion .neutral{stroke:var(--rule);stroke-width:1;stroke-dasharray:2 4}
 .motion .mass{fill:var(--case-color);fill-opacity:.2;stroke:var(--case-color);stroke-width:1.5}
 .motion text{fill:var(--muted);font:10px ui-monospace,monospace}
-.case-metrics{display:grid;grid-template-columns:1fr 1fr;gap:14px 8px;margin:18px 0 0;border-top:1px solid var(--rule);padding-top:14px}
-.case-metrics dt{font-size:11px;color:var(--muted)}
-.case-metrics dd{font:18px ui-monospace,monospace;margin:4px 0 0;color:var(--case-color);white-space:nowrap}
-.case-metrics dd small{font-size:11px;color:var(--muted)}
-.case-metrics .impulse-constant{grid-column:1/-1;display:flex;align-items:baseline;justify-content:space-between;gap:10px}
-.impulse-constant dd{font-size:15px}
-.plot-note{font-size:13px;line-height:1.65;color:var(--muted);max-width:85ch;margin:18px 0 0}
-.equation{font:14px/1.9 ui-monospace,monospace!important;color:var(--ink)!important}
-.same-impulse .values{margin-top:0}.same-impulse .values dd{font-size:20px}
-.same-impulse .study-notes p{overflow-wrap:anywhere}
-@media(max-width:850px){.impulse-cases{gap:10px}.impulse-case{padding:14px 10px}.case-metrics dd{font-size:16px}.same-impulse .hero{grid-template-columns:1fr;gap:18px}}
-@media(max-width:1100px){.impulse-cases{grid-template-columns:1fr;gap:20px}.impulse-case{padding:18px}.impulse-case .case-support{min-height:0}.impulse-case .motion{max-width:420px;margin:4px auto 8px}.case-plots{display:grid;grid-template-columns:1fr 1fr;gap:20px}.case-plots>div{min-width:0}.impulse-chart{max-height:220px}.chart-title{font-size:13px}.case-metrics{grid-template-columns:1fr 1fr 1fr}.case-metrics .impulse-constant{grid-column:auto;display:block}.case-metrics dd{font-size:18px}.impulse-constant dd{font-size:15px}.timing-presets{flex-wrap:wrap}.timing-presets p{flex-basis:100%;margin:2px 0 0}.timing-panel{padding:16px}.timing-heading label{font-size:14px}.same-impulse .time-controls output{font-size:13px}.same-impulse .hero h1{font-size:clamp(36px,8vw,54px)}}
-@media(max-width:680px){.case-plots{grid-template-columns:1fr;gap:0}}
-@media(max-width:400px){.case-metrics{grid-template-columns:1fr 1fr}.case-metrics .impulse-constant{grid-column:1/-1;display:flex}.impulse-case{padding:15px}.timing-heading{gap:10px}}
-@media(prefers-reduced-motion:reduce){.same-impulse *{scroll-behavior:auto}}
+
+.same-impulse .impulse-cases{position:absolute;inset:0;pointer-events:none}
+.same-impulse .impulse-case{--case-color:var(--accent);pointer-events:none}
+.same-impulse .case-broad{--case-color:var(--summary)}
+.same-impulse .case-pair{--case-color:var(--warm)}
+.same-impulse .motion-specimen{position:absolute;left:23%;top:26%;width:40%;margin:0}
+.same-impulse .motion{width:100%;max-height:120px;margin:0}
+.same-impulse .displacement-specimen{position:absolute;left:23%;top:42%;width:48%;margin:0}
+.same-impulse .displacement-specimen .impulse-chart{width:100%;height:auto;max-height:none}
+.same-impulse .chart-title{display:flex;justify-content:space-between;font:10px ui-monospace,monospace;color:var(--faint);margin:0 0 8px;gap:12px}
+.same-impulse .chart-title output{color:var(--ink);white-space:nowrap}
+.same-impulse .force-specimen{position:absolute;left:4.2vw;bottom:194px;width:22%;margin:0;border:1px solid var(--grid);padding:14px;background:color-mix(in srgb,var(--panel) 45%,transparent)}
+.same-impulse .force-specimen .impulse-chart{width:100%;height:auto}
+.same-impulse .exhibit-reading{position:absolute;right:4.2vw;bottom:193px;width:24%;pointer-events:auto}
+.same-impulse .case-metrics{display:flex;flex-wrap:wrap;gap:14px 22px;margin:17px 0;border-top:1px solid var(--rule);padding-top:14px}
+.same-impulse .case-metrics dt{font:10px ui-monospace,monospace;color:var(--faint)}
+.same-impulse .case-metrics dd{font:19px ui-monospace,monospace;margin:5px 0;color:var(--case-color)}
+.same-impulse .case-metrics dd small{font-size:10px;color:var(--muted)}
+.same-impulse .case-metrics .impulse-constant{flex-basis:100%;display:flex;gap:14px;align-items:baseline}
+.same-impulse .impulse-constant dd{font-size:13px}
+.same-impulse .timing-panel{position:absolute;right:4.2vw;bottom:162px;width:24%;pointer-events:auto}
+.same-impulse .timing-heading{display:flex;justify-content:space-between;font:11px ui-monospace,monospace;color:var(--muted)}
+.same-impulse .timing-panel input{width:100%;height:30px;accent-color:var(--warm)}
+.same-impulse .timing-presets{display:flex;gap:12px}
+.same-impulse .timing-presets button{padding:4px 7px;border-radius:0;font:10px ui-monospace,monospace;min-height:32px}
+.same-impulse #timing-help{font:10px/1.4 ui-monospace,monospace;color:var(--faint);margin:7px 0 0}
+.same-impulse .exhibit-stage[data-active-case=pair] .exhibit-reading{bottom:330px}
+.same-impulse .equation{font:14px/1.9 ui-monospace,monospace;color:var(--ink)}
+@media(max-width:1050px){.same-impulse .displacement-specimen{left:8%;width:62%;top:45%}.same-impulse .force-specimen{width:25%;bottom:185px}.same-impulse .exhibit-reading,.same-impulse .timing-panel{width:27%}.same-impulse .motion-specimen{top:28%;left:18%;width:44%}}
+@media(max-width:760px){
+.same-impulse .impulse-cases{position:static;order:2;margin-top:20px;pointer-events:auto}
+.same-impulse .impulse-case{display:flex;flex-direction:column;pointer-events:auto}
+.same-impulse .motion-specimen{position:static;order:1;width:90%;margin:6px auto 20px}
+.same-impulse .motion{max-height:105px}
+.same-impulse .displacement-specimen{position:static;order:2;width:100%;margin:0 0 20px}
+.same-impulse .displacement-specimen .impulse-chart{max-height:none}
+.same-impulse .force-specimen{position:static;order:3;width:min(100%,390px);padding:12px;margin:0 auto}
+.same-impulse .force-specimen .impulse-chart{max-height:155px}
+.same-impulse .exhibit-reading{order:4}
+.same-impulse .timing-panel{position:static;order:6;width:100%;margin-top:8px}
+.same-impulse .case-metrics{gap:14px 28px}
+}
+
+.same-impulse .displacement-specimen .impulse-chart text{font-size:13px}
+@media(max-width:760px){.same-impulse .displacement-specimen .impulse-chart text{font-size:15px}}
+@media(max-width:760px){
+.same-impulse .impulse-cases,.same-impulse .impulse-case{display:contents}
+.same-impulse .motion-specimen{order:2}
+.same-impulse .displacement-specimen{order:3}
+.same-impulse .exhibit-switcher{order:4;margin:0 0 22px}
+.same-impulse .force-specimen{order:5}
+.same-impulse .exhibit-reading{order:6}
+.same-impulse .timing-panel{order:7}
+.same-impulse .exhibit-tools{order:8}
+}
+@media(min-width:1051px){.same-impulse .force-specimen{width:20%}}
+.same-impulse .displacement-specimen .curve{vector-effect:non-scaling-stroke;stroke-width:2}
+@media(min-width:761px){.same-impulse .impulse-case{position:absolute;inset:0}}

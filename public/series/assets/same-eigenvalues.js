@@ -53,14 +53,18 @@ function draw() {
   $('time').value = String(time);
   $('timeOut').value = `t = ${fmt(time, 2)} / 6`;
   $('couplingOut').value = fmt(k, 1);
+  const presetNames = { 0: ['01', 'Uncoupled'], 4: ['02', 'Small excursion'], 12: ['03', 'Large excursion'] };
+  const selected = presetNames[k];
+  $('activeCaseName').textContent = selected ? selected[1] : 'Custom coupling';
+  $('activeCaseNumber').textContent = `${selected ? selected[0] : '↔'} / k = ${fmt(k, 1)}`;
   $('currentNorm').textContent = fmt(normAt(k, time));
   $('peakNorm').textContent = `${fmt(peak.norm)}×`;
   $('peakTime').textContent = fmt(peak.time);
   const current = stateAt(k, time);
   $('currentState').textContent = `x₁ = ${fmt(current[0], 4)} · x₂ = ${fmt(current[1], 4)} · t = ${fmt(time, 2)}`;
   $('currentReading').textContent = peak.norm > 1 + 1e-10
-    ? `At k = ${fmt(k, 1)}, this start reaches ${fmt(peak.norm)} times its initial distance from zero. The eigenvalues are still −1 and −2, and the state still tends to zero.`
-    : `At k = ${fmt(k, 1)}, this start never exceeds its initial distance from zero. Its peak is 1 at the release. The eigenvalues are still −1 and −2.`;
+    ? `At k = ${fmt(k, 1)}, this start reaches ${fmt(peak.norm)} times its initial distance from zero. It still tends to zero; both eigenvalues stay fixed.`
+    : `At k = ${fmt(k, 1)}, this start never exceeds its initial distance from zero. Its peak is 1 at the release. Both eigenvalues stay fixed.`;
   document.querySelectorAll('[data-k]').forEach(button => button.setAttribute('aria-pressed', String(Number(button.dataset.k) === k)));
 }
 

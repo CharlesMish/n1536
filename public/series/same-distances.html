@@ -1,65 +1,59 @@
-<!doctype html>
-<html lang="en" class="same-study same-distances" data-theme="uv">
+<!DOCTYPE html>
+
+<html class="same-study same-distances" data-theme="uv" lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#0d0b18">
-  <meta name="description" content="SAME DISTANCES — Same distances. Different handedness. Rotate a labeled tetrahedron toward its mirror and inspect the best possible three-dimensional fit.">
-  <title>SAME DISTANCES — Field study 16</title>
-  <link rel="stylesheet" href="./assets/same-law.css">
-  <link rel="stylesheet" href="./assets/same-distances.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="#0d0b18" name="theme-color"/>
+<meta content="SAME DISTANCES — Same distances. Different handedness. Rotate a labeled tetrahedron toward its mirror and inspect the best possible three-dimensional fit." name="description"/>
+<title>SAME DISTANCES — Field study 16</title>
+<link href="./assets/same-law.css" rel="stylesheet"/>
+<link href="./assets/exhibit-shell.css" rel="stylesheet"/><link href="./assets/same-distances.css" rel="stylesheet"/>
 </head>
-<body>
-<main class="wrap">
-  <nav class="utility" aria-label="Series"><a href="index.html">← Series</a><button id="theme" type="button">Paper</button></nav>
-  <div class="eyebrow">CMISH / Field study 16 · v0.1</div>
-  <header class="hero">
-    <div><h1>SAME DISTANCES</h1><p class="subtitle">Same distances. Different handedness.</p></div>
-    <p class="intro">Every edge agrees. Every label has its partner. Try turning this tetrahedron onto its mirror, then ask for the best rotation possible.</p>
-  </header>
-  <div class="contract">
-    <span><strong>Frozen</strong> · six pairwise distances; labels A–D; units</span>
-    <span><strong>Free</strong> · orientation; permission to reflect</span>
-    <span class="retained">Distance keeps shape. It forgets which hand.</span>
-  </div>
-  <section class="scene" aria-labelledby="sceneTitle">
-    <div class="scene-header"><h2 id="sceneTitle">Can a turn close the gap?</h2><p>Centroids coincide · fixed orthographic view</p></div>
-    <div class="assembly">
-      <div class="field-column">
-        <div class="field-legend"><span class="target-key">Target · circles / dashed edges</span><span class="source-key">Moving · diamonds / solid edges</span></div>
-        <div id="orientationField" class="orientation-field" tabindex="0" role="group" aria-label="Rotate the moving tetrahedron" aria-describedby="fieldHelp fieldLimit"><div id="fieldPlot"></div></div>
-        <p id="fieldHelp" class="field-help">Drag to turn the moving body. With the field focused, arrow keys turn x / y by 5°; [ and ] turn z. The sliders offer the same controls.</p>
-        <p id="fieldLimit" class="field-help">This is a 2D view of a 3D object. Warm connectors join matching labels; every error below includes depth.</p>
-      </div>
-      <div class="fit-panel">
-        <div class="small-label">The current attempt</div>
-        <p class="current-value"><output id="currentRms">—</output><span>units RMS</span></p>
-        <p id="fitState" class="fit-state">Rotate the moving tetrahedron.</p>
-        <div class="certificate"><span>Original mirror pair · best with rotations + translations</span><strong id="bestRms">1.000 units</strong><small>A global minimum before reflection is allowed.</small></div>
-        <div class="fit-actions"><button id="bestFit" type="button">Best rotational fit</button><button id="reflect" type="button" aria-pressed="false">Allow reflection</button><button id="reset" type="button">Reset</button></div>
-        <p class="reflection-note" id="reflectionState">Reflection is excluded. Moving and target have opposite signed volumes.</p>
-      </div>
-    </div>
-    <fieldset class="rotation-controls"><legend class="small-label">Turn the moving body · x, then y, then z</legend>
-      <div><label for="rotateX">x rotation</label><input id="rotateX" type="range" min="-180" max="180" step="1" value="30"><output id="rotateXOut" for="rotateX">30°</output></div>
-      <div><label for="rotateY">y rotation</label><input id="rotateY" type="range" min="-180" max="180" step="1" value="-35"><output id="rotateYOut" for="rotateY">−35°</output></div>
-      <div><label for="rotateZ">z rotation</label><input id="rotateZ" type="range" min="-180" max="180" step="1" value="25"><output id="rotateZOut" for="rotateZ">25°</output></div>
-    </fieldset>
-  </section>
-  <section class="readout">
-    <div><h2>Six agreements. One missing sign.</h2><p>The labels stay attached. A proper rotation preserves the sign of the volume formed by A, B, C, D. Reflection reverses it. These nonzero signs cannot agree through turning alone.</p><dl class="values"><div><dt>Target signed volume</dt><dd id="targetVolume">−2.667</dd></div><div><dt>Moving signed volume</dt><dd id="sourceVolume">+2.667</dd></div></dl><p class="metric-note">Cubic units · determinant of (B − A, C − A, D − A), divided by 6. The order of the labels defines the sign.</p><p id="distanceAudit" class="retained">Six edge lengths agree.</p></div>
-    <div class="distance-table"><table><caption>Edge audit · same fixed units</caption><thead><tr><th scope="col">Pair</th><th scope="col">Target</th><th scope="col">Moving</th></tr></thead><tbody id="distanceRows"></tbody></table><p class="metric-note">Values rounded here; the comparison uses full floating-point coordinates.</p></div>
-  </section>
-  <p id="announcement" class="sr-only" aria-live="polite"></p>
-  <noscript><p class="fallback">This interactive study needs JavaScript. The fixed tetrahedron and its labeled mirror have the same six distances and signed volumes −8/3 and +8/3. Their smallest possible 3D RMS error under rotations and translations is 1 unit. Allowing reflection reduces it to zero.</p></noscript>
-  <details class="study-notes"><summary>Read the study</summary><div class="notes-grid">
-    <section><h3>What stays the same</h3><p>Four labels name the same corresponding vertices throughout. All six pairwise Euclidean distances are fixed. The target and its mirror are noncoplanar, and the six edge lengths are distinct. The moving body is never stretched or sheared.</p><p>Only this labeled pair is being compared. Permuting labels is a different matching problem. This study does not claim that every unlabeled shape, or every distance dataset, has two different hands.</p></section>
-    <section><h3>The error is three-dimensional</h3><p class="mathematics">RMS = √[Σᵢ ‖Rpᵢ − qᵢ‖² / 4]</p><p>Corresponding points are compared in all three coordinates, in fixed units. The orthographic projection is only a viewing device: screen overlap is not the test. Both centroids sit at zero, so zero translation minimizes the error for every rotation. Moving either centroid apart can only increase it.</p><p>The viewing angle and scale never change when you request a fit. Dragging rotates the moving object, not the camera.</p></section>
-    <section><h3>Why the best rotation is certified</h3><p>The centered target has covariance C = diag(4, 1, ¼). Its mirror reverses z. For any proper rotation R, put B = R diag(1, 1, −1). B is orthogonal with determinant −1, so tr B ≤ 1 and each diagonal entry is at most 1.</p><p class="mathematics">RMS² = 2 Σⱼ Cⱼⱼ(1 − Bⱼⱼ)<br>≥ ½(3 − tr B) ≥ 1</p><p>The identity rotation attains RMS = 1 exactly. “Best rotational fit” uses that analytic solution; it does not stop an iterative search or infer impossibility from your attempt. The minimum includes every proper rotation and every translation.</p></section>
-    <section><h3>The operation that changes the answer</h3><p>“Allow reflection” reflects the original moving body through z = 0 and resets its rotation. This changes its orientation sign and aligns all four corresponding points exactly. The operation has determinant −1; it cannot be performed by a rigid turn in three dimensions.</p><p>With reflection allowed, the sliders still rotate that reflected body. “Best rotational fit” returns to the original mirror pair and its rotation-only optimum. Reset restores the opening attempt. There is no automatic motion.</p></section>
-  </div></details>
-  <footer class="footer"><a href="same-eigenvalues.html">← Same Eigenvalues</a><a href="plates.html#p16">Book of plates</a><a href="same-residual.html">Same Residual →</a></footer>
-</main>
-<script type="module" src="./assets/same-distances.js"></script>
+<body class="exhibit-page same-distances">
+<main class="wrap"><section aria-label="Interactive SAME DISTANCES exhibit" class="exhibit-stage"><div class="exhibit-header"><nav aria-label="Series" class="utility"><a href="index.html">← Series</a><button id="theme" type="button">Paper</button></nav><div class="eyebrow">CMISH / Field study 16 · v0.1</div><header class="hero">
+<div><h1>SAME DISTANCES</h1><p class="subtitle">Same distances. Different handedness.</p></div>
+
+</header></div><div class="exhibit-tools"><a class="read-study-link" href="#study-notes">Read the study ↗</a><p class="field-help" id="fieldHelp">Drag to turn the moving body. With the field focused, arrow keys turn x / y by 5°; [ and ] turn z. The sliders offer the same controls.</p><fieldset class="rotation-controls"><legend class="small-label">Turn the moving body · x, then y, then z</legend>
+<div><label for="rotateX">x rotation</label><input id="rotateX" max="180" min="-180" step="1" type="range" value="30"/><output for="rotateX" id="rotateXOut">30°</output></div>
+<div><label for="rotateY">y rotation</label><input id="rotateY" max="180" min="-180" step="1" type="range" value="-35"/><output for="rotateY" id="rotateYOut">−35°</output></div>
+<div><label for="rotateZ">z rotation</label><input id="rotateZ" max="180" min="-180" step="1" type="range" value="25"/><output for="rotateZ" id="rotateZOut">25°</output></div>
+</fieldset></div><div class="distance-specimen exhibit-specimen exhibit-visual">
+<div class="field-legend"><span class="target-key">Target · circles / dashed edges</span><span class="source-key">Moving · diamonds / solid edges</span></div>
+<div aria-describedby="fieldHelp fieldLimit" aria-label="Rotate the moving tetrahedron" class="orientation-field" id="orientationField" role="group" tabindex="0"><div id="fieldPlot"></div></div>
+
+
+</div><div class="fit-panel exhibit-reading"><div class="small-label" id="distanceCaseNumber">01 / Three operations</div><h2 id="distanceCaseTitle">Mirror</h2><p class="case-description" id="distanceCaseDescription">Six matching edges. Opposite hands. Drag the body and try to close the gap.</p>
+
+<p class="current-value"><output id="currentRms">—</output><span>units RMS</span></p>
+<p class="fit-state" id="fitState">Rotate the moving tetrahedron.</p>
+<div class="certificate"><span>Original mirror pair · best with rotations + translations</span><strong id="bestRms">1.000 units</strong><small>A global minimum before reflection is allowed.</small></div>
+
+<p class="reflection-note" id="reflectionState">Reflection is excluded. Moving and target have opposite signed volumes.</p>
+</div><div aria-label="Tetrahedron comparison" class="fit-actions exhibit-switcher" role="group"><button id="reset" type="button"><span class="case-number">01</span><span>Mirror</span></button><button id="bestFit" type="button"><span class="case-number">02</span><span>Best proper fit</span></button><button aria-pressed="false" id="reflect" type="button"><span class="case-number">03</span><span>Allow reflection</span></button></div></section>
+
+
+
+
+
+
+<p aria-live="polite" class="sr-only" id="announcement"></p>
+<noscript><p class="fallback">This interactive study needs JavaScript. The fixed tetrahedron and its labeled mirror have the same six distances and signed volumes −8/3 and +8/3. Their smallest possible 3D RMS error under rotations and translations is 1 unit. Allowing reflection reduces it to zero.</p></noscript>
+<details class="study-notes" id="study-notes"><summary>Read the study</summary><p class="study-intro">Every edge agrees. Every label has its partner. Try turning this tetrahedron onto its mirror, then ask for the best rotation possible.</p><div class="contract">
+<span><strong>Frozen</strong> · six pairwise distances; labels A–D; units</span>
+<span><strong>Free</strong> · orientation; permission to reflect</span>
+<span class="retained">Distance keeps shape. It forgets which hand.</span>
+</div><div class="notes-grid">
+<section><h3>What stays the same</h3><p>Four labels name the same corresponding vertices throughout. All six pairwise Euclidean distances are fixed. The target and its mirror are noncoplanar, and the six edge lengths are distinct. The moving body is never stretched or sheared.</p><p>Only this labeled pair is being compared. Permuting labels is a different matching problem. This study does not claim that every unlabeled shape, or every distance dataset, has two different hands.</p></section>
+<section><h3>The error is three-dimensional</h3><p class="mathematics">RMS = √[Σᵢ ‖Rpᵢ − qᵢ‖² / 4]</p><p>Corresponding points are compared in all three coordinates, in fixed units. The orthographic projection is only a viewing device: screen overlap is not the test. Both centroids sit at zero, so zero translation minimizes the error for every rotation. Moving either centroid apart can only increase it.</p><p>The viewing angle and scale never change when you request a fit. Dragging rotates the moving object, not the camera.</p></section>
+<section><h3>Why the best rotation is certified</h3><p>The centered target has covariance C = diag(4, 1, ¼). Its mirror reverses z. For any proper rotation R, put B = R diag(1, 1, −1). B is orthogonal with determinant −1, so tr B ≤ 1 and each diagonal entry is at most 1.</p><p class="mathematics">RMS² = 2 Σⱼ Cⱼⱼ(1 − Bⱼⱼ)<br/>≥ ½(3 − tr B) ≥ 1</p><p>The identity rotation attains RMS = 1 exactly. “Best proper fit” uses that analytic solution; it does not stop an iterative search or infer impossibility from your attempt. The minimum includes every proper rotation and every translation.</p></section>
+<section><h3>The operation that changes the answer</h3><p>“Allow reflection” reflects the original moving body through z = 0 and resets its rotation. This changes its orientation sign and aligns all four corresponding points exactly. The operation has determinant −1; it cannot be performed by a rigid turn in three dimensions.</p><p>With reflection allowed, the sliders still rotate that reflected body. “Best proper fit” returns to the original mirror pair and its rotation-only optimum. “Mirror” restores the opening attempt. There is no automatic motion.</p></section>
+</div><p class="field-help" id="fieldLimit">This is a 2D view of a 3D object. Warm connectors join matching labels; every error below includes depth.</p><section class="readout">
+<div><h2>Six agreements. One missing sign.</h2><p>The labels stay attached. A proper rotation preserves the sign of the volume formed by A, B, C, D. Reflection reverses it. These nonzero signs cannot agree through turning alone.</p><dl class="values"><div><dt>Target signed volume</dt><dd id="targetVolume">−2.667</dd></div><div><dt>Moving signed volume</dt><dd id="sourceVolume">+2.667</dd></div></dl><p class="metric-note">Cubic units · determinant of (B − A, C − A, D − A), divided by 6. The order of the labels defines the sign.</p><p class="retained" id="distanceAudit">Six edge lengths agree.</p></div>
+<div class="distance-table"><table><caption>Edge audit · same fixed units</caption><thead><tr><th scope="col">Pair</th><th scope="col">Target</th><th scope="col">Moving</th></tr></thead><tbody id="distanceRows"></tbody></table><p class="metric-note">Values rounded here; the comparison uses full floating-point coordinates.</p></div>
+</section></details>
+<footer class="footer"><a href="same-eigenvalues.html">← Same Eigenvalues</a><a href="plates.html#p16">Book of plates</a><a href="same-residual.html">Same Residual →</a></footer>
+</main><script defer="" src="./assets/exhibit-shell.js"></script>
+<script src="./assets/same-distances.js" type="module"></script>
 </body>
 </html>
