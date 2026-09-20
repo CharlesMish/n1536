@@ -59,9 +59,10 @@ test("the shell exposes bounded compact and keyboard access", () => {
   assert.match(shell, /event\.repeat/);
 });
 
-test("review configuration has previews but no production route", () => {
+test("Workers hosting enables public access and version previews", () => {
   const config = JSON.parse(wrangler);
-  assert.equal(config.workers_dev, false);
+  assert.equal(config.workers_dev, true);
+  assert.equal(config.assets.directory, "./dist");
   assert.equal(config.preview_urls, true);
   assert.equal(config.routes, undefined);
   assert.equal(config.route, undefined);
