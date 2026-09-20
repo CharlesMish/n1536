@@ -47,6 +47,7 @@ test('@desktop Average regrouping preserves counts and sets visible bar widths',
  await expect(page.locator('#claim')).toHaveText('B leads within both groups.');
  await expect(page.locator('#auditRows')).toContainText('120');
  expect(await page.locator('#groups .bar i').evaluateAll(nodes=>nodes.map(n=>n.style.width))).toEqual(['70%','80%','20%','30%']);
+ await page.locator('#study-notes > summary').click();
  await page.getByText('Follow the same 400 records',{exact:true}).click();
  await expect(page.locator('#recordFields svg title')).toHaveCount(400);
  await check();

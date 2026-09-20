@@ -26,6 +26,18 @@ function distanceSVG(paths,t=32){let s='<svg viewBox="0 0 920 230" role="img" ar
 }
 function averageSpecimen(state){let s='<svg viewBox="0 0 600 300" role="img" aria-label="Reversal: A leads pooled sixty to forty percent; B leads within both groups"><g font-size="14" fill="var(--ink)">';const rows=[['Pooled',[[120,200],[80,200]]],['Group 1',state.cells[0]],['Group 2',state.cells[1]]];for(let i=0;i<3;i++){const y=32+i*88;s+=`<text x="18" y="${y}">${rows[i][0]}</text>`;for(let c=0;c<2;c++){const [k,n]=rows[i][1][c],yy=y+9+c*25;s+=`<text x="130" y="${yy+12}" fill="${c?'var(--summary)':'var(--accent)'}">${c?'B':'A'}</text><rect x="151" y="${yy}" width="290" height="13" fill="var(--grid)"/><rect x="151" y="${yy}" width="${290*k/n}" height="13" fill="${c?'var(--summary)':'var(--accent)'}"/><text x="452" y="${yy+12}">${Math.round(100*k/n)}% · ${k}/${n}</text>`;}}return s+'</g></svg>';}
 
+function averageFieldSVG(state){
+ const rows=[['POOLED · FIXED',[[120,200],[80,200]]],['GROUP 1',state.cells[0]],['GROUP 2',state.cells[1]]];
+ const x=110,w=350;
+ let svg=`<svg viewBox="0 0 600 560" role="img" aria-label="${state.name}. ${state.claim} Pooled A sixty percent and B forty percent remain fixed. All bars share a zero to one hundred percent scale.">`;
+ for(const tick of [0,25,50,75,100]){const xx=x+w*tick/100;svg+=`<path d="M${xx} 46V530" stroke="var(--grid)" stroke-width="1"/><text x="${xx}" y="28" fill="var(--faint)" text-anchor="middle" font-size="11">${tick}${tick===100?'%':''}</text>`;}
+ rows.forEach(([name,cells],i)=>{const top=68+i*166,delta=100*cells[0][0]/cells[0][1]-100*cells[1][0]/cells[1][1];
+ svg+=`<text x="${x}" y="${top}" fill="${i?'var(--muted)':'var(--summary)'}" font-size="11" letter-spacing="1.2">${name}</text><text x="${x+w}" y="${top}" fill="var(--faint)" text-anchor="end" font-size="11">${Math.abs(delta)<1e-9?'Equal rates':(delta>0?'A':'B')+' +'+Math.round(Math.abs(delta))+' points'}</text>`;
+ cells.forEach(([k,n],c)=>{const y=top+24+c*49,color=c?'var(--summary)':'var(--accent)',rate=100*k/n;svg+=`<text x="${x-24}" y="${y+19}" fill="${color}" font-size="19">${c?'B':'A'}</text><rect x="${x}" y="${y}" width="${w}" height="25" fill="var(--grid)" opacity=".28"/><rect x="${x}" y="${y}" width="${w*k/n}" height="25" fill="${color}"/><text x="${x+w+20}" y="${y+12}" fill="var(--ink)" font-size="23">${Math.round(rate)}%</text><text x="${x+w+20}" y="${y+30}" fill="var(--faint)" font-size="11">${k} / ${n}</text>`;});
+ });
+ return svg+'</svg>';
+}
+
 const themeButton=document.getElementById('theme');
 function setTheme(value){document.documentElement.dataset.theme=value;themeButton.textContent=value==='uv'?'Paper':'UV';themeButton.setAttribute('aria-label','Switch to '+(value==='uv'?'Paper':'UV')+' presentation');try{localStorage.setItem('same-reading-theme',value);}catch{}}
 let saved='uv';try{saved=localStorage.getItem('same-reading-theme')||'uv';}catch{}setTheme(saved==='paper'?'paper':'uv');themeButton.addEventListener('click',()=>setTheme(document.documentElement.dataset.theme==='paper'?'uv':'paper'));
@@ -34,6 +46,7 @@ let selected=0;
 const $=id=>document.getElementById(id);
 const pct=(k,n)=>100*k/n;
 function showAverage(){const state=GROUPS[selected],rr=records(state);$('claim').textContent=state.claim;$('explanation').textContent=state.explain;
+ $('averageField').innerHTML=averageFieldSVG(state);$('caseNumber').textContent=`0${selected+1} / GROUPING`;$('caseName').textContent=state.name;$('caseReading').textContent=state.explain;
  $('groups').innerHTML=state.cells.map((cells,g)=>{const delta=pct(...cells[0])-pct(...cells[1]);return `<section class="group"><div class="group-head"><h3>Group ${g+1}</h3><span>${Math.abs(delta)<1e-9?'Equal rates':(delta>0?'A':'B')+' +'+Math.abs(delta).toFixed(0)+' percentage points'}</span></div>${cells.map(([k,n],c)=>`<div class="rate-row category-${c}"><span>${c?'B':'A'}</span><div class="bar" aria-hidden="true"><i data-rate="${pct(k,n)}"></i></div><strong>${pct(k,n).toFixed(0)}%<small>${k} / ${n}</small></strong></div>`).join('')}<div class="weights"><p>Share of all A records: ${pct(cells[0][1],200)}%</p><p>Share of all B records: ${pct(cells[1][1],200)}%</p></div></section>`;}).join('');
  document.querySelectorAll('[data-rate]').forEach(el=>{el.style.width=Number(el.dataset.rate)+'%';});
  $('weights').innerHTML=[0,1].map(c=>{const a=state.cells[0][c],b=state.cells[1][c];return `<p class="mathematics">${c?'B':'A'}: ${pct(a[1],200)}% × ${pct(...a)}% + ${pct(b[1],200)}% × ${pct(...b)}% = ${c?40:60}%</p>`;}).join('');

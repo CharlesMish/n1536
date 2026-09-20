@@ -6,3 +6,90 @@
 @media(max-width:760px){.same-residual .hero{grid-template-columns:1fr;gap:14px}.same-residual h1{font-size:clamp(36px,8vw,54px)}.same-residual .intro{font-size:15px}.same-residual .contract{font-size:12px;gap:8px}.same-residual .presets{width:100%}.same-residual .presets button{flex:1;padding:9px 7px}.direction-slider{flex-basis:100%;margin:0}.residual-plots{grid-template-columns:1fr;gap:26px}.residual-plots svg{max-height:430px}.residual-plots figcaption{font-size:14px}.same-residual .scene-header h2{font-size:23px}.same-residual .scene-header p{white-space:normal}.map-equation span:last-child{flex-basis:100%;margin:0}.same-residual .values{gap:16px 12px}.same-residual .values dd{font-size:26px}.audit-table{padding:16px}.audit-table dl{gap:14px 20px}}
 @media(max-width:420px){.same-residual .presets button span{display:block;margin:2px 0 0;font-size:11px}.audit-table dl{grid-template-columns:1fr}.residual-plots figcaption span+span{font-size:11px}.plot-foot{font-size:11px}.same-residual .mathematics{font-size:12px;overflow-wrap:anywhere}}
 @media(prefers-reduced-motion:reduce){.same-residual *, .same-residual *::before, .same-residual *::after{scroll-behavior:auto!important}}
+
+/* Specimen first: an authored case occupies the field; the full account is below. */
+.same-residual.exhibit-page > .wrap{max-width:none;padding:0;margin:0}
+.same-residual.exhibit-page .exhibit-stage{min-height:760px;height:100svh;padding:32px 4vw 40px;position:relative;display:block}
+.same-residual .exhibit-header{position:relative;z-index:2;pointer-events:none}
+.same-residual .exhibit-header a,.same-residual .exhibit-header button{pointer-events:auto}
+.same-residual .utility{font:11px/1.5 ui-monospace,monospace;text-transform:uppercase;letter-spacing:.1em}
+.same-residual .utility button{border:0;padding:0 12px;min-height:32px;border-radius:0;font-size:11px}
+.same-residual .eyebrow{margin-top:6px;font-size:10px}
+.same-residual .hero{display:block;margin:22px 0 0;max-width:80%}
+.same-residual h1{font-size:clamp(46px,5.7vw,90px);line-height:1;letter-spacing:-.055em;margin-bottom:15px}
+.same-residual .subtitle{font-size:clamp(15px,1.3vw,20px)}
+.same-residual .exhibit-reading{position:absolute;right:4vw;bottom:200px;width:clamp(245px,22vw,340px);padding:0;background:none;border:0;margin:0;display:block}
+.same-residual .exhibit-reading .small-label{font-size:10px;margin-bottom:12px}
+.same-residual .exhibit-reading h2{margin:0 0 14px}
+.same-residual .case-description{font-size:14px;line-height:1.65;margin:0 0 18px}
+.same-residual .exhibit-tools{position:absolute;left:4vw;right:calc(26vw + 24px);bottom:111px;margin:0;gap:4px 18px;align-content:end}
+.same-residual .exhibit-switcher{position:absolute;bottom:40px;left:4vw;right:4vw;margin:0;display:flex;gap:0;border-top:1px solid var(--rule)}
+.same-residual .exhibit-switcher button{display:flex;align-items:center;gap:20px;min-height:58px;font-size:15px;padding:14px 0;text-align:left;grid-column:auto}
+.same-residual .case-number{font:10px/1.4 ui-monospace,monospace;color:var(--accent);letter-spacing:.08em;min-width:18px}
+.same-residual #study-notes{margin-top:0;padding-bottom:20px}
+.same-residual .study-intro{max-width:80ch;color:var(--muted);font-size:17px;line-height:1.7}
+.same-residual .footer{padding-bottom:30px}
+@media(max-width:1000px){
+ .same-residual.exhibit-page .exhibit-stage{min-height:760px;padding-left:26px;padding-right:26px}
+ .same-residual .exhibit-reading{right:26px;width:230px;bottom:193px}
+ .same-residual .exhibit-tools{left:26px;right:282px}
+ .same-residual .exhibit-switcher{left:26px;right:26px}
+ .same-residual h1{font-size:clamp(44px,6vw,64px)}
+ .same-residual .case-description{font-size:13px}
+}
+@media(max-width:760px){
+ .same-residual.exhibit-page .exhibit-stage{min-height:100svh;height:auto;display:flex;flex-direction:column;padding:18px 18px 26px;gap:0}
+ .same-residual .exhibit-header{order:1}
+ .same-residual .eyebrow{margin-top:12px;font-size:9px}
+ .same-residual .hero{max-width:none;margin-top:18px;margin-bottom:0}
+ .same-residual h1{font-size:clamp(34px,8.5vw,62px);margin-bottom:10px;overflow-wrap:normal}
+ .same-residual .subtitle{font-size:15px}
+ .same-residual .exhibit-visual{order:2;position:relative;inset:auto;width:100%;margin:24px 0 14px;min-width:0}
+ .same-residual .exhibit-switcher{order:3;position:relative;inset:auto;width:100%;margin:0 0 20px;min-width:0}
+ .same-residual .exhibit-switcher button{min-height:68px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:5px;padding:10px 8px 10px 0;font-size:13px}
+ .same-residual .exhibit-reading{order:4;position:relative;inset:auto;width:100%;margin:0 0 15px;padding:0;display:block}
+ .same-residual .exhibit-reading .small-label{margin:0 0 7px}
+ .same-residual .exhibit-reading h2{font-size:28px;margin:0 0 9px}
+ .same-residual .case-description{font-size:13px;margin-bottom:14px;max-width:58ch}
+ .same-residual .exhibit-tools{order:6;position:relative;inset:auto;width:100%;margin-top:8px;padding-top:10px;border-top:1px solid var(--rule);gap:6px 12px}
+ .same-residual .read-study-link{order:10}
+ .same-residual #study-notes{margin-top:10px}
+}
+
+.same-residual .residual-plots{position:absolute;left:4vw;right:calc(26vw + 24px);top:225px;bottom:215px;gap:26px;display:grid;grid-template-columns:1fr 1fr;align-items:center}
+.same-residual .residual-plots svg{background:transparent;border:0;width:100%;max-height:430px}
+.same-residual .residual-plots figcaption{font:11px/1.5 ui-monospace,monospace;display:block;margin-bottom:6px}
+.same-residual .residual-plots figcaption span{display:block}
+.same-residual .residual-plots figcaption span+span{font-size:9px;color:var(--faint);margin-top:4px}
+.same-residual .plot-foot{font:9px/1.5 ui-monospace,monospace;display:block;margin-top:0}
+.same-residual .plot-foot span{display:block}
+.same-residual .metric-panel .values{padding-top:16px;border-top:1px solid var(--rule);gap:16px 10px}
+.same-residual .metric-panel .values dt{font-size:10px}
+.same-residual .metric-panel .values dd{font-size:clamp(22px,2vw,29px)}
+.same-residual .metric-note{font-size:11px;margin-bottom:0}
+.same-residual .direction-slider{order:-2;flex-basis:100%;margin:0;min-width:0;max-width:520px}
+.same-residual .direction-slider input{height:30px;min-width:30px}
+.same-residual .direction-slider label{font-size:11px}.same-residual .direction-slider output{font-size:12px}
+.same-residual #directionHint{order:-1;flex-basis:100%;margin:0;font-size:10px}
+.same-residual .exhibit-switcher small{font:11px ui-monospace,monospace;color:var(--faint);margin-left:auto;margin-right:20px}
+@media(max-width:1000px){.same-residual .residual-plots{left:26px;right:282px;top:220px;bottom:230px;gap:15px}}
+@media(max-width:760px){
+ .same-residual .residual-plots{position:relative;inset:auto;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
+ .same-residual .residual-plots svg{max-height:320px}
+ .same-residual .residual-plots figcaption{font-size:10px;min-height:38px}
+ .same-residual .residual-plots figcaption span+span{font-size:8px}
+ .same-residual .residual-plots .axis-labels{font-size:20px}
+ .same-residual .plot-foot{font-size:8px;min-height:30px}
+ .same-residual .exhibit-switcher small{margin:0;font-size:10px}
+ .same-residual .metric-panel .values{grid-template-columns:repeat(2,minmax(0,1fr));gap:13px 18px;padding-top:13px;margin-bottom:8px}
+ .same-residual .metric-panel .values dd{font-size:28px}
+ .same-residual .exhibit-tools{margin-top:4px}
+ .same-residual .metric-note{font-size:10px}
+}
+
+.same-residual .residual-plots{top:250px;bottom:232px;align-items:stretch}
+.same-residual .residual-plots figure{height:100%;min-height:0;display:flex;flex-direction:column}
+.same-residual .residual-plots svg{height:100%;flex:1;min-height:0;max-height:none}
+.same-residual .residual-plots figcaption,.same-residual .residual-plots .plot-foot{flex:none}
+@media(max-width:1000px){.same-residual .residual-plots{top:245px;bottom:235px}}
+@media(max-width:760px){.same-residual .residual-plots{inset:auto;height:auto}.same-residual .residual-plots figure{height:auto}.same-residual .residual-plots svg{height:auto;flex:none;max-height:none}.same-residual .plot-foot{margin-top:6px}}

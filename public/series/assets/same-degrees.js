@@ -40,6 +40,9 @@ function announce() {
 function draw() {
   const graph = GRAPHS[selected], state = reachAt(graph.edges, source, hop), maximum = maxHop();
   $('sceneTitle').textContent = graph.description;
+  $('caseName').textContent = graph.name;
+  $('caseNumber').textContent = `0${selected + 1} / NETWORK`;
+  $('caseReading').textContent = hop === 0 ? 'Send a pulse or advance one hop. Three neighbors stay three in every network.' : `${state.frontier} new at this hop · ${state.waiting} reachable later · ${state.unreachable} unreachable.`;
   $('network').innerHTML = networkSVG(graph, state);
   $('hop').max = maximum;
   $('hop').value = hop;

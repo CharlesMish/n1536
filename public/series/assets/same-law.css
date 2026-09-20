@@ -8,3 +8,97 @@
 .authored-bb3f546c3d{color:var(--summary)}
 .authored-8de13a6d03{color:var(--warm)}
 .trajectory-0{--color:var(--accent)}.trajectory-1{--color:var(--summary)}.trajectory-2{--color:var(--warm)}
+
+/* Specimen-first exhibit. Scoped: same-law.css is also a shared legacy base. */
+body.exhibit-page.same-law .wrap{max-width:none;margin:0;padding:0}
+body.exhibit-page.same-law .exhibit-stage{height:100svh;min-height:720px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.7fr) minmax(0,.85fr);grid-template-rows:40px minmax(0,1fr) auto 70px;gap:18px 26px;padding:24px clamp(22px,4.2vw,80px) 18px;position:relative;isolation:isolate}
+body.exhibit-page.same-law .utility{grid-column:1/-1;grid-row:1;justify-content:flex-start;gap:22px;font:11px/1.5 ui-monospace,Consolas,monospace;letter-spacing:.1em;text-transform:uppercase}
+body.exhibit-page.same-law .utility #theme{margin-left:auto;border:0;padding:8px 4px;min-width:60px;min-height:40px;font-size:11px;letter-spacing:.1em}
+body.exhibit-page.same-law .utility a{color:var(--muted)}
+body.exhibit-page.same-law .exhibit-heading{grid-column:1;grid-row:2;display:block;align-self:start;margin:32px 0 0;min-width:0}
+body.exhibit-page.same-law .eyebrow{margin:0 0 30px;font-size:10px;letter-spacing:.09em}
+body.exhibit-page.same-law .hero h1{font-size:clamp(48px,5vw,96px);line-height:.96;font-weight:400;letter-spacing:-.065em;max-width:8ch;margin:0 0 25px;overflow-wrap:normal}
+body.exhibit-page.same-law .subtitle{font-size:clamp(15px,1.2vw,20px);line-height:1.5;max-width:25ch}
+body.exhibit-page.same-law .frozen-caption{margin:50px 0 0;font:11px/1.8 ui-monospace,Consolas,monospace;color:var(--muted);max-width:30ch}
+body.exhibit-page.same-law .frozen-caption span{display:block;color:var(--summary);font-size:10px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:7px}
+body.exhibit-page.same-law .exhibit-field{grid-column:2;grid-row:2;display:flex;flex-direction:column;justify-content:center;align-items:center;align-self:stretch;min-height:0;min-width:0;margin:0}
+body.exhibit-page.same-law .exhibit-field>div{width:100%;min-height:0;display:flex;justify-content:center;align-items:center;flex:1}
+body.exhibit-page.same-law .exhibit-field svg{width:100%;height:100%;max-height:100%;background:none;border:0;overflow:visible}
+body.exhibit-page.same-law .exhibit-field figcaption{font:10px/1.6 ui-monospace,Consolas,monospace;color:var(--faint);text-align:center;margin:10px 0 0;max-width:55ch;flex:none}
+body.exhibit-page.same-law .exhibit-reading{grid-column:3;grid-row:2;align-self:end;min-width:0;padding:0 0 32px}
+body.exhibit-page.same-law .exhibit-reading>h2{font-size:clamp(28px,2.5vw,44px);line-height:1.1;letter-spacing:-.045em;margin:14px 0 18px}
+body.exhibit-page.same-law .exhibit-reading>p{font-size:15px;line-height:1.65;color:var(--muted);margin:0 0 14px}
+body.exhibit-page.same-law .exhibit-reading>p.case-detail{font-size:13px;color:var(--faint)}
+body.exhibit-page.same-law .invariant-line{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 12px;font:11px/1.7 ui-monospace,Consolas,monospace;border-top:1px solid var(--rule);padding-top:15px;margin-top:24px;color:var(--muted)}
+body.exhibit-page.same-law .invariant-line strong{color:var(--summary);font-weight:400}
+body.exhibit-page.same-law .exhibit-tools{grid-column:1/-1;grid-row:3;display:flex;align-items:center;justify-content:space-between;gap:18px;font:11px/1.5 ui-monospace,Consolas,monospace;min-width:0;color:var(--faint)}
+body.exhibit-page.same-law .exhibit-tools button{border:0;border-radius:0;min-height:44px;font:11px/1.3 ui-monospace,Consolas,monospace;padding:8px 10px;white-space:nowrap}
+body.exhibit-page.same-law .exhibit-tools .study-link{font-size:11px;white-space:nowrap;min-height:44px;display:inline-flex;align-items:center;color:var(--muted);text-decoration:none}
+body.exhibit-page.same-law .exhibit-switcher{grid-column:1/-1;grid-row:4;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin:0;align-items:stretch}
+body.exhibit-page.same-law .exhibit-switcher button{display:flex;align-items:center;gap:14px;text-align:left;border:0;border-top:1px solid var(--rule);border-radius:0;background:transparent;padding:12px 0;min-width:0;font-size:15px;color:var(--faint)}
+body.exhibit-page.same-law .exhibit-switcher button[aria-pressed=true]{border-top:2px solid var(--ink);color:var(--ink);background:transparent}
+body.exhibit-page.same-law .exhibit-switcher button span{font:10px ui-monospace,Consolas,monospace;color:var(--accent);margin:0}
+body.exhibit-page.same-law .exhibit-switcher button small{font-size:11px;color:var(--faint)}
+body.exhibit-page.same-law>.wrap>#study-notes,body.exhibit-page.same-law>.wrap>.footer{max-width:1160px;margin:30px auto;padding:20px clamp(22px,4.2vw,70px)}
+body.exhibit-page.same-law #study-notes{scroll-margin-top:18px}
+body.exhibit-page.same-law #study-notes .contract{margin-top:22px}
+body.exhibit-page.same-law #study-notes .intro{margin:18px 0}
+@media(max-width:1100px),(max-height:650px){
+body.exhibit-page.same-law .exhibit-stage{height:auto;min-height:100svh;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto auto auto auto auto auto;gap:18px;padding:18px clamp(18px,4vw,48px) 12px}
+body.exhibit-page.same-law .exhibit-heading{grid-column:1/-1;grid-row:2;margin:0}
+body.exhibit-page.same-law .eyebrow{margin:0 0 14px}
+body.exhibit-page.same-law .hero h1{font-size:clamp(37px,6.8vw,76px);max-width:none;margin:0 0 12px;line-height:1}
+body.exhibit-page.same-law .subtitle{font-size:16px;max-width:none}
+body.exhibit-page.same-law .frozen-caption{margin:16px 0 0;max-width:none;font-size:10px}
+body.exhibit-page.same-law .frozen-caption span{display:inline;margin-right:12px;font-size:9px}
+body.exhibit-page.same-law .exhibit-field{grid-column:1/-1;grid-row:3;width:min(650px,100%);height:clamp(280px,44svh,480px);justify-self:center}
+body.exhibit-page.same-law .exhibit-reading{grid-column:1/-1;grid-row:4;padding:0;max-width:none}
+body.exhibit-page.same-law .exhibit-reading>h2{font-size:28px;display:inline-block;margin:0 18px 7px 0;vertical-align:baseline}
+body.exhibit-page.same-law .exhibit-reading>.small-label{display:inline-block;margin-right:12px;font-size:9px}
+body.exhibit-page.same-law .exhibit-reading>p{font-size:14px;margin-bottom:8px}
+body.exhibit-page.same-law .exhibit-reading>p.case-detail{font-size:12px}
+body.exhibit-page.same-law .invariant-line{margin-top:10px;padding-top:10px}
+body.exhibit-page.same-law .exhibit-tools{grid-column:1/-1;grid-row:5;flex-wrap:wrap;gap:4px 14px}
+body.exhibit-page.same-law .exhibit-switcher{grid-column:1/-1;grid-row:6;gap:15px;min-height:56px}
+body.exhibit-page.same-law .exhibit-switcher button{font-size:14px;gap:10px}
+body.exhibit-page.same-law .utility{gap:14px}
+}
+@media(max-width:480px){
+body.exhibit-page.same-law .exhibit-stage{gap:14px}
+body.exhibit-page.same-law .utility{font-size:10px;letter-spacing:.05em;gap:12px}
+body.exhibit-page.same-law .hero h1{font-size:clamp(34px,9.2vw,44px);letter-spacing:-.06em}
+body.exhibit-page.same-law .eyebrow{font-size:9px;margin-bottom:12px}
+body.exhibit-page.same-law .subtitle{font-size:14px}
+body.exhibit-page.same-law .frozen-caption{margin-top:12px;line-height:1.65}
+body.exhibit-page.same-law .exhibit-field{height:clamp(235px,36svh,330px)}
+body.exhibit-page.same-law .exhibit-field figcaption{font-size:9px;margin-top:6px}
+body.exhibit-page.same-law .exhibit-reading>h2{font-size:25px}
+body.exhibit-page.same-law .exhibit-reading>p{font-size:13px;line-height:1.5}
+body.exhibit-page.same-law .exhibit-reading>p.case-detail{font-size:12px}
+body.exhibit-page.same-law .exhibit-switcher{gap:12px;min-height:55px}
+body.exhibit-page.same-law .exhibit-switcher button{font-size:12px;gap:8px;flex-wrap:wrap;align-content:center}
+body.exhibit-page.same-law .exhibit-switcher button small{font-size:10px}
+body.exhibit-page.same-law .exhibit-tools{font-size:10px}
+body.exhibit-page.same-law>.wrap>#study-notes,body.exhibit-page.same-law>.wrap>.footer{margin:20px auto;padding:16px 18px}
+}
+
+body.exhibit-page.same-law .law-field svg{max-height:620px}
+body.exhibit-page.same-law .law-position{margin:25px 0 0;font:12px/1.5 ui-monospace,Consolas,monospace}
+body.exhibit-page.same-law .law-position p{display:flex;gap:16px;margin:8px 0;color:var(--muted);font-variant-numeric:tabular-nums}
+body.exhibit-page.same-law .law-position p span{color:var(--faint)}
+body.exhibit-page.same-law .exhibit-tools{display:grid;grid-template-columns:minmax(300px,1fr) auto auto;gap:20px}
+body.exhibit-page.same-law .time-controls{display:grid;grid-template-columns:auto auto minmax(100px,1fr) auto;gap:10px;margin:0;min-width:0}
+body.exhibit-page.same-law .time-controls output{font-size:11px;min-width:90px}
+body.exhibit-page.same-law .precision-controls{display:flex;flex-wrap:nowrap;gap:4px;margin:0}
+body.exhibit-page.same-law .precision-controls .small-label{font-size:10px;margin-right:6px;white-space:nowrap}
+body.exhibit-page.same-law .precision-controls button[aria-pressed=true]{background:none;color:var(--ink);box-shadow:inset 0 -2px var(--accent)}
+body.exhibit-page.same-law .law-history-audit{margin:24px 0}
+@media(max-width:1100px),(max-height:650px){body.exhibit-page.same-law .exhibit-tools{display:flex;gap:4px 18px;flex-wrap:wrap}body.exhibit-page.same-law .time-controls{flex-basis:100%}body.exhibit-page.same-law .exhibit-tools>.study-link{margin-left:auto}body.exhibit-page.same-law .law-position{display:flex;align-items:center;flex-wrap:wrap;gap:6px 18px;margin:10px 0}body.exhibit-page.same-law .law-position p{margin:0;gap:8px;font-size:11px}body.exhibit-page.same-law .precision-controls .small-label{flex-basis:auto}}
+@media(max-width:480px){body.exhibit-page.same-law .time-controls{grid-template-columns:auto auto 1fr;gap:5px}body.exhibit-page.same-law .time-controls input{grid-row:2;grid-column:1/-1;margin:0;height:28px}body.exhibit-page.same-law .time-controls output{grid-column:3;grid-row:1}body.exhibit-page.same-law .precision-controls button{padding:5px 8px;font-size:11px}body.exhibit-page.same-law .precision-controls .small-label{font-size:9px}body.exhibit-page.same-law .exhibit-tools>.study-link{font-size:10px}body.exhibit-page.same-law .law-position>.small-label{flex-basis:100%}}
+
+@media(max-width:760px){body.exhibit-page.same-law .law-position{display:none}}
+
+@media(max-width:480px){body.exhibit-page.same-law .exhibit-field{height:clamp(230px,33svh,310px)}}
+
+/* Keep case selection next to its specimen on compact screens. */
+@media(max-width:760px){body.exhibit-page.same-law .exhibit-switcher{grid-row:4}body.exhibit-page.same-law .exhibit-reading{grid-row:5}body.exhibit-page.same-law .exhibit-tools{grid-row:6}}

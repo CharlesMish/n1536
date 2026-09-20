@@ -16,7 +16,7 @@ for(const [slug,title] of studies)test(`@desktop @mobile @reduced ${title} rende
  expect(await page.locator('html').getAttribute('data-theme')).not.toEqual(initial);
  await page.locator('#theme').click();
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBeTruthy();
- await page.locator('details').filter({has:page.getByText('Read the study',{exact:true})}).locator('summary').click();
+ await page.locator('#study-notes > summary').click();
  await expect(page.getByText('Read the study',{exact:true}).locator('..')).toHaveAttribute('open','');
  await check();
 });
@@ -27,6 +27,7 @@ test('@desktop FIT keeps four computed views and exposes the rounding difference
  await expect(page.locator('#roundedLine')).toContainText('3.00');
  await expect(page.locator('#roundedLine')).toContainText('0.50');
  const summary=await page.locator('#sharedSummary').textContent();
+ await page.locator('#study-notes > summary').click();
  await page.locator('#inspectIII').click();
  await expect(page.locator('#row')).toHaveValue('3');
  await expect(page.locator('#reading2')).toContainText('12.74');

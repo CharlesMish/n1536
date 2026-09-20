@@ -9,6 +9,15 @@ let pointer = null;
 
 function draw() {
   state = stateAt(angle);
+  const preset = state.angle === 0 ? 0 : state.angle === 45 ? 1 : state.angle === 90 ? 2 : -1;
+  $('residualCaseNumber').textContent = preset >= 0 ? `0${preset + 1} / Three directions` : 'Custom direction';
+  $('residualCaseTitle').textContent = ['First axis', 'Diagonal', 'Second axis'][preset] || `${Math.round(angle)}° direction`;
+  $('residualCaseDescription').textContent = [
+    'A unit miss along the first axis becomes an error of just 0.01. The bound is far from attained.',
+    'The same unit miss is shared between the two directions. Only the first component shrinks.',
+    'A unit miss along the second axis passes through unchanged. This direction attains the bound.'
+  ][preset] || 'The residual keeps its length while the error follows the narrow ellipse. The condition-number bound stays fixed.';
+
   $('angle').value = String(angle);
   $('angleOut').value = `${Math.round(angle)}°`;
   $('angle').setAttribute('aria-valuetext', `${Math.round(angle)} degrees`);

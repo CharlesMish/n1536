@@ -1,71 +1,72 @@
-<!doctype html>
-<html lang="en" class="same-study same-fit" data-theme="uv">
+<!DOCTYPE html>
+
+<html class="same-study same-fit" data-theme="uv" lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#0d0b18">
-  <meta name="description" content="SAME FIT — Same fitted summary. Different structure. Inspect Anscombe’s quartet and the residuals that its rounded summaries leave out.">
-  <title>SAME FIT — Field study 18</title>
-  <link rel="stylesheet" href="./assets/same-law.css">
-  <link rel="stylesheet" href="./assets/same-fit.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="#0d0b18" name="theme-color"/>
+<meta content="SAME FIT — Same fitted summary. Different structure. Inspect Anscombe’s quartet and the residuals that its rounded summaries leave out." name="description"/>
+<title>SAME FIT — Field study 18</title>
+<link href="./assets/same-law.css" rel="stylesheet"/>
+<link href="./assets/exhibit-shell.css" rel="stylesheet"/><link href="./assets/same-fit.css" rel="stylesheet"/>
 </head>
-<body>
-<main class="wrap">
-  <nav class="utility" aria-label="Series"><a href="index.html">← Series</a><button id="theme" type="button">Paper</button></nav>
-  <div class="eyebrow">CMISH / Field study 18 · v0.1</div>
-  <header class="hero">
-    <div><h1>SAME FIT</h1><p class="subtitle">Same fitted summary. Different structure.</p></div>
-    <p class="intro">Four sets of eleven points. Their familiar summaries agree when rounded. Put the pictures beside one another, then look at what each fitted line leaves behind.</p>
-  </header>
-  <div class="contract">
-    <span><strong>Frozen</strong> · eleven points; shared summary at the stated precision</span>
-    <span><strong>Free</strong> · arrangement of the observations</span>
-    <span class="retained">Anscombe’s quartet · a finite, published specimen</span>
-  </div>
-  <section class="summary-strip" aria-labelledby="summaryTitle">
-    <div class="summary-heading"><h2 id="summaryTitle">A shared numerical portrait.</h2><p>Rounded agreement, not exact equality.</p></div>
-    <dl id="sharedSummary" class="summary-values"></dl>
-    <p class="summary-foot">OLS line at 2 decimal places: <strong id="roundedLine">—</strong>. Variances use n − 1. <a id="openAudit" href="#audit">Audit the rounding ↓</a></p>
-  </section>
-  <section class="scene" aria-labelledby="sceneTitle">
-    <div class="scene-header"><h2 id="sceneTitle">What did the fit leave out?</h2><p id="scaleNote">Shared axes · x: 0–20 · y: 0–15</p></div>
-    <div class="fit-toolbar">
-      <div class="view-buttons" role="group" aria-label="Plot view"><button type="button" data-view="scatter" aria-pressed="true">Points + fit</button><button type="button" data-view="residual" aria-pressed="false">Residuals</button></div>
-      <div class="row-controls"><label for="row">Inspect row</label><select id="row" aria-describedby="rowHelp"></select><button id="previousRow" type="button" aria-label="Previous row">←</button><button id="nextRow" type="button" aria-label="Next row">→</button></div>
-    </div>
-    <p id="rowHelp" class="plot-help">Tap a point or choose a row to inspect it in all four. Row numbers index the published table; they do not identify a shared subject across datasets.</p>
-    <div id="plots" class="quartet">
-      <figure class="quartet-panel dataset-0"><figcaption><span><b>I</b> Scattered</span><span>11 points</span></figcaption><div id="plot0" class="plot"></div><p class="panel-reading" id="reading0"></p><p class="panel-note">Variation around a rising line.</p></figure>
-      <figure class="quartet-panel dataset-1"><figcaption><span><b>II</b> Curved</span><span>11 points</span></figcaption><div id="plot1" class="plot"></div><p class="panel-reading" id="reading1"></p><p class="panel-note">A clear bend remains in the residuals.</p></figure>
-      <figure class="quartet-panel dataset-2"><figcaption><span><b>III</b> One departure</span><span>11 points</span></figcaption><div id="plot2" class="plot"></div><p class="panel-reading" id="reading2"></p><p class="panel-note">One point sits above the otherwise narrow trend.</p></figure>
-      <figure class="quartet-panel dataset-3"><figcaption><span><b>IV</b> One distant x</span><span>11 points</span></figcaption><div id="plot3" class="plot"></div><p class="panel-reading" id="reading3"></p><p class="panel-note">Ten points share x = 8. One point sets the span.</p></figure>
-    </div>
-    <p class="plot-help" id="viewHelp">Solid lines are each dataset’s actual least-squares fit. The selected point has a larger outline; its vertical segment is y minus fitted y.</p>
-  </section>
-  <section class="readout">
-    <div><h2>The line is a summary.</h2><p>It carries a slope and an intercept. It does not carry the curve in II, the unusual point in III, or the concentration at a single x in IV. The residual view makes those differences easier to inspect.</p><p class="verdict">The numbers agree at a stated resolution.<br>The structures remain different.</p></div>
-    <div><h2>Inspect a consequential row.</h2><div class="inspection-presets"><button id="inspectIII" type="button">III · high point, row 3</button><button id="inspectIV" type="button">IV · distant point, row 8</button></div><p>These buttons highlight existing observations. No points are removed, moved, or replaced; the fit and its summary continue to use all eleven.</p></div>
-  </section>
-  <details id="audit" class="study-notes audit">
-    <summary>Audit the numbers · actual fits and rounding</summary>
-    <p class="audit-intro">Every value below is recomputed from the displayed observations. Six decimal places expose differences hidden in the summary above; they are still a decimal display, not an assertion of exact equality. Scroll the table sideways on smaller screens to compare all four.</p>
-    <div class="table-wrap" tabindex="0" role="region" aria-label="Statistics audit, scroll horizontally on small screens"><table><caption>Statistics from all eleven points in each dataset</caption><thead><tr><th scope="col">Statistic</th><th scope="col">I</th><th scope="col">II</th><th scope="col">III</th><th scope="col">IV</th><th scope="col">Max − min</th><th scope="col">Summary</th></tr></thead><tbody id="auditBody"></tbody></table></div>
-    <p class="audit-intro">Sample variance y is shown to <strong>1 decimal place</strong> in the shared summary: at 2 places, III and IV give 4.12 while I and II give 4.13. The other displayed summary statistics use 2 places. The actual fitted lines and residuals always use the computed coefficients, before rounding.</p>
-    <details class="data-audit"><summary>Inspect the source observations</summary><div class="table-wrap" tabindex="0" role="region" aria-label="Published observations, scroll horizontally on small screens"><table><caption>Anscombe’s quartet · original row order</caption><thead><tr><th scope="col">Row</th><th scope="col">I · x, y</th><th scope="col">II · x, y</th><th scope="col">III · x, y</th><th scope="col">IV · x, y</th></tr></thead><tbody id="dataBody"></tbody></table></div></details>
-  </details>
-  <p id="announcement" class="sr-only" aria-live="polite"></p>
-  <noscript><p class="fallback">This study needs JavaScript to draw its computed fits and residuals. Anscombe’s quartet contains four sets of eleven points. Their regression lines round to y = 3.00 + 0.50x, but their point arrangements differ. The underlying statistics are close, not all exactly equal. The original observations are available in the source linked below.</p></noscript>
-  <details class="study-notes">
-    <summary>Read the study</summary>
-    <div class="notes-grid">
-      <section><h3>What stays the same</h3><p>This is Anscombe’s quartet: four fixed datasets, each with eleven observations. The stated means, sample variances, correlation and fitted coefficients agree at the explicitly displayed rounding precision. The page checks that agreement from the data.</p><p>Every panel uses x from 0 to 20. Point view uses y from 0 to 15; residual view uses y − ŷ from −4 to 4. Scales are fixed within each view and shared by all four datasets. Switching views changes the vertical quantity and its labeled scale.</p></section>
-      <section><h3>What a residual measures</h3><p class="mathematics">ŷ = a + bx<br>residual = y − ŷ</p><p>The line minimizes the sum of squared vertical residuals, with an intercept. It is fitted separately to each dataset using its full-precision computed coefficients. A small residual says that a point is near this fitted line; it does not measure how strongly that point determines the fit.</p><p>In IV the isolated point at x = 19 lies on the fitted line, yet provides all the separation in x from the other ten observations. A residual alone would miss that role.</p></section>
-      <section><h3>What this specimen establishes</h3><p>These nearly matching numerical portraits coexist with visibly different structures. That is a reason to inspect the observations and residuals alongside the summary, not a claim that every fitted relationship is misleading.</p><p>The page compares a finite published quartet. It does not rank the datasets, infer a data-generating process, or diagnose every regression with one pattern. Linked row selection follows table position only; the four rows are not observations of the same entity.</p></section>
-      <section><h3>Source and arithmetic</h3><p>F. J. Anscombe, <em>Graphs in Statistical Analysis</em> (1973), <em>The American Statistician</em> 27(1), 17–21. <a href="https://doi.org/10.1080/00031305.1973.10478966">Original paper</a>.</p><p>The numbers are transcribed from <a href="https://svn.r-project.org/R/trunk/src/library/datasets/data/anscombe.R">R’s dataset source</a>. <a href="https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/anscombe.html">R’s documentation</a> includes a comparison of the fitted coefficients.</p><p>Means, centered sums, sample variances, Pearson correlation and ordinary least squares are recomputed locally. Six-place audit values use browser floating-point arithmetic. No solver, random sampling, or data morph is involved.</p></section>
-    </div>
-  </details>
-  <footer class="footer"><a href="same-residual.html">← Same Residual</a><a href="plates.html#p18">Book of plates</a><a href="index.html">Series →</a></footer>
-</main>
-<script type="module" src="./assets/same-fit.js"></script>
+<body class="exhibit-page same-fit">
+<main class="wrap"><section aria-label="Interactive SAME FIT exhibit" class="exhibit-stage"><div class="exhibit-header"><nav aria-label="Series" class="utility"><a href="index.html">← Series</a><button id="theme" type="button">Paper</button></nav><div class="eyebrow">CMISH / Field study 18 · v0.1</div><header class="hero">
+<div><h1>SAME FIT</h1><p class="subtitle">Same fitted summary. Different structure.</p></div>
+
+</header></div><div class="exhibit-tools"><a class="read-study-link" href="#study-notes">Read the study ↗</a><div class="fit-toolbar">
+<div aria-label="Plot view" class="view-buttons" role="group"><button aria-pressed="true" data-view="scatter" type="button">Points + fit</button><button aria-pressed="false" data-view="residual" type="button">Residuals</button></div>
+<div class="row-controls"><label for="row">Inspect row</label><select aria-describedby="rowHelp" id="row"></select><button aria-label="Previous row" id="previousRow" type="button">←</button><button aria-label="Next row" id="nextRow" type="button">→</button></div>
+</div><p class="plot-help" id="rowHelp">Tap a point or choose its table row. Row numbers are table positions, not shared subjects across datasets.</p></div><figure class="fit-specimen exhibit-specimen exhibit-visual dataset-0" id="activeDataset"><figcaption><span id="activeDatasetLabel">I · Scattered</span><span id="primaryScale">x 0–20 · y 0–15</span></figcaption><div class="plot" id="primaryPlot"></div><p class="panel-reading" id="primaryReading"></p></figure><figure class="residual-inset dataset-0" id="activeResidual"><figcaption><span>Residuals</span><span>y − ŷ · −4 to 4</span></figcaption><div class="plot" id="residualInset"></div><p>Same eleven points · actual fitted line</p></figure><aside class="exhibit-reading fit-reading"><div class="small-label" id="fitCaseNumber">01 / Anscombe’s four datasets</div><h2 id="fitCaseTitle">Scattered</h2><p class="case-description" id="fitCaseDescription">Eleven observations vary around a rising line. The residuals retain that scatter.</p><div class="frozen-fit"><span class="small-label">Shared line · rounded to 2 places</span><strong id="exhibitRoundedLine">y = 3.00 + 0.50x</strong><p>Summaries agree at their stated precision, not exactly. <a href="#audit" id="stageAudit">Audit the numbers ↗</a></p></div><p class="panel-reading" id="fitSelectedPoint"></p></aside><div aria-label="Anscombe dataset" class="exhibit-switcher fit-datasets" role="group"><button aria-pressed="true" data-dataset="0" type="button"><span class="case-number">I</span><span>Scattered</span></button><button aria-pressed="false" data-dataset="1" type="button"><span class="case-number">II</span><span>Curved</span></button><button aria-pressed="false" data-dataset="2" type="button"><span class="case-number">III</span><span>One departure</span></button><button aria-pressed="false" data-dataset="3" type="button"><span class="case-number">IV</span><span>One distant x</span></button></div></section>
+
+
+
+
+
+
+
+
+<p aria-live="polite" class="sr-only" id="announcement"></p>
+<noscript><p class="fallback">This study needs JavaScript to draw its computed fits and residuals. Anscombe’s quartet contains four sets of eleven points. Their regression lines round to y = 3.00 + 0.50x, but their point arrangements differ. The underlying statistics are close, not all exactly equal. The original observations are available in the source linked below.</p></noscript>
+<details class="study-notes" id="study-notes">
+<summary>Read the study</summary>
+<p class="study-intro">Four sets of eleven points. Their familiar summaries agree when rounded. Put the pictures beside one another, then look at what each fitted line leaves behind.</p><div class="contract">
+<span><strong>Frozen</strong> · eleven points; shared summary at the stated precision</span>
+<span><strong>Free</strong> · arrangement of the observations</span>
+<span class="retained">Anscombe’s quartet · a finite, published specimen</span>
+</div><div class="notes-grid">
+<section><h3>What stays the same</h3><p>This is Anscombe’s quartet: four fixed datasets, each with eleven observations. The stated means, sample variances, correlation and fitted coefficients agree at the explicitly displayed rounding precision. The page checks that agreement from the data.</p><p>Every panel uses x from 0 to 20. Point view uses y from 0 to 15; residual view uses y − ŷ from −4 to 4. Scales are fixed within each view and shared by all four datasets. Switching views changes the vertical quantity and its labeled scale.</p></section>
+<section><h3>What a residual measures</h3><p class="mathematics">ŷ = a + bx<br/>residual = y − ŷ</p><p>The line minimizes the sum of squared vertical residuals, with an intercept. It is fitted separately to each dataset using its full-precision computed coefficients. A small residual says that a point is near this fitted line; it does not measure how strongly that point determines the fit.</p><p>In IV the isolated point at x = 19 lies on the fitted line, yet provides all the separation in x from the other ten observations. A residual alone would miss that role.</p></section>
+<section><h3>What this specimen establishes</h3><p>These nearly matching numerical portraits coexist with visibly different structures. That is a reason to inspect the observations and residuals alongside the summary, not a claim that every fitted relationship is misleading.</p><p>The page compares a finite published quartet. It does not rank the datasets, infer a data-generating process, or diagnose every regression with one pattern. Linked row selection follows table position only; the four rows are not observations of the same entity.</p></section>
+<section><h3>Source and arithmetic</h3><p>F. J. Anscombe, <em>Graphs in Statistical Analysis</em> (1973), <em>The American Statistician</em> 27(1), 17–21. <a href="https://doi.org/10.1080/00031305.1973.10478966">Original paper</a>.</p><p>The numbers are transcribed from <a href="https://svn.r-project.org/R/trunk/src/library/datasets/data/anscombe.R">R’s dataset source</a>. <a href="https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/anscombe.html">R’s documentation</a> includes a comparison of the fitted coefficients.</p><p>Means, centered sums, sample variances, Pearson correlation and ordinary least squares are recomputed locally. Six-place audit values use browser floating-point arithmetic. No solver, random sampling, or data morph is involved.</p></section>
+</div>
+<section aria-labelledby="summaryTitle" class="summary-strip">
+<div class="summary-heading"><h2 id="summaryTitle">A shared numerical portrait.</h2><p>Rounded agreement, not exact equality.</p></div>
+<dl class="summary-values" id="sharedSummary"></dl>
+<p class="summary-foot">OLS line at 2 decimal places: <strong id="roundedLine">—</strong>. Variances use n − 1. <a href="#audit" id="openAudit">Audit the rounding ↓</a></p>
+</section><section aria-labelledby="sceneTitle" class="quartet-overview">
+<div class="scene-header"><h2 id="sceneTitle">Inspect the four datasets together</h2><p id="scaleNote">Shared axes · x: 0–20 · y: 0–15</p></div>
+
+
+<div class="quartet" id="plots">
+<figure class="quartet-panel dataset-0"><figcaption><span><b>I</b> Scattered</span><span>11 points</span></figcaption><div class="plot" id="plot0"></div><p class="panel-reading" id="reading0"></p><p class="panel-note">Variation around a rising line.</p></figure>
+<figure class="quartet-panel dataset-1"><figcaption><span><b>II</b> Curved</span><span>11 points</span></figcaption><div class="plot" id="plot1"></div><p class="panel-reading" id="reading1"></p><p class="panel-note">A clear bend remains in the residuals.</p></figure>
+<figure class="quartet-panel dataset-2"><figcaption><span><b>III</b> One departure</span><span>11 points</span></figcaption><div class="plot" id="plot2"></div><p class="panel-reading" id="reading2"></p><p class="panel-note">One point sits above the otherwise narrow trend.</p></figure>
+<figure class="quartet-panel dataset-3"><figcaption><span><b>IV</b> One distant x</span><span>11 points</span></figcaption><div class="plot" id="plot3"></div><p class="panel-reading" id="reading3"></p><p class="panel-note">Ten points share x = 8. One point sets the span.</p></figure>
+</div>
+<p class="plot-help" id="viewHelp">Solid lines are each dataset’s actual least-squares fit. The selected point has a larger outline; its vertical segment is y minus fitted y.</p>
+</section><section class="readout">
+<div><h2>The line is a summary.</h2><p>It carries a slope and an intercept. It does not carry the curve in II, the unusual point in III, or the concentration at a single x in IV. The residual view makes those differences easier to inspect.</p><p class="verdict">The numbers agree at a stated resolution.<br/>The structures remain different.</p></div>
+<div><h2>Inspect a consequential row.</h2><div class="inspection-presets"><button id="inspectIII" type="button">III · high point, row 3</button><button id="inspectIV" type="button">IV · distant point, row 8</button></div><p>These buttons highlight existing observations. No points are removed, moved, or replaced; the fit and its summary continue to use all eleven.</p></div>
+</section><details class="study-notes audit" id="audit">
+<summary>Audit the numbers · actual fits and rounding</summary>
+<p class="audit-intro">Every value below is recomputed from the displayed observations. Six decimal places expose differences hidden in the summary above; they are still a decimal display, not an assertion of exact equality. Scroll the table sideways on smaller screens to compare all four.</p>
+<div aria-label="Statistics audit, scroll horizontally on small screens" class="table-wrap" role="region" tabindex="0"><table><caption>Statistics from all eleven points in each dataset</caption><thead><tr><th scope="col">Statistic</th><th scope="col">I</th><th scope="col">II</th><th scope="col">III</th><th scope="col">IV</th><th scope="col">Max − min</th><th scope="col">Summary</th></tr></thead><tbody id="auditBody"></tbody></table></div>
+<p class="audit-intro">Sample variance y is shown to <strong>1 decimal place</strong> in the shared summary: at 2 places, III and IV give 4.12 while I and II give 4.13. The other displayed summary statistics use 2 places. The actual fitted lines and residuals always use the computed coefficients, before rounding.</p>
+<details class="data-audit"><summary>Inspect the source observations</summary><div aria-label="Published observations, scroll horizontally on small screens" class="table-wrap" role="region" tabindex="0"><table><caption>Anscombe’s quartet · original row order</caption><thead><tr><th scope="col">Row</th><th scope="col">I · x, y</th><th scope="col">II · x, y</th><th scope="col">III · x, y</th><th scope="col">IV · x, y</th></tr></thead><tbody id="dataBody"></tbody></table></div></details>
+</details></details>
+<footer class="footer"><a href="same-residual.html">← Same Residual</a><a href="plates.html#p18">Book of plates</a><a href="index.html">Series →</a></footer>
+</main><script defer="" src="./assets/exhibit-shell.js"></script>
+<script src="./assets/same-fit.js" type="module"></script>
 </body>
 </html>

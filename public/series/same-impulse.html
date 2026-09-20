@@ -8,35 +8,38 @@
   <title>SAME IMPULSE — Field study 14</title>
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="stylesheet" href="./assets/same-law.css">
+  <link rel="stylesheet" href="./assets/exhibit-shell.css">
   <link rel="stylesheet" href="./assets/same-impulse.css">
 </head>
-<body class="same-study same-impulse">
+<body class="same-study exhibit-page same-impulse">
 <main class="wrap">
-  <nav class="utility" aria-label="Series"><a href="index.html">← Series</a><button id="theme" type="button">Paper</button></nav>
-  <div class="eyebrow">CMISH / Field study 14 · v0.1</div>
-  <header class="hero">
-    <div><h1>SAME IMPULSE</h1><p class="subtitle">Same push integrated. Different motion.</p></div>
-    <p class="intro">One mass, spring, and damper. Three ways to deliver the same applied impulse. Move the second pulse: its timing can reinforce or quiet the motion already under way.</p>
-  </header>
-  <div class="contract"><span><strong>Frozen</strong> · mass, spring, damping, starting rest</span><span><strong>Free</strong> · applied-force timing</span><span class="retained">∫₀³ F(t) dt = 1.000 N·s · all three</span></div>
-  <section class="timing-panel" aria-labelledby="timing-title">
-    <div class="timing-heading"><label id="timing-title" for="spacing">C · time between pulse centers</label><output id="spacingOut" for="spacing" aria-live="off">1.00 s</output></div>
-    <input id="spacing" type="range" min="0.6" max="2.2" step="0.01" value="1" aria-describedby="timing-help">
-    <div class="timing-presets"><button id="halfPeriod" type="button">Spacing 1 s</button><button id="fullPeriod" type="button">Spacing 2 s</button><p id="timing-help">The damped period is 2.002 s. Compare a half-cycle with a whole cycle.</p></div>
-  </section>
-  <section class="scene" aria-labelledby="motion-title">
-    <div class="scene-header"><h2 id="motion-title">Watch when the push arrives.</h2><p>Same scales · time 0–8 s · positive motion is to the right</p></div>
-    <div class="time-controls"><button id="play" type="button" aria-pressed="false">Play</button><button id="restart" type="button">Restart</button><label class="sr-only" for="time">Elapsed time in seconds</label><input id="time" type="range" min="0" max="8" step="0.01" value="0" aria-describedby="scrub-help"><output id="timeOut" for="time" aria-live="off">0.00 / 8 s</output></div>
-    <p id="scrub-help" class="small-label">Scrub time to inspect · plots show the complete histories</p>
-    <div class="impulse-cases" id="cases" aria-label="Three force histories and oscillator responses"></div>
-    <p class="plot-note">Shaded force area = applied impulse. The vertical cursor links force, motion, and displacement. The dotted line marks 3 s, when every applied force has ended.</p>
-  </section>
-  <section class="readout">
-    <div><h2>The second push meets a moving mass.</h2><p id="currentReading"></p><p>All applied forces point right, yet the spring can pull the mass left. Equal applied impulse fixes the force–time area; it does not fix the displacement history, peak displacement, or remaining vibration.</p></div>
-    <div><h3>One oscillator, unchanged</h3><dl class="values"><div><dt>Mass m</dt><dd>1 kg</dd></div><div><dt>Stiffness k</dt><dd>π² N/m</dd></div><div><dt>Damping c</dt><dd>0.3 N·s/m</dd></div></dl><p class="equation">m x″ + c x′ + k x = F(t)<br>x(0) = 0, x′(0) = 0</p></div>
+  <section class="exhibit-stage" aria-label="Same Impulse interactive exhibit">
+    <nav class="utility" aria-label="Series"><a href="index.html">← Series</a><a href="plates.html#p14">Plate 14</a><button id="theme" type="button">Paper</button></nav>
+    <header class="hero"><div class="eyebrow">CMISH / Field study 14 · J = 1 N·s</div><h1>SAME IMPULSE</h1><p class="subtitle">Same push integrated. Different motion.</p></header>
+    <div class="impulse-cases" id="cases" aria-label="Selected force history and oscillator response"></div>
+    <div class="exhibit-tools">
+      <div class="time-controls"><button id="play" type="button" aria-pressed="false">Play</button><button id="restart" type="button">Restart</button><label class="sr-only" for="time">Elapsed time in seconds</label><input id="time" type="range" min="0" max="8" step="0.01" value="0" aria-describedby="scrub-help"><output id="timeOut" for="time" aria-live="off">0.00 / 8 s</output></div>
+      <p id="scrub-help" class="small-label">Scrub to inspect · same fixed scales in every case</p>
+      <a class="study-link" href="#study-notes">Read the study ↗</a>
+    </div>
+    <div class="exhibit-switcher" role="group" aria-label="Force history">
+      <button type="button" data-case="early" aria-pressed="false"><span>01</span> Early pulse</button>
+      <button type="button" data-case="broad" aria-pressed="false"><span>02</span> Broad push</button>
+      <button type="button" data-case="pair" aria-pressed="true"><span>03</span> Two pulses</button>
+    </div>
+    <section class="timing-panel" aria-labelledby="timing-title">
+      <div class="timing-heading"><label id="timing-title" for="spacing">Two-pulse spacing</label><output id="spacingOut" for="spacing">1.00 s</output></div>
+      <input id="spacing" type="range" min="0.6" max="2.2" step="0.01" value="1" aria-describedby="timing-help">
+      <div class="timing-presets"><button id="halfPeriod" type="button">Spacing 1 s</button><button id="fullPeriod" type="button">Spacing 2 s</button></div>
+      <p id="timing-help">Adjust the gap in case 03 · damped period 2.002 s.</p>
+    </section>
   </section>
   <p id="announcement" class="sr-only" aria-live="polite"></p>
-  <details class="study-notes"><summary>Read the study</summary>
+  <details class="study-notes" id="study-notes"><summary>Read the study</summary>
+    <div class="contract"><span><strong>Frozen</strong> · mass, spring, damping, starting rest</span><span><strong>Free</strong> · applied-force timing</span><span class="retained">∫₀³ F(t) dt = 1.000 N·s · all three</span></div>
+    <p id="currentReading"></p>
+    <p class="equation">m x″ + c x′ + k x = F(t) · m = 1 kg · k = π² N/m · c = 0.3 N·s/m<br>x(0) = 0, x′(0) = 0</p>
+    <p>Every applied force points right; the spring can pull the mass left. Shaded force area is applied impulse. The dotted line marks 3 s, when all applied forces have ended.</p>
     <div class="notes-grid">
       <section><h3>Same area, different timing</h3><p>A delivers one smooth pulse over 0.2–0.8 s. B spreads its push over 0–3 s. C splits the impulse equally between two 0.6 s pulses; its first center is at 0.5 s and the second follows by the selected spacing. Every force is zero outside the common 0–3 s window.</p><p>A pulse starting at a, with width w and impulse j, is F(t) = (j/w)[1 − cos(2π(t − a)/w)] on its support and zero elsewhere. Its exact area is j. A and B each use j = 1 N·s; C uses j = 0.5 N·s twice.</p></section>
       <section><h3>Applied impulse is not net impulse</h3><p>The displayed 1 N·s counts the applied force F alone. Net force also includes −kx and −cx′. The momentum change is the integral of that net force, so equal applied impulse does not force equal final velocity.</p><p>Work is another integral, ∫F dx = ∫F x′ dt. Because the mass moves differently while each force acts, equal applied impulse also does not imply equal work or equal energy supplied.</p></section>
@@ -47,6 +50,7 @@
   <noscript><p>This study needs JavaScript for its analytic response plots and time controls. The mathematical construction is described above.</p></noscript>
   <footer class="footer"><a href="same-degrees.html">← Same Degrees</a><a href="plates.html#p14">Book of plates</a><a href="same-eigenvalues.html">Same Eigenvalues →</a></footer>
 </main>
+<script defer src="./assets/exhibit-shell.js"></script>
 <script type="module" src="./assets/same-impulse.js"></script>
 </body>
 </html>
