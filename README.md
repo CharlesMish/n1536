@@ -4,7 +4,7 @@ The repository now includes the eighteen-study SAME series at **`/series/`**, wi
 
 Run `npm run dev` and open `/series/index.html`, or build with `npm run validate`. The expanded studies live in `public/series/`: each page has external same-origin styles and scripts, shared specimen image files, and external Volume workers. No inline-code CSP exception is required. See [the integration notes](docs/series/INTEGRATION.md) and [editorial rationale](docs/series/EDITORIAL_NOTES.md).
 
-This GitHub update does not deploy a production route. Existing Cloudflare review settings remain unchanged.
+The collection is configured for Cloudflare Workers Static Assets. See the hosting settings below.
 
 ---
 
@@ -14,7 +14,7 @@ This GitHub update does not deploy a production route. Existing Cloudflare revie
 
 SAME N is a full-screen visual exhibit of three ways to place the same number of points on a sphere: seeded pseudorandom surface draws, a canonical two-dimensional Sobol prefix mapped with equal area, and a fixed-size spherical Fibonacci lattice. The exhibit keeps `N = 1,536` constant so the methods can be inspected without pretending that they make the same promise.
 
-The intended public home is `https://same-n.cmish.dev/`. This branch is a review candidate only: its Cloudflare configuration exposes version previews but deliberately contains no production route.
+The intended public home is `https://same-n.cmish.dev/`. Workers serves the built collection directly; a Custom Domain can be attached in the Cloudflare dashboard.
 
 ## Exhibit controls
 
@@ -79,7 +79,7 @@ This boundary is intentionally narrow. Future SAME studies can reuse the shell w
 Requirements: Node.js 22.12 or newer.
 
 ```bash
-npm install
+npm ci --include=dev
 npm run dev
 ```
 
@@ -92,15 +92,38 @@ npm run preview
 
 The Vite build is written to `dist/`. Cloudflare Pages/Workers Static Assets reads `public/_headers` into that build and applies a same-origin policy (including same-origin workers for Volume) with no `unsafe-inline` or `unsafe-eval`.
 
-## Review-only Cloudflare upload
+## Cloudflare Workers hosting
 
-After `npm run validate` and authenticated Wrangler setup:
+Connect this repository to the existing Worker in **Settings > Build**:
+
+| Setting | Value |
+| --- | --- |
+| Production branch | `main` |
+| Root directory | Repository root |
+| Build command | `npm run build` |
+| Deploy command | `npx wrangler deploy` |
+| Non-production branch deploy command | `npx wrangler versions upload` |
+| Build variable | `NODE_VERSION=22.16.0` (or a compatible newer Node release) |
+
+For checks before each deployment, use `npm run validate` as the build command; it already includes the build. Install development dependencies, since they contain Vite and Wrangler. Workers reads the output directory `./dist` from `wrangler.jsonc`; there is no separate Pages output-directory setting.
+
+The configured Worker name is `same-n`. Use that Worker in the dashboard, or change `name` in `wrangler.jsonc` to match your existing Worker before deploying. `workers_dev: true` enables its public workers.dev address, and `preview_urls: true` keeps version previews available. Custom domains are managed in **Settings > Domains & Routes**; attach `same-n.cmish.dev` to this Worker if it is not already attached. No domain is automatically claimed by this repository configuration.
+
+Browse `/series/` for all eighteen studies, `/series/plates.html` for the book, and `/` for SAME N. Host the whole `dist` directory at the domain root so absolute asset links resolve.
+
+For a manual deployment after authenticated Wrangler setup:
 
 ```bash
-npx wrangler versions upload --preview-alias v02-review --strict
+npm ci --include=dev
+npm run validate
+npx wrangler deploy
 ```
 
-`wrangler.jsonc` sets `workers_dev` to `false`, enables version preview URLs explicitly, and contains no route for `same-n.cmish.dev`. Do not run `wrangler deploy` or promote a version as part of this review.
+To upload only a review version, use `npx wrangler versions upload` instead of the final command. Deploying or merging into a connected production branch can publish the site; opening a pull request does not itself promote a Worker version.
+
+The existing `public/_headers` keeps the strict same-origin CSP, blocks iframe embedding, and includes `X-Robots-Tag: noindex, nofollow`. The site remains browsable and shareable; remove that last header when search indexing is desired.
+
+Cloudflare references: [Workers Builds settings](https://developers.cloudflare.com/workers/ci-cd/builds/configuration/) and [Custom Domains](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/).
 
 ## Tests
 

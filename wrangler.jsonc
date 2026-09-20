@@ -2,7 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "same-n",
   "compatibility_date": "2026-09-01",
-  "workers_dev": false,
+  "workers_dev": true,
   "preview_urls": true,
   "assets": {
     "directory": "./dist",
