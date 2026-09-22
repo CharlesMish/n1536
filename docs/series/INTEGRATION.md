@@ -1,10 +1,10 @@
 # Integration into n1536 — 2026-09-19
 
-The eighteen-study collection is integrated under `/series/`, including the corrected Moves and Divergence pages and the new Distances, Residual, and Fit studies. The repository's newer modular SAME N lives at `/same-n.html`; `/series/same-n.html` redirects to it. The domain root redirects to `/series/`, and its header returns to the collection. We deliberately preserve the hardened renderer, compact inspection disclosure, keyboard controls, and source/test boundary rather than replacing them with the earlier standalone N.
+The nineteen-study collection is integrated under `/series/`, including the corrected Moves and Divergence pages and the Distances, Residual, Fit, and Sum studies. The repository's newer modular SAME N lives at `/same-n.html`; `/series/same-n.html` redirects to it. The domain root redirects to `/series/`, and its header returns to the collection. We deliberately preserve the hardened renderer, compact inspection disclosure, keyboard controls, and source/test boundary rather than replacing them with the earlier standalone N.
 
 ## Source layout
 
-- `public/series/*.html`: index, book, seventeen studies, and the N redirect.
+- `public/series/*.html`: index, book, eighteen studies, and the N redirect.
 - `public/series/assets/*.css`: external authored styles.
 - `public/series/assets/*.js`: scientific kernels, rendering/control code, and explanation helpers, preserving their original script order.
 - `volume-*.worker.js`: exactly the expanded solver worker strings from the input, now served from the same origin.
@@ -46,7 +46,7 @@ The three new pages reuse LAW’s Paper/UV typography and layout with separate s
 
 Moves and Divergence retain their authored field layouts. Their CSS and icons are external, canvas shortcuts are scoped to focused inspection surfaces, paused studies stop idle rendering, and hidden pages stop playback. Moves exposes the turn-scale slider and measured heading residual. Divergence keeps its corrected potential, curl/flux formulas and backing-store-aware reading plate. Shadow also invalidates its draw cache on resize, preventing a cleared canvas from staying blank.
 
-The index and book contain all eighteen entries as static HTML, so links and specimens remain available without JavaScript. Navigation enhancement is optional. Original vector specimens are shared assets instead of duplicated multi-megabyte JavaScript strings; catalog and book images load lazily. Existing raster-backed specimen wrappers remain inline because browsers block nested external images inside an SVG loaded as an image.
+The index and book contain all nineteen entries as static HTML, so links and specimens remain available without JavaScript. Navigation enhancement is optional. Original vector specimens are shared assets instead of duplicated multi-megabyte JavaScript strings; catalog and book images load lazily. Existing raster-backed specimen wrappers remain inline because browsers block nested external images inside an SVG loaded as an image.
 
 Browser coverage exercises the five additions with the real response CSP, native range/select keyboard controls, Paper/UV themes, reduced motion, and compact viewports. Numerical tests separate applied impulse from net momentum change and the selected-start eigenvalue peak from worst-case operator amplification.
 
@@ -71,7 +71,7 @@ Residual keeps the entire linear system fixed. With r = b − A x̂, the solutio
 
 Fit draws actual per-dataset least-squares lines and computes every statistic from the published decimal values. The shared summary declares its rounding precision; the numerical audit reveals the differences. The opening view selects one dataset, while the study retains the four-dataset comparison with fixed axes. Residuals use each dataset’s own computed line. There is no fabricated exact equality or data morph.
 
-All three use external same-origin modules and the established Paper/UV styles. Study 15 links onward to 16; the index, book, and no-JavaScript navigation include all eighteen entries. Production hosting remains a separate action.
+All three use external same-origin modules and the established Paper/UV styles. Study 15 links onward to 16; the index, book, and no-JavaScript navigation include all nineteen entries. Production hosting remains a separate action.
 
 ### Validation for studies 16–18
 
@@ -96,3 +96,13 @@ DIVERGENCE retains its existing immersive shell and study dialog. Its CSS breakp
 `tests/browser/immersive-studies.spec.js` checks desktop, shorter laptop, and phone compositions, actual visual changes on case selection, case controls, disclosures, keyboard use, and runtime/CSP behavior. Its DIVERGENCE check measures painted canvas bounds, rather than assuming that a large canvas means a large specimen.
 
 Recorded local validation for this pass: all 61 unit tests, 54 series checks, the production build, and CSP/static checks passed. The 27 new browser checks passed at 1920×900, 1440×800, and 390×844. Another 37 existing study checks passed across desktop, 320px portrait, 667px landscape, and reduced motion. Visual review covered both Paper and UV. The six pure model/math modules are unchanged; the LAW and AVERAGE mathematical definitions are also unchanged.
+
+## SAME SUM · study 19
+
+Starting main: `f226b1e35f7bf75f33a38d1bca06440a115f4f8f`. Source: Charlie’s supplied `opus5p5_19.zip`.
+
+Integrated the supplied Opus exhibit after correcting the rounding explanation: result-dependent spacing, signed correction (exact − stored), and a signed place-value diagram rather than an IEEE memory layout. The frozen seed, values, orders, and three totals are preserved. The catalog, book, static links, keyboard navigation, and count assertions include study 19.
+
+Regenerate the shared card/book specimen with `node scripts/make-sum-specimen.mjs`. The model and its independent binary-decoding tests cover every addition. Browser tests exercise both themes, case switching, correction signs, scrubbing, playback, keyboard controls, narrow layouts, and the hosted CSP.
+
+Independent Python `Fraction` evaluation reproduced all 4,608 additions: Given −670 grid units with 763 rounding events (380 upward); Ascending +101 units with one upward event; Descending exact. The signed ledger closes in every order. Local `npm run validate` passes 68 unit tests, 56 series checks, the build, and CSP/static checks for 21 collection pages.

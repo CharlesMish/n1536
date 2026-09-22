@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en" data-theme="uv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0d0b18">
+  <meta name="description" content="SAME SUM — Same numbers added. Different totals. Add one fixed set of 1,536 binary64 values in three orders and inspect the signed rounding correction at each addition.">
+  <title>SAME SUM — Field study 19</title>
+  <link rel="stylesheet" href="./assets/same-law.css">
+  <link rel="stylesheet" href="./assets/exhibit-shell.css">
+  <link rel="stylesheet" href="./assets/same-sum.css">
+</head>
+<body class="same-study exhibit-page same-sum">
+<main class="wrap">
+  <section class="exhibit-stage" aria-label="Interactive SAME SUM exhibit">
+    <nav class="utility" aria-label="Series"><a href="index.html">← Series</a><a href="plates.html#p19">Plate 19</a><button id="theme" type="button">Paper</button></nav>
+
+    <header class="hero exhibit-heading">
+      <div class="eyebrow">CMISH / Field study 19 · v0.1</div>
+      <h1>SAME SUM</h1>
+      <p class="subtitle">Same numbers added. Different totals.</p>
+      <p class="frozen-caption"><span>Held constant</span>1,536 binary64 values, each added once to one accumulator. Round to nearest, ties to even.</p>
+    </header>
+
+    <div class="sum-field exhibit-field exhibit-visual">
+      <figure class="bits-figure">
+        <figcaption class="panel-head"><span>One addition · signed place values</span><span id="bitsScale">Fixed ruler · 2⁻²⁰ to 2⁴²</span></figcaption>
+        <svg id="bitsPlot" viewBox="0 0 700 222" role="img" aria-labelledby="bitsTitle bitsDesc">
+          <title id="bitsTitle">The accumulator, the value added, the exact sum and the stored result</title>
+          <desc id="bitsDesc">Loading the addition.</desc>
+        </svg>
+        <p class="step-line" id="stepLine">Loading.</p>
+        <p class="rounding-note">Correction = exact − stored. Negative means rounded upward; a carry can change retained bits. This is a signed binary place-value diagram, not the 64-bit memory layout.</p>
+      </figure>
+      <figure class="drift-figure">
+        <figcaption class="panel-head"><span>Computed − exact running total</span><span>Shared fixed axis · all three orders</span></figcaption>
+        <svg id="driftPlot" viewBox="0 0 700 176" role="img" aria-labelledby="driftTitle driftDesc">
+          <title id="driftTitle">How far each order's running total has drifted from the exact running total</title>
+          <desc id="driftDesc">Loading the drift traces.</desc>
+        </svg>
+        <p class="drift-legend"><span class="legend-held">Shaded: the large value is in the accumulator</span><span>Steps are discrete; the trace holds between them</span></p>
+      </figure>
+    </div>
+
+    <aside class="exhibit-reading" aria-labelledby="caseName">
+      <span class="small-label" id="caseNumber">01 / Stored order</span>
+      <h2 id="caseName">Given</h2>
+      <p id="caseReading">Loading the three orders.</p>
+      <dl class="values">
+        <div><dt>Computed total · 8 places</dt><dd id="computedTotal">—</dd></div>
+        <div><dt>Computed − exact</dt><dd id="totalError">—</dd></div>
+        <div><dt>Additions that rounded</dt><dd id="roundedCount">—</dd></div>
+      </dl>
+      <p class="exact-line">Exact total · fixed <output id="exactTotal">—</output></p>
+      <div class="invariant-line"><span>Computed + signed corrections = exact</span><strong id="ledgerStatus">checking</strong></div>
+    </aside>
+
+    <div class="exhibit-tools">
+      <div class="time-controls">
+        <button id="play" type="button" aria-pressed="false">Play</button>
+        <button id="restart" type="button">Restart</button>
+        <label class="sr-only" for="step">Addition step</label>
+        <input id="step" type="range" min="0" max="1536" step="1" value="768">
+        <output id="stepOut" for="step">Step 768 / 1,536</output>
+      </div>
+      <div class="jump-controls" role="group" aria-label="Jump between roundings">
+        <button id="prevRound" type="button">← Previous rounding</button>
+        <button id="nextRound" type="button">Next rounding →</button>
+      </div>
+      <a class="study-link" href="#study-notes">Read the study ↗</a>
+    </div>
+
+    <div class="exhibit-switcher" role="group" aria-label="Order of addition">
+      <button type="button" data-case="0" aria-pressed="true"><span>01</span>Given <small id="caseSmall0">stored order</small></button>
+      <button type="button" data-case="1" aria-pressed="false"><span>02</span>Ascending <small id="caseSmall1">smallest |x| first</small></button>
+      <button type="button" data-case="2" aria-pressed="false"><span>03</span>Descending <small id="caseSmall2">largest |x| first</small></button>
+    </div>
+  </section>
+
+  <p id="announcement" class="sr-only" aria-live="polite"></p>
+  <noscript><p class="fallback">This study computes its three sums on opening and needs JavaScript. The exact total of the 1,536 values is 7,919.23452281951904296875. Adding them in stored order gives 7,919.23388385772705078125 (670 × 2⁻²⁰ low). Smallest magnitude first gives 7,919.234619140625 (101 × 2⁻²⁰ high). Largest magnitude first gives the exact total.</p></noscript>
+
+  <details class="study-notes" id="study-notes">
+    <summary>Read the study</summary>
+    <p class="study-intro">Real addition does not care about order. A binary64 accumulator does: each addition is rounded to the nearest representable binary64 value, with ties to even. The spacing between those values depends on the result’s magnitude. Each new addition starts from the previously rounded result.</p>
+    <div class="contract">
+      <span><strong>Frozen</strong> · one multiset of 1,536 binary64 values; binary64 addition, round to nearest, ties to even; one accumulator starting at 0</span>
+      <span><strong>Free</strong> · order of addition</span>
+      <span class="retained">exact total 7,919.23452281951904296875</span>
+    </div>
+
+    <section class="readout">
+      <div>
+        <h2>Addition forgot the order. Rounding did not.</h2>
+        <p id="currentReading">Loading.</p>
+        <p>Scrub to the steps where the large value sits in the accumulator. The ruler never moves; the 53-bit window follows the stored result’s exponent. Each row shows a sign and the place values of its magnitude, not a literal memory layout. The correction row is exact a + b minus its stored result. A negative correction means the stored result rounded upward. Rounding can change retained bits; it does not simply delete trailing bits.</p>
+      </div>
+      <div>
+        <dl class="values" id="totalsTable"></dl>
+      </div>
+    </section>
+
+    <div class="notes-grid">
+      <section>
+        <h3>What stays the same</h3>
+        <p>The values are generated once from seed 4217: 1,534 moderate values with magnitudes between 2⁻⁶ and 2⁹ and random signs, each rounded to a multiple of 2⁻²⁰. Two more values complete the set: L, the binary64 nearest φ · 2⁴⁰ as evaluated (about 1.78 × 10¹²), at stored position 385, and −L at stored position 1,153.</p>
+        <p>Every order adds each of the 1,536 values exactly once, one at a time, into a single binary64 accumulator that starts at zero. Nothing else touches the running total.</p>
+      </section>
+      <section>
+        <h3>What changes</h3>
+        <p>Only the permutation. Given keeps the stored order. Ascending and Descending sort by |x| with a stable tie rule, so +L comes before −L in both.</p>
+        <p>In real arithmetic, addition is commutative and associative, so all three orders share one exact sum. In binary64, every addition rounds its exact result to the nearest number with a 53-bit significand, and the next addition starts from that rounded value.</p>
+      </section>
+      <section>
+        <h3>Why the large pair matters</h3>
+        <p>While the accumulator holds L, whose exponent is 40, its lowest kept bit is 2⁻¹². Contributions below 2⁻¹² cannot be represented independently at that scale. Rounding to nearest can move the stored result upward or downward; the signed correction records the difference. When −L arrives the subtraction is exact (Sterbenz's lemma applies), but it only removes L. It cannot undo earlier rounding errors.</p>
+        <p>Without L, every partial sum of these grid values is smaller than 2²⁰ in magnitude and so needs at most 40 significant bits; those additions cannot round. Given holds L for 768 additions. Ascending meets L once, at step 1,535, with the whole moderate total in the accumulator. Descending cancels the pair in its first two steps.</p>
+      </section>
+      <section>
+        <h3>An exact ledger</h3>
+        <p>Every value here, and every stored partial sum, is an integer count of 2⁻²⁰, kept as a BigInt. The exact running totals are integer sums. Knuth's TwoSum recovers the rounding error of each floating-point addition as a binary64; the page checks it against the BigInt difference at every step, and checks that computed total plus the sum of signed rounding corrections equals the exact total for each order.</p>
+        <p>Every dyadic fraction has a terminating decimal expansion, so the audit decimals below are exact. Readouts marked with a place count are rounded for display.</p>
+      </section>
+      <section>
+        <h3>What this exhibit does not test</h3>
+        <p>It is not a ranking of summation orders. Sorting by increasing magnitude is common advice and often limits error well; in this specimen, the opposite order wins because the largest values cancel. Descending is exact for this multiset, not in general.</p>
+        <p>Compensated (Kahan–Babuška, Neumaier) and pairwise summation change the algorithm rather than the order, and are outside this study. No fused multiply-add, extended precision or reassociation is involved: ECMAScript defines Number addition as IEEE 754 binary64 with ties to even.</p>
+      </section>
+      <section>
+        <h3>Further reading</h3>
+        <p>David Goldberg, <a href="https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html"><em>What Every Computer Scientist Should Know About Floating-Point Arithmetic</em></a> (1991). Nicholas J. Higham, “The Accuracy of Floating Point Summation,” <em>SIAM Journal on Scientific Computing</em> 14 (1993). Donald E. Knuth, <em>The Art of Computer Programming</em>, Vol. 2, §4.2.2, for the exact error of a floating-point sum. <a href="https://tc39.es/ecma262/multipage/ecmascript-data-types-and-values.html#sec-numeric-types-number-add">ECMAScript Number::add</a> specifies the arithmetic used here.</p>
+      </section>
+    </div>
+
+    <section class="audit">
+      <h3>Step audit · exact decimals</h3>
+      <div class="audit-table"><dl id="stepAudit"></dl></div>
+    </section>
+    <section class="audit">
+      <h3>Checks run on opening</h3>
+      <ul class="check-list" id="checkList"><li>Running checks.</li></ul>
+    </section>
+  </details>
+
+  <footer class="footer"><a href="same-fit.html">← Same Fit</a><a href="plates.html#p19">Book of plates</a><a href="index.html">Series →</a></footer>
+</main>
+<script src="./assets/exhibit-shell.js" defer></script>
+<script src="./assets/same-sum.js" type="module"></script>
+</body>
+</html>
