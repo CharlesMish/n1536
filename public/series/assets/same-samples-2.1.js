@@ -265,12 +265,17 @@ function I() {
   }
 
   function fieldRect() {
-      if(W<=700)return {x:20,y:12,w:W-40,h:Hgt-24};
-    const top = W > 700 ? Math.min(Hgt * 0.22, 168) : Math.min(Hgt * 0.26, 148);
-    const bot = W > 700 ? Math.min(Hgt * 0.34, 268) : Math.min(Hgt * 0.40, 236);
-    const left = W > 860 ? Math.min(W * 0.18, 220) : Math.min(W * 0.08, 28);
-    const right = W > 860 ? Math.min(W * 0.30, 360) : Math.min(W * 0.08, 28);
-    return { x: left, y: top, w: Math.max(48, W - left - right), h: Math.max(48, Hgt - top - bot) };
+    if(document.documentElement.classList.contains("mobile-reading"))return {x:22,y:24,w:W-44,h:Hgt-48};
+    const stageBox=stage.getBoundingClientRect();
+    const header=document.querySelector(".study-header").getBoundingClientRect();
+    const reading=document.querySelector(".method-reading").getBoundingClientRect();
+    const tools=document.querySelector(".study-tools").getBoundingClientRect();
+    // Reserve the inset column even when its contents are hidden, keeping axes fixed.
+    const left=Math.min(72,Math.max(20,W*.046))+Math.min(312,W*.28)+24;
+    const right=reading.left-stageBox.left-24;
+    const top=header.bottom-stageBox.top+24;
+    const bottom=tools.top-stageBox.top-24;
+    return {x:left,y:top,w:Math.max(48,right-left),h:Math.max(48,bottom-top)};
   }
 
   function plotMap() {
@@ -290,18 +295,6 @@ function I() {
 
   function currentCurve() {
     return curves[method];
-  }
-
-  function displayValues() {
-    if (morphing && !reduced.matches) {
-      const a = curves[morphFrom].vs;
-      const b = curves[morphTo].vs;
-      const t = ease(mix);
-      const out = new Float64Array(DENSE);
-      for (let i = 0; i < DENSE; i++) out[i] = a[i] + (b[i] - a[i]) * t;
-      return out;
-    }
-    return currentCurve().vs;
   }
 
   function strokePoly(values, color, width, alpha) {
@@ -361,6 +354,10 @@ function I() {
     ctx.textAlign = "right";
     ctx.textBaseline = "bottom";
     ctx.fillText("0", L.x0 - 8, L.toY(0) - 6);
+    ctx.fillText(YHI.toFixed(2), L.x0 - 8, L.y0 + 8);
+    ctx.fillText(YLO.toFixed(2), L.x0 - 8, L.y1);
+    ctx.textAlign = "left";
+    ctx.fillText("Measured y · fixed axes", L.x0, L.r.y + 13);
 
     const skipGhost = morphing ? { [morphFrom]: true, [morphTo]: true } : { [method]: true };
     const ghostA = theme === "uv" ? 0.16 : 0.18;
@@ -369,12 +366,12 @@ function I() {
       strokePoly(curves[k].vs, col.faint, 1.05, ghostA);
     }
 
-    if (showBasis) {
-      const b = basis[method][pin];
-      strokePoly(b.vs, col.accent, 1.45, theme === "uv" ? 0.42 : 0.38);
-    }
-
-    const vs = displayValues();
+    // Influence is a different quantity, drawn only in the separately scaled inset.
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(L.x0, L.y0, L.x1 - L.x0, L.y1 - L.y0);
+    ctx.clip();
+    const vs = currentCurve().vs;
     const ypp = showBend ? secondDiff(vs, 1 / (DENSE - 1)) : null;
     let maxBend = 1e-6;
     if (ypp) for (let i = 0; i < DENSE; i++) maxBend = Math.max(maxBend, Math.abs(ypp[i]));
@@ -395,12 +392,14 @@ function I() {
         ctx.lineTo(L.toX(i / (DENSE - 1)), L.toY(vs[i]));
         ctx.stroke();
       }
+    } else if (morphing) {
+      const t = ease(mix);
+      strokePoly(curves[morphFrom].vs, col.ink, 1.75, 1 - t);
+      strokePoly(curves[morphTo].vs, col.ink, 1.75, t);
     } else {
-      const inkA = showBasis
-        ? (theme === "uv" ? 0.42 : 0.38)
-        : (theme === "uv" ? 0.94 : 0.90);
-      strokePoly(vs, col.ink, showBasis ? 1.35 : 1.75, inkA);
+      strokePoly(vs, col.ink, 1.75, theme === "uv" ? 0.94 : 0.90);
     }
+    ctx.restore();
 
     const focus = pin >= 0 ? pin : hover;
     if (focus >= 0) {
@@ -483,7 +482,10 @@ function I() {
 
     pctx.font = "9px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
     pctx.fillStyle = col.faint;
-    pctx.fillText("φⱼ  ·  yⱼ = 1, else 0", 14, 16);
+    pctx.fillText("φⱼ · response to +1", 14, 16);
+    pctx.textAlign = "right";
+    pctx.fillText(bmin.toFixed(2) + " to " + bmax.toFixed(2), w - 14, 16);
+    pctx.textAlign = "left";
     pctx.fillStyle = col.muted;
     pctx.fillText("j = " + pin + "   x = " + X[pin].toFixed(3) + "   y = " + Y[pin].toFixed(2), 14, h - 10);
   }
@@ -526,6 +528,7 @@ function I() {
     document.getElementById("basisKey").setAttribute("aria-hidden", showBasis ? "false" : "true");
     document.getElementById("bendKey").setAttribute("aria-hidden", showBend ? "false" : "true");
     document.getElementById("usePlate").classList.toggle("is-inspecting", pin >= 0);
+    document.getElementById("usePlate").hidden = !showBasis;
     const view = currentCurve();
     document.getElementById("live").textContent =
       e.name + ". " + e.claim + ". Nine frozen samples. Selected index " + pin +
@@ -537,8 +540,11 @@ function I() {
   function updateReadout() {
     const view = currentCurve();
     document.getElementById("statResid").textContent = fmtRes(view.resid);
-    document.getElementById("statBend").textContent = fmtSci(view.bend);
-    document.getElementById("statSpan").textContent = view.span.toFixed(2);
+    document.getElementById("statBend").textContent = morphing ? "—" : fmtSci(view.bend);
+    document.getElementById("statSpan").textContent = morphing ? "—" : view.span.toFixed(2);
+    document.getElementById("measurementScope").textContent = morphing
+      ? "Crossfading completed curves · endpoint measurements resume when the transition ends."
+      : "Span and Bend describe the fitted curve. Influence has its own scale in the inset.";
     document.getElementById("statPin").textContent = String(pin);
   }
 
@@ -606,7 +612,7 @@ function I() {
   function loop(now) {
     if (morphing) {
       mix = Math.min(1, (now - morphT0) / DUR);
-      if (mix >= 1) { morphing = false; mix = 1; }
+      if (mix >= 1) { morphing = false; mix = 1; updateReadout(); }
     }
     try { drawField(); }
     catch (err) { console.error(err); }
@@ -664,6 +670,7 @@ function I() {
     if (reduced.matches && morphing) {
       morphing = false;
       mix = 1;
+      updateReadout();
     }
   });
   resize();
