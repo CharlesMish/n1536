@@ -9,7 +9,7 @@
   const META = {
     source: {
       index: "01", name: "Source", claim: "Kept phase",
-      note: "The amplitudes stay with the angles that made the picture. Structure is the thing you keep.",
+      note: "The original phases retain the source picture. Keep the magnitude and change the phase to see which structure it leaves undetermined.",
       plateTitle: "Fig. 01 — source spectrum", plateCaption: "A face, seated in its own phase.",
       plateSide: "original φ", seed: "kept"
     },

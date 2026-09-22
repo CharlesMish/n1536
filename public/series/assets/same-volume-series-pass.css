@@ -117,7 +117,7 @@ button{color:inherit;font:inherit}button:focus-visible{outline:2px solid var(--a
 .study-dialog .focus-values{font:14px/1.6 ui-monospace,monospace;white-space:pre-wrap;background:var(--field);padding:16px}
 .study-dialog canvas{width:100%;height:auto;border:1px solid var(--rule)}
 .field-loader.is-hidden{visibility:hidden}.field-loader.is-hidden span{animation:none}
-@media(max-width:700px){
+@media(max-width:1099px), (max-height:619px){
  html.mobile-reading,html.mobile-reading body{height:auto;min-height:100svh;overflow:auto}
  html.mobile-reading body>[id=app]{height:auto;min-height:100svh;padding-bottom:28px}
  .mobile-heading{position:relative;padding:24px 20px 10px}
@@ -139,7 +139,7 @@ button{color:inherit;font:inherit}button:focus-visible{outline:2px solid var(--a
  .mobile-flow .method-reading{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;pointer-events:auto}
  .mobile-flow .method-reading h2{font-size:27px}.mobile-flow .method-reading p{display:block;font-size:16px;max-width:none}
  .mobile-flow .method-reading dl{gap:12px 18px}.mobile-flow .method-reading dt,.mobile-flow .method-reading dd{font-size:12px}
- .mobile-flow .use-plate{display:block;opacity:1;box-shadow:none;padding:14px}
+ .mobile-flow .use-plate{display:block;max-width:560px;opacity:1;box-shadow:none;padding:14px}
  .mobile-flow .use-plate header,.mobile-flow .use-plate figcaption{font-size:11px;line-height:1.45}
  .mobile-flow .field-keys{align-items:flex-start;gap:10px}.mobile-flow .field-key p{font-size:11px;line-height:1.5}
  .mobile-flow .drag-note{display:block;font-size:11px}
@@ -151,3 +151,6 @@ button{color:inherit;font:inherit}button:focus-visible{outline:2px solid var(--a
 
 
 .pixelated{image-rendering:pixelated}
+
+/* Reserve a clear central field beside the reading and inspection inset. */
+.use-plate{margin:0}

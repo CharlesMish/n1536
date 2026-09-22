@@ -106,7 +106,8 @@ function I(){
   let pin=-1,hover=-1;
   let W=1,H=1,PR=1;
   let worker=null,workerUrl="",workerMode="",runId=0;
-  let primaryComplete=false,forming=false;
+  let primaryComplete=false,forming=false,primaryFailure=false;
+  let activeClaim="carry",activeIteration=0;
   let mix=1,morphing=false,morphT0=0,morphFrom="carry",morphTo="carry";
   const MORPH_DURATION=1100;
   let frameHandle=0;
@@ -164,20 +165,18 @@ function I(){
     return true;
   }
 
-  function fieldRect(){
-    if(W<=700)return{x:22,y:24,w:W-44,h:H-48};
-    if(W<=900&&H<=500&&W>H){
-      const top=Math.min(H*0.28,112);
-      const bot=Math.min(H*0.42,140);
-      const left=Math.min(W*0.05,32);
-      const right=Math.min(W*0.38,310);
-      return{x:left,y:top,w:Math.max(40,W-left-right),h:Math.max(40,H-top-bot)};
-    }
-    const top=Math.min(H*0.22,176);
-    const bot=Math.min(H*0.29,224);
-    const left=W>860?Math.min(W*0.20,292):Math.min(W*0.08,36);
-    const right=W>860?Math.min(W*0.29,380):Math.min(W*0.08,36);
-    return{x:left,y:top,w:Math.max(40,W-left-right),h:Math.max(40,H-top-bot)};
+  function fieldRect() {
+    if(document.documentElement.classList.contains("mobile-reading"))return {x:22,y:24,w:W-44,h:H-48};
+    const stageBox=stage.getBoundingClientRect();
+    const header=document.querySelector(".study-header").getBoundingClientRect();
+    const reading=document.querySelector(".method-reading").getBoundingClientRect();
+    const tools=document.querySelector(".study-tools").getBoundingClientRect();
+    // Reserve the inset column even when its contents are hidden, keeping axes fixed.
+    const left=Math.min(72,Math.max(20,W*.046))+Math.min(312,W*.28)+24;
+    const right=reading.left-stageBox.left-24;
+    const top=header.bottom-stageBox.top+24;
+    const bottom=tools.top-stageBox.top-24;
+    return {x:left,y:top,w:Math.max(48,right-left),h:Math.max(48,bottom-top)};
   }
 
   function obligationLayout(){
@@ -551,10 +550,10 @@ function I(){
     try{
       worker=new Worker(new URL(source,document.baseURI));
     }
-    catch(err){stopActiveWorker();hideLoader();fallback.hidden=false;return null;}
+    catch(err){stopActiveWorker();forming=false;primaryFailure=mode==="obligations";hideLoader();fallback.hidden=false;updateReadout();return null;}
     workerMode=mode;
     worker.onmessage=onMessage;
-    worker.onerror=()=>{stopActiveWorker();forming=false;hideLoader();fallback.hidden=false;};
+    worker.onerror=()=>{stopActiveWorker();forming=false;primaryFailure=mode==="obligations";hideLoader();fallback.hidden=false;updateReadout();};
     return worker;
   }
 
@@ -563,17 +562,26 @@ function I(){
       const view=currentObligation();
       const pending=document.getElementById("methodPending");
       if(morphing){for(const id of ["statV","statM","statT","statGray"])document.getElementById(id).textContent="—";if(pending){pending.hidden=false;pending.textContent="Presentation transition · not a solved design.";}return;}
-      if(pending)pending.textContent="This claim is still being formed.";
-      if(!view||!view.rho||(reduced.matches&&!view.settled)){
-        ["statV","statM","statT","statGray"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent="—";});
-        if(pending)pending.hidden=false;
-        return;
-      }
-      if(pending)pending.hidden=!!view.settled;
-      document.getElementById("statV").textContent=view.vol.toFixed(8);
-      document.getElementById("statM").textContent=refs.CmStar>0?fmtRatio(view.Cm/refs.CmStar):"—";
-      document.getElementById("statT").textContent=refs.CtStar>0?fmtRatio(view.Ct/refs.CtStar):"—";
-      document.getElementById("statGray").textContent=view.gray.toFixed(2);
+      const selectedName=OBLIGATION_META[obligationMethod].name;
+      const selectedStatus=view?.settled
+        ? `${selectedName} completed at iteration ${view.iter}.`
+        : view?.rho ? `${selectedName}: intermediate iterate ${view.iter}, not a completed design.`
+        : `${selectedName} is waiting to start.`;
+      const activeStatus=primaryFailure ? "Solve interrupted; unfinished cases are unavailable."
+        : primaryComplete ? "All three runs complete."
+        : fields[activeClaim]?.settled ? `${OBLIGATION_META[activeClaim].name} complete; preparing the next run.`
+        : `Solving ${OBLIGATION_META[activeClaim].name}, iteration ${activeIteration}.`;
+      if(pending){pending.hidden=false;pending.textContent=selectedStatus+" "+activeStatus;}
+      const presentable=view?.rho&&(!reduced.matches||view.settled);
+      document.getElementById("statV").textContent=presentable?view.vol.toFixed(8):"—";
+      document.getElementById("statGray").textContent=presentable?view.gray.toFixed(2):"—";
+      const wait=primaryFailure?"Unavailable: ":"Waiting for ";
+      document.getElementById("statM").textContent=refs.CmStar>0
+        ? presentable?fmtRatio(view.Cm/refs.CmStar):wait+selectedName
+        : wait+"Carry";
+      document.getElementById("statT").textContent=refs.CtStar>0
+        ? presentable?fmtRatio(view.Ct/refs.CtStar):wait+selectedName
+        : wait+"Conduct";
     }else{
       const ready=structuralState.C0>1e-12&&structuralState.C>0;
       document.getElementById("statC").textContent=ready?(structuralState.C/structuralState.C0).toFixed(2):"—";
@@ -681,6 +689,7 @@ function I(){
     if(primaryComplete){forming=false;hideLoader();applyMeta();return;}
     fields.carry=fields.conduct=fields.share=null;
     refs.CmStar=0;refs.CtStar=0;
+    primaryFailure=false;activeClaim="carry";activeIteration=0;
     forming=true;showLoader("Forming obligations");
     if(studyMode==="obligations"){updateReadout();drawPlate();invalidate();}
     const id=++runId;
@@ -690,8 +699,10 @@ function I(){
       if(msg.type==="state"){
         const claim=msg.claim||msg.phase;
         fields[claim]=msg;
+        activeClaim=claim;activeIteration=msg.iter;
         if(claim==="carry"&&msg.settled)refs.CmStar=msg.Cm;
         if(claim==="conduct"&&msg.settled)refs.CtStar=msg.Ct;
+        if(studyMode==="obligations")updateReadout();
         const canPresent=!reduced.matches||msg.settled;
         const referenceChanged=msg.settled&&(claim==="carry"||claim==="conduct");
         if(studyMode==="obligations"&&((claim===obligationMethod&&canPresent)||referenceChanged)){
@@ -763,7 +774,7 @@ function I(){
     obligationMethod=next;
     const cur=currentObligation();
     const presentable=cur&&cur.rho&&(!reduced.matches||cur.settled);
-    if(!presentable)showLoader("Forming "+next);else hideLoader();
+    if(!presentable)showLoader("Waiting for "+OBLIGATION_META[next].name+" result");else hideLoader();
     applyMeta();
   }
 
