@@ -1,6 +1,6 @@
 # SAME — Field studies
 
-The repository now includes the eighteen-study SAME series at **`/series/`**, with its index, book of plates, and the latest additions: SAME DISTANCES, SAME RESIDUAL, and SAME FIT. SAME MOVES, SAME DIVERGENCE, SAME DEGREES, SAME IMPULSE, and SAME EIGENVALUES remain part of the collection. The maintained modular SAME N exhibit lives at **`/same-n.html`**; its header links back to the series. The series N entry redirects to that implementation, preserving its newer shell and accessibility work.
+The repository now includes the nineteen-study SAME series at **`/series/`**, with its index, book of plates, and the latest addition: SAME SUM (study 19), joining SAME DISTANCES, SAME RESIDUAL, and SAME FIT. SAME MOVES, SAME DIVERGENCE, SAME DEGREES, SAME IMPULSE, and SAME EIGENVALUES remain part of the collection. The maintained modular SAME N exhibit lives at **`/same-n.html`**; its header links back to the series. The series N entry redirects to that implementation, preserving its newer shell and accessibility work.
 
 Run `npm run dev` and open `/series/index.html`, or build with `npm run validate`. The expanded studies live in `public/series/`: each page has external same-origin styles and scripts, shared specimen image files, and external Volume workers. No inline-code CSP exception is required. See [the integration notes](docs/series/INTEGRATION.md) and [editorial rationale](docs/series/EDITORIAL_NOTES.md).
 
@@ -111,7 +111,7 @@ For checks before each deployment, use `npm run validate` as the build command; 
 
 The configured Worker name is `same-n`. Use that Worker in the dashboard, or change `name` in `wrangler.jsonc` to match your existing Worker before deploying. `workers_dev: true` enables its public workers.dev address, and `preview_urls: true` keeps version previews available. Custom domains are managed in **Settings > Domains & Routes**; attach `same.cmish.dev` to this Worker if it is not already attached. No domain is automatically claimed by this repository configuration. The internal Worker name can stay `same-n` while the public address is `same.cmish.dev`; keep the old domain attached as an alias if existing links should continue to work.
 
-The homepage `/` redirects to `/series/` for all eighteen studies. Browse `/series/plates.html` for the book and `/same-n.html` for SAME N. Host the whole `dist` directory at the domain root so absolute asset links resolve. Keep `assets.html_handling` set to `auto-trailing-slash`: directory indexes need their trailing slash so relative styles, scripts, images, and links resolve inside `/series/`.
+The homepage `/` redirects to `/series/` for all nineteen studies. Browse `/series/plates.html` for the book and `/same-n.html` for SAME N. Host the whole `dist` directory at the domain root so absolute asset links resolve. Keep `assets.html_handling` set to `auto-trailing-slash`: directory indexes need their trailing slash so relative styles, scripts, images, and links resolve inside `/series/`.
 
 For a manual deployment after authenticated Wrangler setup:
 
