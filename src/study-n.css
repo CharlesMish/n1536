@@ -26,3 +26,16 @@
 .series-return{color:inherit;text-decoration:none;pointer-events:auto}
 .series-return:hover{text-decoration:underline;text-underline-offset:4px}
 .series-return:focus-visible{outline:2px solid var(--summary);outline-offset:4px}
+
+/* Reserve two explicit tool rows for the shared reading entry on portrait phones. */
+@media (max-width: 700px) and (orientation: portrait) {
+  .same-n .study-tools {
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:8px;
+  }
+  .same-n .study-tools > .read-study { grid-column:1/-1; }
+  .same-n .method-reading,
+  .same-n .use-plate.is-mobile-open { bottom:calc(202px + var(--safe-bottom)); }
+  .same-n .field-keys { bottom:calc(372px + var(--safe-bottom)); }
+}

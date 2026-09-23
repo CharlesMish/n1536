@@ -16,8 +16,8 @@ for(const [slug,title] of studies)test(`@desktop @mobile @reduced ${title} rende
  expect(await page.locator('html').getAttribute('data-theme')).not.toEqual(initial);
  await page.locator('#theme').click();
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBeTruthy();
- await page.locator('#study-notes > summary').click();
- await expect(page.getByText('Read the study',{exact:true}).locator('..')).toHaveAttribute('open','');
+ await page.locator('a[href="#study-notes"]').click();
+ await expect(page.getByRole('dialog')).toBeVisible();
  await check();
 });
 
@@ -27,19 +27,23 @@ test('@desktop FIT keeps four computed views and exposes the rounding difference
  await expect(page.locator('#roundedLine')).toContainText('3.00');
  await expect(page.locator('#roundedLine')).toContainText('0.50');
  const summary=await page.locator('#sharedSummary').textContent();
- await page.locator('#study-notes > summary').click();
+ await page.locator('a[href="#study-notes"]').click();
  await page.locator('#inspectIII').click();
  await expect(page.locator('#row')).toHaveValue('3');
  await expect(page.locator('#reading2')).toContainText('12.74');
+ await page.keyboard.press('Escape');
  await page.locator('button[data-view="residual"]').click();
+ await page.locator('a[href="#study-notes"]').click();
  await expect(page.locator('button[data-view="residual"]')).toHaveAttribute('aria-pressed','true');
  await expect(page.locator('#scaleNote')).toContainText('−4');
  await expect(page.locator('#sharedSummary')).toHaveText(summary);
  await page.locator('#inspectIV').click();
  await expect(page.locator('#row')).toHaveValue('8');
  await expect(page.locator('#reading3')).toContainText('19');
+ await page.keyboard.press('Escape');
  await page.locator('#row').focus();await page.keyboard.press('End');
  await expect(page.locator('#row')).toHaveValue('11');
+ await page.locator('a[href="#study-notes"]').click();
  await page.locator('#audit > summary').click();
  await expect(page.locator('#auditBody')).toContainText('4.122620');
  await expect(page.locator('#auditBody')).toContainText('4.127269');

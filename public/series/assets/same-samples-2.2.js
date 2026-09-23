@@ -16,9 +16,6 @@
    const source=document.getElementById('plate'),target=dialog.querySelector('canvas');target.width=source.width;target.height=source.height;target.getContext('2d').drawImage(source,0,0);
    dialog.showModal();dialog.querySelector('.close-reading').focus();
  });
- dialog.querySelector('.close-reading').addEventListener('click',()=>dialog.close());
- // Native document shortcuts should not change the scene beneath an open dialog.
- window.addEventListener('keydown',e=>{if(dialog.open)e.stopImmediatePropagation();},{capture:true});
  const heading=document.createElement('div');heading.className='mobile-heading';
  const flow=document.createElement('div');flow.className='mobile-flow';
  const topNodes=[document.querySelector('.study-header'),document.querySelector('.theme-switch')];

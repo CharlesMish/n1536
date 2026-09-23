@@ -16,6 +16,7 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="/src/styles.css" />
     <link rel="stylesheet" href="/src/study-n.css" />
+    <link rel="stylesheet" href="/series/assets/study-reading.css" />
     <title>SAME N — v0.2 exhibit</title>
   </head>
   <body>
@@ -148,6 +149,7 @@
             <span class="tool-dot" aria-hidden="true"></span>Inspect
           </button>
           <button type="button" id="reseedBtn">New random</button>
+          <a href="#study-notes" class="read-study">Read the study</a>
           <span class="drag-note">Drag to turn</span>
         </div>
 
@@ -176,8 +178,22 @@
           mathematical point transport.
         </p>
       </section>
+      <details id="study-notes">
+        <summary>Read the study</summary>
+        <h3>What stays the same</h3>
+        <p>Each method places 1,536 points on the same unit sphere. The displayed count and radius stay fixed while the construction changes.</p>
+        <h3>What changes</h3>
+        <p>Random uses a deterministic seeded random construction; New random chooses another seed. Sobol uses a deterministic low-discrepancy sequence mapped to the sphere. Fibonacci uses a fixed golden-angle construction. These are different ways of placing the same number of points.</p>
+        <h3>Try this</h3>
+        <p>Switch between Random, Sobol, and Fibonacci. Turn on Spacing to inspect local variation, or Order to inspect the sequence. Drag the sphere to turn it. On compact screens, Inspect opens the figure plate.</p>
+        <h3>Reading the measurements</h3>
+        <p>NN CV is the standard deviation divided by the mean of the nearest-neighbor chord distances. A lower value means more uniform nearest-neighbor spacing for this point set. It does not establish the best method for integration, coverage, or every other task.</p>
+        <h3>Boundary of the claim</h3>
+        <p>These are the displayed finite point sets. Sobol’s dyadic prefixes and Fibonacci’s fixed full set support different uses. The animated transition uses a spatially arranged presentation correspondence; it is not mathematical point transport.</p>
+      </details>
     </div>
 
     <script type="module" src="/src/main.js"></script>
+    <script defer src="/series/assets/study-reading.js"></script>
   </body>
 </html>

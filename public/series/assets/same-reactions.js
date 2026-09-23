@@ -141,18 +141,6 @@ theme(savedTheme);
 $('theme').addEventListener('click', () => theme(document.documentElement.dataset.theme === 'paper' ? 'uv' : 'paper'));
 
 const notes = $('study-notes');
-let returnFocus = null;
-$('readingLink').addEventListener('click', event => {
-  if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
-  event.preventDefault();
-  returnFocus = event.currentTarget;
-  notes.open = true;
-  notes.querySelector('summary').focus({ preventScroll: true });
-  notes.scrollIntoView({ block: 'start' });
-});
-notes.addEventListener('toggle', () => {
-  if (!notes.open && returnFocus) { returnFocus.focus(); returnFocus = null; }
-});
 document.addEventListener('keydown', event => {
   if (event.defaultPrevented || event.repeat || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return;
   const target = event.target;

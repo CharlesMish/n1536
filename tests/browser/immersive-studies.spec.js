@@ -104,8 +104,8 @@ for (const viewport of viewports) {
       const trigger = stage.locator('a[href="#study-notes"]');
       await trigger.click();
       await expect(notes).toHaveAttribute('open', '');
-      await expect(notes.locator(':scope > summary')).toBeFocused();
-      await notes.locator(':scope > summary').click();
+      await expect(page.locator('dialog .close-reading')).toBeFocused();
+      await page.locator('dialog .close-reading').click();
       await expect(notes).not.toHaveAttribute('open', '');
       await expect(trigger).toBeFocused();
       await assertNoHorizontalOverflow(page);
