@@ -1,24 +1,6 @@
 /* Presentation navigation; no study models or values are changed here. */
 (() => {
   const notes = document.getElementById('study-notes');
-  let readingTrigger = null;
-  for (const link of document.querySelectorAll('a[href="#study-notes"]')) {
-    link.addEventListener('click', event => {
-      if (!notes || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
-      event.preventDefault();
-      readingTrigger = link;
-      notes.open = true;
-      notes.querySelector('summary')?.focus({ preventScroll: true });
-      notes.scrollIntoView({ block: 'start' });
-    });
-  }
-  notes?.addEventListener('toggle', () => {
-    if (!notes.open && readingTrigger) {
-      readingTrigger.focus();
-      readingTrigger = null;
-    }
-  });
-
   document.addEventListener('keydown', event => {
     if (event.defaultPrevented || event.repeat || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return;
     const target = event.target;

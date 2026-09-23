@@ -36,7 +36,7 @@ for (const [file, title] of additions) {
     await theme.click();
     await theme.click();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
-    const reading = page.locator('summary, #readBtn, .read-study').first();
+    const reading = page.locator('[data-study-reading-trigger]').first();
     await reading.click();
     if (await page.locator('dialog').count()) {
       await expect(page.getByRole('dialog')).toBeVisible();

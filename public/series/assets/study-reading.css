@@ -1,0 +1,41 @@
+/* One reading surface across the SAME collection. Keep each study's content. */
+html dialog.study-dialog[data-shared-reading] {
+  box-sizing:border-box; position:fixed; inset:0; margin:auto;
+  width:min(760px,calc(100vw - 32px)); max-width:none; height:auto;
+  max-height:85svh; padding:28px; overflow:auto; overscroll-behavior:contain;
+  border:1px solid var(--rule); border-radius:8px;
+  background:var(--panel,var(--field)); color:var(--ink);
+  font:16px/1.6 "Helvetica Neue",Helvetica,Arial,sans-serif;
+  text-align:left; letter-spacing:normal; touch-action:auto;
+}
+html dialog.study-dialog[data-shared-reading]::backdrop { background:#07060fb8; backdrop-filter:blur(4px); }
+html dialog.study-dialog[data-shared-reading] .close-reading {
+  position:sticky; float:right; top:0; z-index:2; min-height:44px;
+  padding:9px 12px; margin:0 0 12px 16px; border:1px solid var(--rule);
+  border-radius:4px; background:var(--panel,var(--field)); color:var(--ink);
+  font:14px/1.4 "Helvetica Neue",Helvetica,Arial,sans-serif; cursor:pointer;
+}
+html dialog.study-dialog[data-shared-reading] > h2 { margin:0 80px 24px 0; font-size:28px; line-height:1.15; font-weight:500; letter-spacing:-.025em; }
+html dialog.study-dialog[data-shared-reading] h3 { font-weight:500; font-size:17px; line-height:1.4; color:var(--summary); margin:24px 0 8px; }
+html dialog.study-dialog[data-shared-reading] p { font-size:16px; color:var(--muted,var(--ink-muted)); line-height:1.65; }
+html dialog.study-dialog[data-shared-reading] .dialog-notes { clear:both; margin:0; padding:0; max-width:none; border:0; width:100%; }
+html dialog.study-dialog[data-shared-reading] .dialog-notes > summary { display:none; }
+html dialog.study-dialog[data-shared-reading] .notes-grid,
+html dialog.study-dialog[data-shared-reading] .readout { display:grid; grid-template-columns:minmax(0,1fr); gap:20px; }
+html dialog.study-dialog[data-shared-reading] .notes-grid > *,
+html dialog.study-dialog[data-shared-reading] .readout > * { min-width:0; }
+html dialog.study-dialog[data-shared-reading] .contract { display:flex; flex-wrap:wrap; gap:12px; }
+html dialog.study-dialog[data-shared-reading] .focus-values { font:14px/1.6 ui-monospace,monospace; white-space:pre-wrap; overflow-wrap:anywhere; background:var(--field); padding:16px; }
+html dialog.study-dialog[data-shared-reading] canvas { max-width:100%; height:auto; }
+html dialog.study-dialog[data-shared-reading] :focus-visible { outline:2px solid var(--summary); outline-offset:3px; }
+html [data-study-reading-trigger] { display:inline-flex; align-items:center; min-height:44px; font:11px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace; letter-spacing:.08em; text-transform:uppercase; color:var(--muted,var(--ink-muted)); text-decoration:none; cursor:pointer; }
+@media(max-width:760px) {
+  html dialog.study-dialog[data-shared-reading] { padding:20px; max-height:calc(100svh - 24px); }
+  html dialog.study-dialog[data-shared-reading] > h2 { font-size:25px; }
+  html dialog.study-dialog[data-shared-reading] .quartet,
+  html dialog.study-dialog[data-shared-reading] .summary-values,
+  html dialog.study-dialog[data-shared-reading] .audit-table dl { grid-template-columns:minmax(0,1fr); }
+}
+@media(prefers-reduced-motion:reduce) { html dialog.study-dialog[data-shared-reading] { scroll-behavior:auto; } }
+/* SAME N otherwise fills a fixed viewport: keep its unenhanced notes reachable. */
+.same-n > #study-notes { position:fixed; z-index:10; inset:auto 16px 16px; max-height:85svh; overflow:auto; padding:16px; background:var(--panel,var(--field)); color:var(--ink); border:1px solid var(--rule); }

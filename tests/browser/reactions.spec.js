@@ -49,11 +49,11 @@ test('@desktop @mobile @reduced REACTIONS preserves support readings across case
     }
   }
   await page.locator('#readingLink').click();
-  await expect(page.locator('#study-notes summary')).toBeFocused();
+  await expect(page.locator('dialog .close-reading')).toBeFocused();
   await expect(page.locator('#study-notes')).toHaveAttribute('open', '');
   await expect(page.locator('.audit tbody tr')).toHaveCount(3);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
-  await page.locator('#study-notes summary').click();
+  await page.locator('dialog .close-reading').click();
   await expect(page.locator('#readingLink')).toBeFocused();
   expect(failures).toEqual([]);
   expect(await page.evaluate(() => window.reactionsCsp)).toEqual([]);

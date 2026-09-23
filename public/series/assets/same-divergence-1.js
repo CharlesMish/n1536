@@ -411,8 +411,7 @@
     wake();
   }
   document.getElementById("pauseBtn").addEventListener("click", () => setPaused(!paused));
-  document.getElementById("closeReading").addEventListener("click", () => dialog.close());
-  dialog.addEventListener("click", ev => { if (ev.target === dialog) dialog.close(); });
+
   window.addEventListener("keydown", ev => {
     if (ev.defaultPrevented || ev.repeat || ev.metaKey || ev.ctrlKey || ev.altKey) return;
     if (ev.target.isContentEditable || ev.target.closest?.("input,textarea,select,button,a,summary,[contenteditable]")) return;
