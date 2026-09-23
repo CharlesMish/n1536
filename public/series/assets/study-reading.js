@@ -19,7 +19,7 @@
       dialog.append(close, heading, notes);
       notes.classList.add('dialog-notes');
       const open = trigger => {
-        returnFocus = trigger;
+        if (trigger && !dialog.contains(trigger)) returnFocus = trigger;
         notes.open = true;
         if (!dialog.open) dialog.showModal();
         dialog.scrollTop = 0;
@@ -31,6 +31,19 @@
         link.addEventListener('click', event => {
           if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
           event.preventDefault(); open(link);
+        });
+      }
+      for (const link of document.querySelectorAll('a[href^="#"]')) {
+        const target = document.getElementById(link.hash.slice(1));
+        if (!target || target === notes || !notes.contains(target) || dialog.contains(link)) continue;
+        link.setAttribute('aria-haspopup', 'dialog');
+        link.setAttribute('aria-controls', dialog.id);
+        link.addEventListener('click', event => {
+          if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+          event.preventDefault();
+          open(link);
+          if (target instanceof HTMLDetailsElement) target.open = true;
+          target.scrollIntoView({ block: 'start' });
         });
       }
       // Direct note links and in-study audit links remain valid entry points.
