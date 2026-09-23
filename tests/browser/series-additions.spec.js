@@ -138,11 +138,11 @@ test('@desktop catalog and book retain every study without JavaScript', async ({
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
   await page.goto('http://127.0.0.1:4173/series/index.html');
-  await expect(page.locator('.card')).toHaveCount(19);
+  await expect(page.locator('.card')).toHaveCount(20);
   await page.locator('.card').last().click();
-  await expect(page.getByRole('heading', { name: 'SAME SUM', exact: true })).toBeVisible();
-  await page.goto('http://127.0.0.1:4173/series/plates.html#p19');
-  await expect(page.locator('.spread')).toHaveCount(19);
-  await expect(page.locator('#p19')).toContainText('SUM');
+  await expect(page.getByRole('heading', { name: 'SAME REACTIONS', exact: true })).toBeVisible();
+  await page.goto('http://127.0.0.1:4173/series/plates.html#p20');
+  await expect(page.locator('.spread')).toHaveCount(20);
+  await expect(page.locator('#p20')).toContainText('REACTIONS');
   await context.close();
 });

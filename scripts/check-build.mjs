@@ -65,7 +65,7 @@ console.log(`CSP/static build check passed (${files.length} deployed files).`);
 
 // Check every added route, not just the original Vite entry.
 const seriesPages=files.filter(file=>file.endsWith('.html')&&file.includes(`${path.sep}series${path.sep}`));
-assert.equal(seriesPages.length,21,'series index, book, N redirect and eighteen exhibits are deployed');
+assert.equal(seriesPages.length,22,'series index, book, N redirect and nineteen exhibits are deployed');
 for(const file of [...seriesPages, path.join(dist, 'index.html')]){
  const page=await readFile(file,'utf8');
  assert.doesNotMatch(page,/<style(?:\s|>)|\sstyle\s*=|\son[a-z]+\s*=/i,`${file}: no inline styles or handlers`);

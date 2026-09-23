@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en" data-theme="uv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0d0b18">
+  <meta name="description" content="SAME REACTIONS — one beam and one centered total load give matching support reactions, while load placement changes bending and deflection.">
+  <title>SAME REACTIONS — Field study 20</title>
+  <link rel="stylesheet" href="./assets/same-reactions.css">
+</head>
+<body class="exhibit-page same-reactions">
+<main class="wrap">
+  <section class="exhibit-stage" aria-label="Same Reactions interactive exhibit">
+    <nav class="utility" aria-label="Series navigation">
+      <a href="index.html">← Series</a>
+      <a href="plates.html#p20">Plate 20</a>
+      <button id="theme" type="button" aria-label="Switch to Paper presentation">Paper</button>
+    </nav>
+
+    <header class="hero">
+      <div class="eyebrow">CMISH / Field study 20 · equilibrium / interior</div>
+      <h1>SAME <br>REACTIONS</h1>
+      <p class="subtitle">Same forces at the supports. Different bend.</p>
+      <p class="frozen-caption"><span>Held fixed</span>One simply supported beam · length L · stiffness EI · total downward load W · load centroid L/2.</p>
+    </header>
+
+    <div class="field" aria-label="Beam, bending moment, and deflection on shared scales">
+      <div id="staticPreview" class="static-preview">
+        <img src="./assets/specimen-20.svg" width="600" height="330" alt="Three centered load patterns on the same simply supported beam. Every pattern gives W/2 at each support; the quarter-point pair and uniform load share peak bending moment WL/8 but have different midspan deflections.">
+        <p>Static plate · three load patterns · fixed support reactions</p>
+      </div>
+      <div id="interactive" hidden>
+        <figure class="chart load-chart"><figcaption><span>01 / Applied load and support readings</span><span>same resultant W · same center L/2</span></figcaption><div id="loadPlot"></div></figure>
+        <figure class="chart moment-chart"><figcaption><span>02 / Bending moment</span><span>M / (WL) · fixed 0 to 1/4</span></figcaption><div id="momentPlot"></div></figure>
+        <figure class="chart deflection-chart"><figcaption><span>03 / Downward deflection</span><span>δ / (WL³/EI) · fixed 0 to 1/48</span></figcaption><div id="deflectionPlot"></div></figure>
+        <p class="legend"><span><i class="key-selected"></i>Selected load</span><span id="referenceLegend"><i class="key-reference"></i>Uniform load reference</span><span>Axes remain fixed across cases</span></p>
+      </div>
+    </div>
+
+    <aside class="exhibit-reading" aria-labelledby="caseName">
+      <span class="small-label" id="caseNumber">02 / TWO POINT LOADS</span>
+      <h2 id="caseName">The quarter pair</h2>
+      <p id="caseReading">Two equal loads at L/4 and 3L/4 make the same peak moment as a uniform load. Their moment profiles differ; the pair’s midspan deflection is 10% larger.</p>
+      <dl class="values">
+        <div><dt>Left · right reactions</dt><dd id="reactions">W/2 · W/2</dd></div>
+        <div><dt>Peak M / (WL)<span class="numeric-precision" hidden> · 5 decimals</span></dt><dd id="peakMoment">1/8</dd></div>
+        <div><dt>Midspan δ / (WL³/EI)<span class="numeric-precision" hidden> · 5 decimals</span></dt><dd id="midDeflection">11/768</dd></div>
+      </dl>
+      <div class="pair-tool" id="pairTool">
+        <label for="pairPosition">Move both loads symmetrically <strong>a / L</strong></label>
+        <div><input id="pairPosition" type="range" min="0.10" max="0.50" step="0.01" value="0.25"><output id="pairOutput" for="pairPosition">0.25</output></div>
+        <p>The total, load centroid, and both reactions stay fixed.</p>
+      </div>
+      <p class="invariant-line">Support gauges <strong>W/2 · W/2 in every case</strong></p>
+    </aside>
+
+    <div class="exhibit-tools"><a href="#study-notes" id="readingLink">Read the study ↗</a><span>Choose a case; move the paired loads; compare the two interior curves.</span></div>
+    <div class="exhibit-switcher" role="group" aria-label="Load arrangement">
+      <button type="button" data-case="center" aria-pressed="false"><span>01</span>Center point<small>one load W</small></button>
+      <button type="button" data-case="pair" aria-pressed="true"><span>02</span>Symmetric pair<small>W/2 + W/2</small></button>
+      <button type="button" data-case="uniform" aria-pressed="false"><span>03</span>Uniform<small>W / L across span</small></button>
+    </div>
+  </section>
+
+  <p id="announcement" class="sr-only" aria-live="polite"></p>
+  <noscript><p class="fallback">The static plate above and the derivation below work without JavaScript. At every loading, the reactions are W/2 and W/2. The center point has peak moment WL/4 and midspan deflection WL³/(48EI). The quarter-point pair and uniform load both have peak moment WL/8, but midspan deflections 11WL³/(768EI) and 10WL³/(768EI), respectively.</p></noscript>
+
+  <details class="study-notes" id="study-notes">
+    <summary>Read the study</summary>
+    <p class="study-intro">A support scale measures what the entire load does to the beam as a whole. The beam's interior answers a finer question: where that load enters and how its effects accumulate along the span.</p>
+    <div class="contract"><span><strong>Frozen</strong> · simply supported beam, L, constant EI, total downward W, load centroid L/2</span><span><strong>Free</strong> · distribution of that load across the span</span><span class="retained">R<sub>A</sub> = R<sub>B</sub> = W/2 · every case</span></div>
+    <div class="notes-grid">
+      <section><h3>What the supports know</h3><p>For each pattern, the downward loads sum to W and their first moment about the left support is WL/2. Vertical equilibrium gives R<sub>A</sub> + R<sub>B</sub> = W. Moment equilibrium gives R<sub>B</sub>L = WL/2. Thus both reactions equal W/2, exactly, in this ideal model.</p><p>These are three statically equivalent external loadings. Their matching resultants and reactions say nothing by themselves about the entire internal moment or deflected shape.</p></section>
+      <section><h3>Three authored arrangements</h3><p><strong>Center point:</strong> W at x = L/2. <strong>Symmetric pair:</strong> W/2 at x = a and x = L − a; the initial setting is a = L/4. <strong>Uniform:</strong> q = W/L throughout 0 ≤ x ≤ L. The paired slider spans 0.10 ≤ a/L ≤ 0.50. At the right endpoint, the two idealized half-loads coincide and reproduce the center point.</p><p>The total load, beam length, supports, material stiffness and units are held fixed between cases. The drawings of concentrated forces use arrows, not finite-width pressure patches.</p></section>
+      <section><h3>The interior calculation</h3><p>Let u = x/L and m(u) = M(x)/(WL). With downward deflection d(u) = δ(x)/(WL³/EI), the small-deflection Euler–Bernoulli relation is d″(u) = −m(u) in the sign convention used here, with d(0) = d(1) = 0.</p><p>For a point load with fraction p of W at fraction v of L, write (u − v)<sub>+</sub> = max(0, u − v). Each curve uses m(u) = u/2 − Σ p(u − v)<sub>+</sub> − q̄u²/2, where the normalized load rate q̄ = qL/W is 1 for the uniform case and 0 for the point-load cases. The displayed d(u) is the twice-integrated curve with both support boundary conditions enforced. The plots use those formulas directly; they do not step a numerical beam solver.</p></section>
+      <section><h3>The matching peak, the differing bend</h3><p>In normalized units, the center point has maximum m = 1/4 and midspan d = 1/48 = 16/768. For the pair, maximum m = (a/L)/2 and midspan d = (a/L)[3 − 4(a/L)²]/48. Uniform loading has maximum m = 1/8 and midspan d = 5/384 = 10/768.</p><p>At a/L = 1/4, the pair's moment has a plateau at 1/8 from L/4 to 3L/4. The uniform curve reaches 1/8 only at midspan. Both maxima agree, while their midspan deflections are 11/768 and 10/768. The pair's deflection is 10% larger here.</p></section>
+      <section><h3>Reading the fixed axes</h3><p>Each moment plot uses 0 to 1/4 in units of WL. Each downward deflection plot uses 0 to 1/48 in units of WL³/EI. The x coordinate always spans the same u ∈ [0, 1]. The dashed uniform reference keeps the same axes. Its line disappears when uniform itself is selected.</p><p>The axis ranges fit all three cases and every paired slider setting. Filled moment area is the actual normalized moment diagram; the deflection curve is plotted on its separately labeled normalized axis, not as a true-scale deformed beam silhouette.</p></section>
+      <section><h3>Boundary of the claim</h3><p>The model assumes static loading; ideal pin and roller supports; a prismatic linear elastic beam of constant EI; small deflection; and no shear deflection, self-weight, load spread, or support settlement. W and EI are positive. It does not compare failure capacities, design adequacy, or real-world load-path safety. All exact fractions refer to this stated model; SVG coordinates are rounded for drawing.</p></section>
+    </div>
+    <div class="audit"><h3>Reproducible checkpoints</h3><table><thead><tr><th scope="col">Pattern</th><th scope="col">Load first moment / (WL)</th><th scope="col">R<sub>A</sub> / W</th><th scope="col">R<sub>B</sub> / W</th><th scope="col">Peak M / (WL)</th><th scope="col">δ(L/2) / (WL³/EI)</th></tr></thead><tbody><tr><th scope="row">Center point</th><td>1/2</td><td>1/2</td><td>1/2</td><td>1/4</td><td>1/48</td></tr><tr><th scope="row">Quarter pair</th><td>1/2</td><td>1/2</td><td>1/2</td><td>1/8</td><td>11/768</td></tr><tr><th scope="row">Uniform</th><td>1/2</td><td>1/2</td><td>1/2</td><td>1/8</td><td>5/384</td></tr></tbody></table></div>
+  </details>
+  <footer class="footer"><a href="same-sum.html">← Same Sum</a><a href="plates.html#p20">Book of plates</a><a href="index.html">Series →</a></footer>
+</main>
+<script type="module" src="./assets/same-reactions.js"></script>
+</body>
+</html>

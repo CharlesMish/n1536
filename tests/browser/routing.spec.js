@@ -11,10 +11,10 @@ for (const entry of ['/', '/series', '/series/', '/series/index.html']) {
     });
     await page.goto(entry);
     await expect(page).toHaveURL(/\/series\/(?:index\.html)?$/);
-    await expect(page.locator('.card')).toHaveCount(19);
+    await expect(page.locator('.card')).toHaveCount(20);
     // A stylesheet must actually apply, not merely exist in the build.
     await expect(page.locator('.card').first()).toHaveCSS('display', 'flex');
-    await expect(page.locator('img')).toHaveCount(16);
+    await expect(page.locator('img')).toHaveCount(17);
     await page.locator('img').evaluateAll(images => images.forEach(image => { image.loading = 'eager'; }));
     await expect.poll(() => page.locator('img').evaluateAll(images =>
       images.filter(image => !image.complete || image.naturalWidth === 0).map(image => ({src: image.src, complete: image.complete, width: image.naturalWidth}))
@@ -22,7 +22,7 @@ for (const entry of ['/', '/series', '/series/', '/series/index.html']) {
     const links = await page.locator('.card').evaluateAll(cards => cards.map(card => card.href));
     expect(links.every(link => new URL(link).pathname.startsWith('/series/'))).toBe(true);
     await page.getByRole('link', { name: 'book of plates →', exact: true }).click();
-    await expect(page.locator('.spread')).toHaveCount(19);
+    await expect(page.locator('.spread')).toHaveCount(20);
     expect(failures).toEqual([]);
   });
 }
@@ -31,7 +31,7 @@ test('@desktop homepage reaches collection without JavaScript', async ({ browser
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
   await page.goto(baseURL + '/');
-  await expect(page.locator('.card')).toHaveCount(19);
+  await expect(page.locator('.card')).toHaveCount(20);
   await expect(page.locator('.card').first()).toHaveCSS('display', 'flex');
   await context.close();
 });
@@ -41,5 +41,5 @@ test('@desktop N keeps its own address and query through the old study link', as
   await expect(page).toHaveURL(/\/same-n(?:\.html)?\?renderer=canvas2d#study$/);
   await expect(page.getByRole('heading', { name: 'SAME N', exact: true })).toBeVisible();
   await page.getByRole('link', { name: 'Back to SAME series', exact: true }).click();
-  await expect(page.locator('.card')).toHaveCount(19);
+  await expect(page.locator('.card')).toHaveCount(20);
 });
