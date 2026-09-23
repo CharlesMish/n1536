@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 const pages = ['../same-n','same-shadow-2','same-earth','same-sites3','same-samples-2','same-volume-series-pass','same-marginals-2','same-average','same-magnitude-2','same-law','same-moves','same-divergence','same-degrees','same-impulse','same-eigenvalues','same-distances','same-residual','same-fit','same-sum','same-reactions'];
-for (const width of [1440, 390]) for (const slug of pages) {
+for (const width of [1440, 320]) for (const slug of pages) {
   test(`@desktop shared reading ${slug} at ${width}`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     const errors = [];

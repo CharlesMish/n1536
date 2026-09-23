@@ -125,6 +125,6 @@ Local `npm run validate` passes 76 unit tests, 58 series checks, the build, and 
 
 All twenty studies now use `study-reading.css` and `study-reading.js` for the reading dialog. The earlier studies keep their authored explanations and snapshot hooks. The later studies progressively enhance their existing `details#study-notes` into the same modal surface, moving the live DOM nodes so numerical audits and inspection controls retain their bindings. SAME N also exposes the shared reading entry point.
 
-The shared layer provides consistent typography, spacing, viewport bounds, Close/Escape behavior, focus return, and keyboard isolation from the exhibit underneath. Closed-panel content remains in authored HTML for no-JavaScript reading. Nested audits remain disclosures within the reading panel. Mathematical models are unchanged.
+The shared layer provides consistent typography, spacing, viewport bounds, Close/Escape behavior, focus return, and keyboard isolation from the exhibit underneath. The converted notes remain in authored HTML for no-JavaScript reading. Nested audits remain disclosures within the reading panel. Mathematical models are unchanged.
 
 Browser coverage opens and closes all twenty reading panels at desktop and phone sizes in both presentations, checks focus containment and unchanged case selection, and covers Fit’s audit entry point and deep link.
