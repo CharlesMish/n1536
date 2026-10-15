@@ -108,6 +108,7 @@
 @media(max-width:760px){.same-fit .fit-specimen{inset:auto}.same-fit .residual-inset{inset:auto}}
 
 .compare-link{display:inline-block;padding:10px 14px;border:1px solid var(--accent);border-radius:6px;margin:0 12px 10px 0;color:var(--ink);font-size:14px}
+@media(max-width:760px){.same-fit .exhibit-stage>.compare-link{order:3;align-self:flex-start;margin:0 0 20px}.same-fit .fit-datasets{margin-bottom:10px}}
 #quartetCompare{scroll-margin-top:64px}
 #quartetCompare .view-buttons{margin-bottom:18px}
 

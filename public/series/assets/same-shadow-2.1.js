@@ -469,6 +469,11 @@ function I() {
     document.getElementById("statVol").textContent = volumes[method].toFixed(2);
     const sel = pin || { x: 0.58, y: 0 };
     const iv = intervals(method, sel.x, sel.y);
+    const cavityVisible = method === 'well' && iv.length === 2;
+    const explanation = document.getElementById('depthExplanation');
+    explanation.hidden = !cavityVisible;
+    document.getElementById('usePlate').classList.toggle('has-cavity', cavityVisible);
+    if (cavityVisible) explanation.textContent = `At x = ${sel.x.toFixed(2)}, y = ${sel.y.toFixed(2)}, this ray passes through two occupied intervals separated by an enclosed cavity. The exterior view need not reveal this gap.`;
     document.getElementById("statRay").textContent = iv.length === 0 ? "void" : (iv.length === 1 ? "1 span" : iv.length + " spans");
     document.getElementById("statView").textContent = isFace() ? "FACE" : "OFF";
     document.getElementById("live").textContent =
@@ -576,7 +581,7 @@ function I() {
     applyMeta();
     plate.focus({ preventScroll: true });
     plate.scrollIntoView({ block: "nearest" });
-    document.getElementById("live").textContent = "Well selected. At x = 0.58, y = 0, the depth figure shows two occupied intervals separated by an enclosed cavity. The exterior view need not reveal this gap.";
+    document.getElementById("live").textContent = 'Well selected. ' + document.getElementById('depthExplanation').textContent;
   });
   document.getElementById("ghostBtn").addEventListener("click", () => {
     showGhost = !showGhost;

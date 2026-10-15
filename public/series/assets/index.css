@@ -282,7 +282,8 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-off
 .wrap{padding-top:32px}
 .toolbar{margin-bottom:12px}
 .collection-choices{display:flex;gap:8px;flex-wrap:wrap}
-.collection-choices button,.book-link{font-size:14px;min-height:44px;padding:12px 16px;border:1px solid var(--rule);border-radius:24px}
+.collection-choices button,.book-link,.more-studies{font-size:14px;min-height:44px;padding:12px 16px;border:1px solid var(--rule);border-radius:24px}
+.more-studies{margin-top:24px;color:var(--ink);background:#b59bff22;border-color:var(--accent);cursor:pointer}
 .collection-choices button[aria-pressed=true]{color:var(--ink);background:#b59bff22;border-color:var(--accent)}
 .collection-choices button[aria-pressed=false]{color:var(--ink-muted)}
 .book-link{color:var(--ink-muted)}

@@ -401,10 +401,20 @@ let focusIndex = 0;
 // The authored HTML is also the complete, usable no-JavaScript collection.
 const starters = new Set(['01', '02', '04', '13', '18', '20']);
 const cards = [...grid.querySelectorAll('.card')];
+const moreStudies = document.getElementById('more-studies');
+const collectionKey = 'same-series-collection';
+function requestedCollection() {
+  if (location.hash === '#all') return 'all';
+  if (location.hash === '#start') return 'start';
+  try { return sessionStorage.getItem(collectionKey) === 'all' ? 'all' : 'start'; }
+  catch { return 'start'; }
+}
 function visibleCards() { return cards.filter(card => !card.hidden); }
 function chooseCollection(mode) {
+  try { sessionStorage.setItem(collectionKey, mode); } catch { /* Browsing works without storage. */ }
   cards.forEach((card, index) => { card.hidden = mode === 'start' && !starters.has(STUDIES[index].study); });
-  document.querySelectorAll('[data-collection]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.collection === mode)));
+  document.querySelectorAll('.collection-choices [data-collection]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.collection === mode)));
+  moreStudies.hidden = mode === 'all';
   document.getElementById('collection-note').textContent = mode === 'start'
     ? 'Six ways in. Try a view, a distance rule, a network, or a fitted line — then explore all twenty.'
     : 'All twenty studies, in their original order. The book of plates keeps the longer explanations.';
@@ -414,9 +424,13 @@ function chooseCollection(mode) {
 document.querySelector('.collection-choices').hidden = false;
 document.querySelectorAll('[data-collection]').forEach(button => button.addEventListener('click', () => {
   chooseCollection(button.dataset.collection);
-  history.replaceState(null, '', button.dataset.collection === 'all' ? '#all' : location.pathname);
+  history.replaceState(null, '', button.dataset.collection === 'all' ? '#all' : '#start');
+  if (button === moreStudies) {
+    // Continue with the first study newly revealed by this action.
+    cards.find((card, index) => !starters.has(STUDIES[index].study)).focus();
+  }
 }));
-window.addEventListener('hashchange', () => chooseCollection(location.hash === '#all' ? 'all' : 'start'));
+window.addEventListener('hashchange', () => chooseCollection(requestedCollection()));
 
 function updateFocus() {
   const cards = visibleCards();
@@ -447,10 +461,9 @@ document.addEventListener("keydown", e => {
   const columns=getComputedStyle(grid).gridTemplateColumns.split(" ").length;
   const delta={ArrowRight:1,ArrowLeft:-1,ArrowDown:columns,ArrowUp:-columns}[e.key];
   if(delta){e.preventDefault();focusIndex=Math.max(0,Math.min(cards.length-1,focusIndex+delta));cards[focusIndex].focus();}
-  else if(e.key>="1"&&e.key<="9"){e.preventDefault();location.assign(STUDIES[Number(e.key)-1].file);}
-  else if(e.key==="0"){e.preventDefault();location.assign(STUDIES[9].file);}
+  else if(e.key>="1"&&e.key<="9"){e.preventDefault();openAt(Number(e.key)-1);}
+  else if(e.key==="0"){e.preventDefault();openAt(9);}
   else if(e.key.toLowerCase()==="n"){e.preventDefault();openAt(focusIndex,true);}
 });
 
-chooseCollection(location.hash === '#all' ? 'all' : 'start');
-  
+chooseCollection(requestedCollection());

@@ -92,6 +92,7 @@ function renderAudit() {
   $('roundedLine').textContent = shared.intercept !== null && shared.slope !== null
     ? `y = ${shared.intercept} + ${shared.slope}x` : 'The rounded lines differ.';
   $('exhibitRoundedLine').textContent = $('roundedLine').textContent;
+  $('compareRoundedLine').textContent = $('roundedLine').textContent;
   const fields = [{ key: 'n', label: 'Observations', digits: 0 }, ...SUMMARY_FIELDS,
     { key: 'rSquared', label: 'R²', digits: null }, { key: 'sse', label: 'Residual sum of squares', digits: null }];
   $('auditBody').innerHTML = fields.map(field => {
@@ -159,6 +160,17 @@ for (const hostId of ['primaryPlot', 'residualInset']) $(hostId).addEventListene
 
 renderAudit();
 renderPlots();
+// Keep the same comparison trigger beside the dataset choices on small screens.
+const compareLink = document.querySelector('.compare-link');
+const compareHome = document.createComment('comparison link desktop position');
+compareLink.before(compareHome);
+const compactLayout = matchMedia('(max-width: 760px)');
+function placeComparisonLink() {
+  if (compactLayout.matches) document.querySelector('.fit-datasets').after(compareLink);
+  else compareHome.after(compareLink);
+}
+compactLayout.addEventListener('change', placeComparisonLink);
+placeComparisonLink();
 new ResizeObserver(() => {
   const width = `${$('plots').clientWidth}/${$('primaryPlot').clientWidth}/${$('primaryPlot').clientHeight}`;
   if (width === previousWidth) return;

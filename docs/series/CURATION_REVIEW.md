@@ -4,7 +4,7 @@ This branch shortens the entrance and makes three existing experiments easier to
 
 ## Changes
 
-- The index opens with N, SHADOW, SITES, DEGREES, FIT, and REACTIONS. All twenty studies remain available through All studies, with a persistent `#all` URL and a complete no-JavaScript fallback. Original study numbering, specimen captions, and numeric shortcuts are retained. Version, case chips, duplicate claims, and opening-state labels are removed from cards; the book retains the explanatory catalogue.
+- The index opens with N, SHADOW, SITES, DEGREES, FIT, and REACTIONS. All twenty studies remain available through All studies, with a persistent `#all` URL and a complete no-JavaScript fallback. Original study numbering and specimen captions are retained. Numeric shortcuts follow the visible card order. Version, case chips, duplicate claims, and opening-state labels are removed from cards; the book retains the explanatory catalogue.
 - FIT has a Compare all four link into the existing comparison section. Comparison controls switch all four plots between observations and residuals, preserving the selected row and shared scales. Closing returns focus to the link.
 - SHADOW separates Turn the body from Inspect cavity. The latter selects Well and pins the ray at (0.58, 0); its occupied intervals reveal the cavity that an exterior rotation may conceal. Front view restores the canonical silhouette. No body geometry changes.
 - VOLUME's primary worker survives an appendix visit. Separate worker generations prevent stale messages crossing modes. Primary completion or failure updates its stored state without dismissing the appendix loader or replacing its field. Completed results remain in memory for this page visit, not across reloads. There can be two simultaneous workers while the primary and appendix solve; unfinished appendix cases still restart after leaving them.
@@ -36,3 +36,13 @@ Report reproducible findings in severity order with file/control references and 
 - Inspected rendered screenshots of the entrance, four-panel comparison, and cavity witness. The desktop comparison keeps all four plot panels in view; phones stack the plots.
 
 Environment note: the pinned Playwright browser download returned invalid archives here. Local browser checks used packaged Chromium 153 with video recording disabled; the repository's browser configuration and dependencies are unchanged. CI remains the check against its normal installed browser.
+
+## Follow-up to the review of f9fc180
+
+- Returning through a study’s series link restores the collection choice for the current tab, using guarded session storage. Explicit `#all` and `#start` URLs override that choice. If storage is unavailable, the index and explicit URLs remain usable; cross-page restoration is unavailable.
+- A bottom “All twenty studies” action expands the collection and focuses EARTH, the first newly revealed card. Number shortcuts follow visible order, so 3 opens SITES in the starting six and EARTH in the full collection. Missing positions do nothing.
+- FIT states its computed shared rounded line, two-decimal precision, and differing actual coefficients inside the comparison. On screens up to 760px, the same comparison link moves directly after the dataset choices. Its external-link arrow is removed.
+- SHADOW displays the two-interval explanation beside the ray, with current coordinates, whenever the selected Well ray crosses the cavity. The desktop inset expands to 400px. Changing to a ray/body without that cavity hides the explanation. Turn and Inspect remain action buttons rather than toggles.
+- The starting six remain unchanged. Replacing N with AVERAGE is a useful editorial hypothesis about grouping coverage, not an established usability fix. N’s pre-existing layout issue remains separate.
+
+Follow-up validation: `npm run validate` passes (76 unit tests, 58 series checks, build and CSP checks). The 19 curation browser checks pass across desktop, 390px phone, 320px phone, and reduced motion, using packaged Chromium 153. Inspected desktop FIT and desktop/phone SHADOW screenshots. This is local automated interaction testing, not real touch or screen-reader testing.
