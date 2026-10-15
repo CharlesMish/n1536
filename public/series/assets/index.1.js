@@ -395,52 +395,38 @@ const STUDIES = [
   }
 ];
 
-const SPECIMENS = {"10": "<img src=\"./assets/specimen-10.svg\" width=\"600\" height=\"360\" loading=\"lazy\" decoding=\"async\" alt=\"Three exact trajectories at step 32 and their distances from the reference\">", "01": "<img src=\"./assets/specimen-01.svg\" width=\"600\" height=\"280\" loading=\"lazy\" decoding=\"async\" alt=\"Fibonacci sphere and equal-area disk, 1536 sites\">", "02": "<img src=\"./assets/specimen-02.svg\" width=\"600\" height=\"280\" loading=\"lazy\" decoding=\"async\" alt=\"Occupied depth sections of the three bodies at y equals zero\">", "03": "<img src=\"./assets/specimen-03.svg\" width=\"600\" height=\"280\" loading=\"lazy\" decoding=\"async\" alt=\"Same spherical disks in Mercator and Equal Earth\">", "04": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 280\" role=\"img\" aria-label=\"Three native nearest-site territory rasters\"><text x=\"10\" y=\"32\" fill=\"#b59bff\" font-family=\"Helvetica,Arial,sans-serif\" font-size=\"17\">Euclidean</text><image x=\"10\" y=\"56\" width=\"180\" height=\"180\" href=\"./assets/specimen-234484e861655759.png\" class=\"pixelated\"/><circle cx=\"42.40\" cy=\"196.40\" r=\"2.5\" fill=\"#f6f2ff\"/><circle cx=\"74.80\" cy=\"158.60\" r=\"2.5\" fill=\"#f6f2ff\"/><circle cx=\"146.80\" cy=\"207.20\" r=\"2.5\" fill=\"#f6f2ff\"/><circle cx=\"168.40\" cy=\"153.20\" r=\"2.5\" fill=\"#f6f2ff\"/><circle cx=\"101.80\" cy=\"138.80\" r=\"2.5\" fill=\"#f6f2ff\"/><circle cx=\"35.20\" cy=\"99.20\" r=\"2.5\" fill=\"#f6f2ff\"/><circle cx=\"125.20\" cy=\"84.80\" r=\"2.5\" fill=\"#f6f2ff\"/><text x=\"210\" y=\"32\" fill=\"#67d7c4\" font-family=\"Helvetica,Arial,sans-serif\" font-size=\"17\">Taxicab</text><image x=\"210\" y=\"56\" width=\"180\" height=\"180\" href=\"./assets/specimen-8d16cf429fb7cf56.png\" class=\"pixelated\"/><circle cx=\"242.40\" cy=\"196.40\" r=\"2.5\" fill=\"#f6f2ff\"/><circle cx=\"274.80\" cy=\"158.60\" r=\"2.5\" fill=\"#f6f2ff\"/><circle cx=\"346.80\" cy=\"207.20\" r=\"2.5\" fill=\"#f6f2ff\"/><circle cx=\"368.40\" cy=\"153.20\" r=\"2.5\" fill=\"#f6f2ff\"/><circle cx=\"301.80\" cy=\"138.80\" r=\"2.5\" fill=\"#f6f2ff\"/><circle cx=\"235.20\" cy=\"99.20\" r=\"2.5\" fill=\"#f6f2ff\"/><circle cx=\"325.20\" cy=\"84.80\" r=\"2.5\" fill=\"#f6f2ff\"/><text x=\"410\" y=\"32\" fill=\"#f2a65a\" font-family=\"Helvetica,Arial,sans-serif\" font-size=\"17\">Chebyshev</text><image x=\"410\" y=\"56\" width=\"180\" height=\"180\" href=\"./assets/specimen-076c376b72bb39e8.png\" class=\"pixelated\"/><circle cx=\"442.40\" cy=\"196.40\" r=\"2.5\" fill=\"#f6f2ff\"/><circle cx=\"474.80\" cy=\"158.60\" r=\"2.5\" fill=\"#f6f2ff\"/><circle cx=\"546.80\" cy=\"207.20\" r=\"2.5\" fill=\"#f6f2ff\"/><circle cx=\"568.40\" cy=\"153.20\" r=\"2.5\" fill=\"#f6f2ff\"/><circle cx=\"501.80\" cy=\"138.80\" r=\"2.5\" fill=\"#f6f2ff\"/><circle cx=\"435.20\" cy=\"99.20\" r=\"2.5\" fill=\"#f6f2ff\"/><circle cx=\"525.20\" cy=\"84.80\" r=\"2.5\" fill=\"#f6f2ff\"/></svg>", "05": "<img src=\"./assets/specimen-05.svg\" width=\"600\" height=\"360\" loading=\"lazy\" decoding=\"async\" alt=\"Three reconstructions above, and response to a unit change at sample five below\">", "06": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 280\" role=\"img\" aria-label=\"Carry Conduct and Share solved density fields and normalized compliance\"><text x=\"12\" y=\"32\" fill=\"#b59bff\" font-family=\"Helvetica,Arial,sans-serif\" font-size=\"18\">Carry</text><image x=\"12\" y=\"65\" width=\"176\" height=\"88\" href=\"./assets/specimen-e14c55e48094b7b8.png\" class=\"pixelated\"/><text x=\"12\" y=\"193\" fill=\"#c9c0e5\" font-family=\"Helvetica,Arial,sans-serif\" font-size=\"14\">Mech 1.00×</text><text x=\"12\" y=\"216\" fill=\"#c9c0e5\" font-family=\"Helvetica,Arial,sans-serif\" font-size=\"14\">Heat 213.90×</text><text x=\"12\" y=\"249\" fill=\"#c9c0e5\" font-family=\"Helvetica,Arial,sans-serif\" font-size=\"13\">ρ mean 0.40000</text><text x=\"212\" y=\"32\" fill=\"#67d7c4\" font-family=\"Helvetica,Arial,sans-serif\" font-size=\"18\">Conduct</text><image x=\"212\" y=\"65\" width=\"176\" height=\"88\" href=\"./assets/specimen-e5fdba18568ea88d.png\" class=\"pixelated\"/><text x=\"212\" y=\"193\" fill=\"#c9c0e5\" font-family=\"Helvetica,Arial,sans-serif\" font-size=\"14\">Mech 4715.55×</text><text x=\"212\" y=\"216\" fill=\"#c9c0e5\" font-family=\"Helvetica,Arial,sans-serif\" font-size=\"14\">Heat 1.00×</text><text x=\"212\" y=\"249\" fill=\"#c9c0e5\" font-family=\"Helvetica,Arial,sans-serif\" font-size=\"13\">ρ mean 0.40000</text><text x=\"412\" y=\"32\" fill=\"#f2a65a\" font-family=\"Helvetica,Arial,sans-serif\" font-size=\"18\">Share</text><image x=\"412\" y=\"65\" width=\"176\" height=\"88\" href=\"./assets/specimen-cb90acf4d36b1698.png\" class=\"pixelated\"/><text x=\"412\" y=\"193\" fill=\"#c9c0e5\" font-family=\"Helvetica,Arial,sans-serif\" font-size=\"14\">Mech 1.27×</text><text x=\"412\" y=\"216\" fill=\"#c9c0e5\" font-family=\"Helvetica,Arial,sans-serif\" font-size=\"14\">Heat 1.59×</text><text x=\"412\" y=\"249\" fill=\"#c9c0e5\" font-family=\"Helvetica,Arial,sans-serif\" font-size=\"13\">ρ mean 0.40001</text></svg>", "07": "<img src=\"./assets/specimen-07.svg\" width=\"600\" height=\"280\" loading=\"lazy\" decoding=\"async\" alt=\"Three pairings of the same x and y values\">", "08": "<img src=\"./assets/specimen-08.svg\" width=\"600\" height=\"300\" loading=\"lazy\" decoding=\"async\" alt=\"Reversal: A leads pooled sixty to forty percent; B leads within both groups\">", "09": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 280\" role=\"img\" aria-label=\"Source borrowed and scrambled phase fields with a common Fourier magnitude\"><text x=\"10\" y=\"32\" fill=\"#b59bff\" font-family=\"Helvetica,Arial,sans-serif\" font-size=\"17\">Source</text><image x=\"10\" y=\"56\" width=\"180\" height=\"180\" href=\"./assets/specimen-20334e17a92ddbd8.png\" class=\"pixelated\"/><text x=\"210\" y=\"32\" fill=\"#67d7c4\" font-family=\"Helvetica,Arial,sans-serif\" font-size=\"17\">Borrowed</text><image x=\"210\" y=\"56\" width=\"180\" height=\"180\" href=\"./assets/specimen-d909bb7723c81e39.png\" class=\"pixelated\"/><text x=\"410\" y=\"32\" fill=\"#f2a65a\" font-family=\"Helvetica,Arial,sans-serif\" font-size=\"17\">Scrambled</text><image x=\"410\" y=\"56\" width=\"180\" height=\"180\" href=\"./assets/specimen-2c1dead2fafc4952.png\" class=\"pixelated\"/></svg>", "11": "<img src=\"assets/specimen-11.svg\" width=\"600\" height=\"280\" loading=\"lazy\" decoding=\"async\" alt=\"All 720 endpoints with given and reversed paths at lambda one\">", "12": "<img src=\"assets/specimen-12.svg\" width=\"600\" height=\"280\" loading=\"lazy\" decoding=\"async\" alt=\"Quiet Slide and Spin velocity fields with identical source and witness square\">", "13": "<img src=\"./assets/specimen-13.svg\" width=\"900\" height=\"430\" loading=\"lazy\" decoding=\"async\" alt=\"Same degrees: three networks after two hops from A\">", "14": "<img src=\"./assets/specimen-14.svg\" width=\"640\" height=\"360\" loading=\"lazy\" decoding=\"async\" alt=\"Same applied impulse, different oscillator responses\">", "15": "<img src=\"./assets/specimen-15.svg\" width=\"560\" height=\"330\" loading=\"lazy\" decoding=\"async\" alt=\"Same eigenvalues, different transient norms\">", "16": "<img src=\"./assets/specimen-16.svg\" width=\"560\" height=\"330\" loading=\"lazy\" decoding=\"async\" alt=\"Same distances, opposite handedness\">", "17": "<img src=\"./assets/specimen-17.svg\" width=\"560\" height=\"330\" loading=\"lazy\" decoding=\"async\" alt=\"Same residual, different solution error\">", "18": "<img src=\"./assets/specimen-18.svg\" width=\"560\" height=\"330\" loading=\"lazy\" decoding=\"async\" alt=\"Anscombe’s quartet: matching rounded summaries, different structures\">", "19": "<img src=\"./assets/specimen-19.svg\" width=\"560\" height=\"330\" loading=\"lazy\" decoding=\"async\" alt=\"Same numbers added, different totals\">", "20": "<img src=\"./assets/specimen-20.svg\" width=\"600\" height=\"330\" loading=\"lazy\" decoding=\"async\" alt=\"Three beams with identical end reactions; quarter-point pair and uniform load have matching peak moments and differing midspan deflections\">"};
-const CAPTIONS = {"10": "Step 32 · ε = 2⁻⁴⁰ · below: distance from A, logarithmic scale", "01": "Fibonacci shown · low spacing variation is one property, not an overall ranking", "02": "Section at y = 0 · identical occupied x extent · Well’s enclosed cavity is visible", "03": "Same disks · seam clipping · independently fitted map panels", "04": "Same seven sites · Euclidean, Taxicab and Chebyshev · native 360² rasters", "05": "Common axes within each panel · same measured values · different influence", "06": "Target 0.40 · achieved means 0.40000000 / 0.40000000 / 0.40001309 · local SIMP results", "07": "Same x and y lists · fixed pairing permutations · common axes", "08": "Reverse grouping shown · identical pooled rates · exact integer counts", "09": "Three real reconstructions · one magnitude array · common linear grayscale", "11": "All 720 endpoints · Given and Reversed paths · λ = 1 · fixed equal-unit axes", "12": "Shared source and arrow scale · witness flux 1/π² · y increases downward, as in the live exhibit", "13": "Source A, two hops · Spread reaches 8, Narrow 7, Apart 6 · every vertex has degree 3 · identical positions and 18 edges", "14": "Applied impulse 1 N·s in every case · two pulses 1 s apart · exact responses on fixed axes · residual envelope measured at 3 s", "15": "k = 0, 4, 12 · peak / initial norm 1.000×, 1.036×, 3.011× · fixed starting vector (0, 1), units, and Euclidean norm", "16": "The same six distances survive both panels. Left: the global rotation-and-translation minimum retains 1 unit of 3D RMS error. Right: reflection closes the gap. Both use the same projection and scale.", "17": "θ = 45° · relative residual 1.000% · relative error 70.714% · κ₂ = 100 · equal-unit circle and error ellipse", "18": "Anscombe’s quartet · 11 points each · lines round to y = 3.00 + 0.50x · actual fitted coefficients differ · variance y agrees at 1 decimal place", "19": "Shared fixed axis · computed − exact running total · Given −670 × 2⁻²⁰, Ascending +101 × 2⁻²⁰, Descending exact · shaded: Given holds the large value", "20": "Each support W/2 · pair and uniform both peak at WL/8 · midspan deflections 11/768 and 10/768 in units of WL³/EI"};
 const grid = document.getElementById("grid");
 let focusIndex = 0;
 
-function render() {
-  if (!grid.querySelector(".card")) grid.innerHTML = STUDIES.map((s, i) => {
-    const specimen = SPECIMENS[s.study];
-    return `
-    <a class="card" href="${s.file}" data-index="${i}" data-file="${s.file}">
-      <div class="card-top">
-        <span class="study-no">Field study ${s.study}</span>
-        <span class="version">${s.version}</span>
-      </div>
-      <h2>${s.title}</h2>
-      <p class="claim">${s.claim}</p><p class="question">${s.question}</p>
-      <dl class="invariant">
-        <div><dt>Frozen</dt><dd>${s.frozen}</dd></div>
-        <div><dt>Free</dt><dd>${s.free}</dd></div>
-      </dl>
-      <div class="tags">
-        <span class="domain">${s.domain}</span>
-        ${s.methods.map(m => `<span class="${m===s.focus?"is-on":""}">${m}</span>`).join("")}
-      </div>
-      ${s.cost ? `<div class="cost">${s.cost}</div>` : ""}
-      <div class="specimen">${specimen}</div>
-      <div class="plate-cap">${CAPTIONS[s.study]}</div>
-      <div class="card-foot">
-        <span>${s.focus} opens first</span>
-        <span class="go">Open →</span>
-      </div>
-    </a>`;
-  }).join("");
+// The authored HTML is also the complete, usable no-JavaScript collection.
+const starters = new Set(['01', '02', '04', '13', '18', '20']);
+const cards = [...grid.querySelectorAll('.card')];
+function visibleCards() { return cards.filter(card => !card.hidden); }
+function chooseCollection(mode) {
+  cards.forEach((card, index) => { card.hidden = mode === 'start' && !starters.has(STUDIES[index].study); });
+  document.querySelectorAll('[data-collection]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.collection === mode)));
+  document.getElementById('collection-note').textContent = mode === 'start'
+    ? 'Six ways in. Try a view, a distance rule, a network, or a fitted line — then explore all twenty.'
+    : 'All twenty studies, in their original order. The book of plates keeps the longer explanations.';
   focusIndex = 0;
   updateFocus();
 }
+document.querySelector('.collection-choices').hidden = false;
+document.querySelectorAll('[data-collection]').forEach(button => button.addEventListener('click', () => {
+  chooseCollection(button.dataset.collection);
+  history.replaceState(null, '', button.dataset.collection === 'all' ? '#all' : location.pathname);
+}));
+window.addEventListener('hashchange', () => chooseCollection(location.hash === '#all' ? 'all' : 'start'));
 
 function updateFocus() {
-  const cards = [...grid.querySelectorAll(".card")];
+  const cards = visibleCards();
   cards.forEach((c, i) => {
     c.classList.toggle("is-selected", i === focusIndex);
   });
 }
 
 function openAt(i, newTab) {
-  const cards = [...grid.querySelectorAll(".card")];
+  const cards = visibleCards();
   const card = cards[i];
   if (!card) return;
   const href = card.getAttribute("href");
@@ -450,21 +436,21 @@ function openAt(i, newTab) {
 
 grid.addEventListener("focusin", e => {
   const card=e.target.closest("a.card");
-  if(card){focusIndex=Number(card.dataset.index);updateFocus();}
+  if(card){focusIndex=visibleCards().indexOf(card);updateFocus();}
 });
 document.addEventListener("keydown", e => {
   if(e.repeat||e.altKey||e.ctrlKey||e.metaKey||e.shiftKey||e.target.closest("input,textarea,select,[contenteditable]"))return;
-  const cards=[...grid.querySelectorAll(".card")];
+  const cards=visibleCards();
   if(!cards.length)return;
   const focused=e.target.closest("a.card");
   if(e.target.closest("a,button")&&!focused)return;
   const columns=getComputedStyle(grid).gridTemplateColumns.split(" ").length;
   const delta={ArrowRight:1,ArrowLeft:-1,ArrowDown:columns,ArrowUp:-columns}[e.key];
   if(delta){e.preventDefault();focusIndex=Math.max(0,Math.min(cards.length-1,focusIndex+delta));cards[focusIndex].focus();}
-  else if(e.key>="1"&&e.key<="9"){e.preventDefault();openAt(Number(e.key)-1,false);}
-  else if(e.key==="0"){e.preventDefault();openAt(9,false);}
+  else if(e.key>="1"&&e.key<="9"){e.preventDefault();location.assign(STUDIES[Number(e.key)-1].file);}
+  else if(e.key==="0"){e.preventDefault();location.assign(STUDIES[9].file);}
   else if(e.key.toLowerCase()==="n"){e.preventDefault();openAt(focusIndex,true);}
 });
 
-render();
+chooseCollection(location.hash === '#all' ? 'all' : 'start');
   

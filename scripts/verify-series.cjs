@@ -35,7 +35,7 @@ pass('AVERAGE pooled counts and within-group comparisons agree exactly',()=>asse
 pass('Twenty numbered studies have matching book entries and valid specimens',()=>{
  const index=sourceHTML('index.html'),book=sourceHTML('plates.html');
  const a=JSON.parse(index.match(/const STUDIES = (\[[\s\S]*?\n\]);/)[1]),b=JSON.parse(book.match(/const PLATES = (\[[\s\S]*?\n\]);/)[1]);
- const figs=JSON.parse(book.match(/^const FIGS = (.*);$/m)[1]),specs=JSON.parse(index.match(/^const SPECIMENS = (.*);$/m)[1]);
+ const figs=JSON.parse(book.match(/^const FIGS = (.*);$/m)[1]),specs=Object.fromEntries([...index.matchAll(/<div class="specimen">([\s\S]*?)<\/div>/g)].map((m,i)=>[String(i+1).padStart(2,'0'),m[1]]));
  assert(a.length===20&&b.length===20);for(let i=0;i<20;i++){const n=String(i+1).padStart(2,'0');assert(a[i].study===n&&b[i].n===n&&a[i].file===b[i].file);assert(fs.readFileSync(root+a[i].file,'utf8').toUpperCase().includes('FIELD STUDY '+n));assert(figs['p'+n]===specs[n]&&!specs[n].includes('undefined'));}
 });
 // A small event harness exercises the actual new-page scripts without a browser or layout engine.

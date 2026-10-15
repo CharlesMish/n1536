@@ -563,6 +563,21 @@ function I() {
     btn.addEventListener("click", () => selectMethod(btn.dataset.method));
   });
   document.getElementById("faceBtn").addEventListener("click", faceView);
+  document.getElementById("turnBtn").addEventListener("click", () => {
+    snapFace = false; vYaw = 0; vPitch = 0;
+    yaw = 0.72; pitch = -0.32;
+    applyMeta();
+    document.getElementById("live").textContent = "Off-axis view. Compare the bodies here, then return to Front view for their shared silhouette.";
+  });
+  document.getElementById("depthBtn").addEventListener("click", () => {
+    method = "well"; pin = { x: 0.58, y: 0 };
+    const plate = document.getElementById("usePlate");
+    plate.classList.add("is-inspecting");
+    applyMeta();
+    plate.focus({ preventScroll: true });
+    plate.scrollIntoView({ block: "nearest" });
+    document.getElementById("live").textContent = "Well selected. At x = 0.58, y = 0, the depth figure shows two occupied intervals separated by an enclosed cavity. The exterior view need not reveal this gap.";
+  });
   document.getElementById("ghostBtn").addEventListener("click", () => {
     showGhost = !showGhost;
     applyMeta();

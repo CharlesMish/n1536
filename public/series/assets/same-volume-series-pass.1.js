@@ -105,8 +105,9 @@ function I(){
   let showLoad=false,showHeat=false,showEnergy=false,showDeflect=false;
   let pin=-1,hover=-1;
   let W=1,H=1,PR=1;
-  let worker=null,workerUrl="",workerMode="",runId=0;
-  let primaryComplete=false,forming=false,primaryFailure=false;
+  const workers={obligations:null,appendix:null};
+  const runIds={obligations:0,appendix:0};
+  let primaryComplete=false,forming=false,primaryFailure=false,structuralFailure=false;
   let activeClaim="carry",activeIteration=0;
   let mix=1,morphing=false,morphT0=0,morphFrom="carry",morphTo="carry";
   const MORPH_DURATION=1100;
@@ -539,22 +540,31 @@ function I(){
   }
   function hideLoader(){loader.classList.add("is-hidden");loader.setAttribute("aria-hidden","true");}
 
-  function stopActiveWorker(){
-    if(worker){worker.terminate();worker=null;}
-    if(workerUrl){URL.revokeObjectURL(workerUrl);workerUrl="";}
-    workerMode="";
+  // Keep the primary solve alive while the visitor explores the appendix.
+  // Each mode owns its worker and generation; stale messages cannot cross modes.
+  function stopActiveWorker(mode=studyMode){
+    workers[mode]?.terminate();
+    workers[mode]=null;
+    runIds[mode]++;
   }
 
   function createWorker(source,mode,onMessage){
-    stopActiveWorker();
+    stopActiveWorker(mode);
+    const generation=runIds[mode];
+    const fail=()=>{
+      if(generation!==runIds[mode])return;
+      stopActiveWorker(mode);
+      if(mode==="obligations")primaryFailure=true;else structuralFailure=true;
+      if(studyMode===mode){forming=false;hideLoader();fallback.hidden=false;}
+      updateReadout();
+    };
     try{
-      worker=new Worker(new URL(source,document.baseURI));
-    }
-    catch(err){stopActiveWorker();forming=false;primaryFailure=mode==="obligations";hideLoader();fallback.hidden=false;updateReadout();return null;}
-    workerMode=mode;
-    worker.onmessage=onMessage;
-    worker.onerror=()=>{stopActiveWorker();forming=false;primaryFailure=mode==="obligations";hideLoader();fallback.hidden=false;updateReadout();};
-    return worker;
+      const worker=new Worker(new URL(source,document.baseURI));
+      workers[mode]=worker;
+      worker.onmessage=event=>{if(generation===runIds[mode])onMessage(event);};
+      worker.onerror=fail;
+      return worker;
+    }catch(err){fail();return null;}
   }
 
   function updateReadout(){
@@ -589,7 +599,13 @@ function I(){
       document.getElementById("statGray").textContent=structuralState.gray.toFixed(2);
       document.getElementById("statIter").textContent=String(structuralState.iter).padStart(2,"0");
       const pending=document.getElementById("methodPending");
-      if(pending)pending.hidden=!forming;
+      if(pending){
+        pending.hidden=false;
+        pending.textContent=(structuralFailure ? "Structural solve interrupted. " : forming ? "Forming this structural case. " : "Structural case complete. ")+
+          (primaryFailure ? "Primary solve interrupted; return to VOLUME for details." :
+           primaryComplete ? "All three VOLUME designs are kept for this visit." :
+           "VOLUME continues solving in the background; returning keeps its progress.");
+      }
     }
   }
 
@@ -687,12 +703,19 @@ function I(){
 
   function startPrimary(){
     if(primaryComplete){forming=false;hideLoader();applyMeta();return;}
+    if(workers.obligations){
+      forming=true;applyMeta();
+      const view=currentObligation();
+      if(view?.rho&&(!reduced.matches||view.settled))hideLoader();
+      else showLoader("Waiting for "+OBLIGATION_META[obligationMethod].name+" result");
+      return;
+    }
     fields.carry=fields.conduct=fields.share=null;
     refs.CmStar=0;refs.CtStar=0;
     primaryFailure=false;activeClaim="carry";activeIteration=0;
     forming=true;showLoader("Forming obligations");
     if(studyMode==="obligations"){updateReadout();drawPlate();invalidate();}
-    const id=++runId;
+    const id=runIds.obligations+1;
     const w=createWorker(OBLIGATION_WORKER_SRC,"obligations",ev=>{
       const msg=ev.data;
       if(!msg||msg.requestId!==id)return;
@@ -715,10 +738,12 @@ function I(){
         fields.carry=Object.assign(msg.fields.carry,{settled:true,claim:"carry"});
         fields.conduct=Object.assign(msg.fields.conduct,{settled:true,claim:"conduct"});
         fields.share=Object.assign(msg.fields.share,{settled:true,claim:"share"});
-        primaryComplete=true;forming=false;stopActiveWorker();
+        primaryComplete=true;stopActiveWorker("obligations");
+        if(studyMode==="obligations")forming=false;
         if(studyMode==="obligations"){hideLoader();updateReadout();drawPlate();invalidate();}
+        if(studyMode==="appendix")updateReadout();
         const c=fields.carry,d=fields.conduct,s=fields.share;
-        document.getElementById("live").textContent="Three obligation fields completed. Carry mechanical reference 1.00 and thermal "+fmtRatio(c.Ct/d.Ct)+". Conduct mechanical "+fmtRatio(d.Cm/c.Cm)+" and thermal reference 1.00. Share mechanical "+fmtRatio(s.Cm/c.Cm)+" and thermal "+fmtRatio(s.Ct/d.Ct)+".";
+        if(studyMode==="obligations")document.getElementById("live").textContent="Three obligation fields completed. Carry mechanical reference 1.00 and thermal "+fmtRatio(c.Ct/d.Ct)+". Conduct mechanical "+fmtRatio(d.Cm/c.Cm)+" and thermal reference 1.00. Share mechanical "+fmtRatio(s.Cm/c.Cm)+" and thermal "+fmtRatio(s.Ct/d.Ct)+".";
       }
     });
     if(w)w.postMessage({type:"run",requestId:id});
@@ -726,12 +751,13 @@ function I(){
 
   function startStructural(kind,force){
     structuralMethod=kind;
+    structuralFailure=false;
     morphing=false;pin=-1;hover=-1;usePlate.classList.remove("is-inspecting");
     if(!force&&restoreStructural(structuralCache[kind])){
       forming=false;hideLoader();applyMeta();return;
     }
     seedStructural(kind);forming=true;showLoader("Forming "+kind);applyMeta();
-    const id=++runId;
+    const id=runIds.appendix+1;
     const w=createWorker(STRUCTURAL_WORKER_SRC,"appendix",ev=>{
       const msg=ev.data;
       if(!msg||msg.requestId!==id||msg.kind!==structuralMethod)return;
@@ -780,15 +806,17 @@ function I(){
 
   function switchStudy(next){
     if(next===studyMode)return;
-    stopActiveWorker();morphing=false;pin=-1;hover=-1;usePlate.classList.remove("is-inspecting");
+    if(studyMode==="appendix")stopActiveWorker("appendix");
+    morphing=false;pin=-1;hover=-1;usePlate.classList.remove("is-inspecting");
     studyMode=next;fallback.hidden=true;buildChrome();
     if(studyMode==="appendix")startStructural(structuralMethod,false);
     else{
       forming=!primaryComplete;
       applyMeta();
-      if(primaryComplete)hideLoader();else startPrimary();
+      if(primaryFailure){forming=false;hideLoader();fallback.hidden=false;}
+      else startPrimary();
     }
-    document.getElementById("live").textContent=studyMode==="appendix"?"Structural appendix opened. Same designable fraction, three different structural cases.":"Returned to the primary obligations exhibit.";
+    document.getElementById("live").textContent=studyMode==="appendix"?"Structural appendix opened. Same designable fraction, three different structural cases. The primary solve continues in the background.":"Returned to the primary obligations exhibit.";
   }
 
   function resize(){

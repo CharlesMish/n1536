@@ -20,6 +20,7 @@
       notes.classList.add('dialog-notes');
       const open = trigger => {
         if (trigger && !dialog.contains(trigger)) returnFocus = trigger;
+        dialog.dataset.readingView = trigger?.dataset.readingView || "";
         notes.open = true;
         if (!dialog.open) dialog.showModal();
         dialog.scrollTop = 0;

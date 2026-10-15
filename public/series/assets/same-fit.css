@@ -106,3 +106,23 @@
 @media(min-width:1500px){.same-fit .fit-specimen{top:250px}}
 @media(max-width:1000px){.same-fit .fit-specimen{top:245px}.same-fit .residual-inset{bottom:135px}}
 @media(max-width:760px){.same-fit .fit-specimen{inset:auto}.same-fit .residual-inset{inset:auto}}
+
+.compare-link{display:inline-block;padding:10px 14px;border:1px solid var(--accent);border-radius:6px;margin:0 12px 10px 0;color:var(--ink);font-size:14px}
+#quartetCompare{scroll-margin-top:64px}
+#quartetCompare .view-buttons{margin-bottom:18px}
+
+/* Compare in the same modal, with all four plots on the desktop stage. */
+.same-fit .study-dialog[data-reading-view=comparison]{width:min(1100px,calc(100vw - 32px));max-width:1100px}
+.same-fit .study-dialog[data-reading-view=comparison] #study-reading-title,
+.same-fit .study-dialog[data-reading-view=comparison] #study-notes > :not(#quartetCompare){display:none}
+.same-fit .study-dialog[data-reading-view=comparison] #quartetCompare{margin:0;padding:0;border:0;scroll-margin-top:0}
+.same-fit .study-dialog[data-reading-view=comparison] .scene-header{margin-bottom:8px}
+.same-fit .study-dialog[data-reading-view=comparison] .scene-header h2{font-size:23px;margin:0}
+.same-fit .study-dialog[data-reading-view=comparison] .plot{min-height:0}
+.same-fit .study-dialog[data-reading-view=comparison] .plot svg{display:block;width:100%;height:180px}
+.same-fit .study-dialog[data-reading-view=comparison] .quartet{gap:16px 24px}
+.same-fit .study-dialog[data-reading-view=comparison] .panel-reading{font-size:11px;margin-top:3px;line-height:1.35}
+.same-fit .study-dialog[data-reading-view=comparison] .plot-help{margin:6px 0 10px;font-size:12px}
+.same-fit .study-dialog[data-reading-view=comparison] .view-buttons{display:inline-flex;width:auto;margin-bottom:12px}
+.comparison-explanation{display:inline-block;font-size:12px;margin:0 0 12px 14px}
+@media(max-width:680px){.comparison-explanation{margin-left:0;display:block}.same-fit .study-dialog[data-reading-view=comparison] .scene-header h2{font-size:21px}}

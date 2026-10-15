@@ -22,7 +22,8 @@ function marker(dataset, x, y, radius, className) {
 function plotSVG(index, hostId = 'plot' + index, plotView = view) {
   const dataset = DATASETS[index], stats = STATS[index];
   const width = Math.max(260, $(hostId).clientWidth);
-  const height = hostId === 'primaryPlot' ? Math.max(260, $(hostId).clientHeight) : hostId === 'residualInset' ? 180 : Math.max(245, Math.min(300, width * 0.54 + 36));
+  const comparing = /^plot[0-3]$/.test(hostId) && document.querySelector('dialog[data-reading-view="comparison"]')?.open;
+  const height = comparing ? 180 : hostId === 'primaryPlot' ? Math.max(260, $(hostId).clientHeight) : hostId === 'residualInset' ? 180 : Math.max(245, Math.min(300, width * 0.54 + 36));
   const left = 43, right = width - 19, top = 30, bottom = height - 36;
   const x = value => left + value / 20 * (right - left);
   const y = plotView === 'scatter'
@@ -75,7 +76,7 @@ function renderPlots() {
   $('viewHelp').textContent = view === 'scatter'
     ? 'Solid lines are each dataset’s actual least-squares fit. The selected point has a larger outline; its vertical segment is y minus fitted y.'
     : 'Residual = observed y minus fitted y. The dashed horizontal line marks zero. These are the same eleven observations, with a new vertical quantity and one shared residual scale.';
-  document.querySelectorAll('button[data-view]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.view === view)));
+  document.querySelectorAll('button[data-view], button[data-compare-view]').forEach(button => button.setAttribute('aria-pressed', String((button.dataset.view || button.dataset.compareView) === view)));
 }
 
 function announce(message) { $('announcement').textContent = message; }
@@ -127,8 +128,8 @@ $('previousRow').addEventListener('click', () => inspectRow(row - 1));
 $('nextRow').addEventListener('click', () => inspectRow(row + 1));
 $('inspectIII').addEventListener('click', () => { activeDataset = 2; inspectRow(3, 'Row 3 selected. Dataset III’s point at (13, 12.74) has residual ' + signed(STATS[2].residuals[2]) + '.'); });
 $('inspectIV').addEventListener('click', () => { activeDataset = 3; inspectRow(8, 'Row 8 selected. Dataset IV’s point at (19, 12.50) has zero residual to displayed precision, yet is the only point away from x = 8.'); });
-document.querySelectorAll('button[data-view]').forEach(button => button.addEventListener('click', () => {
-  view = button.dataset.view;
+document.querySelectorAll('button[data-view], button[data-compare-view]').forEach(button => button.addEventListener('click', () => {
+  view = button.dataset.view || button.dataset.compareView;
   renderPlots();
   announce(view === 'scatter' ? 'Points and actual fitted lines. Shared y range zero to fifteen.' : 'Residuals versus x. Shared residual range minus four to four. The selected row is unchanged.');
 }));
@@ -166,3 +167,9 @@ new ResizeObserver(() => {
   resizeFrame = requestAnimationFrame(() => { resizeFrame = null; renderPlots(); });
 }).observe(document.querySelector('.exhibit-stage'));
 $('study-notes').addEventListener('toggle', renderPlots);
+
+// Re-enter the full explanation through the shared modal navigation.
+$("compareExplanation").addEventListener("click", () => {
+  document.querySelector('.exhibit-tools a[href="#study-notes"]').click();
+  renderPlots();
+});
