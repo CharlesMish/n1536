@@ -17,7 +17,7 @@ const STUDIES = [
     "version": "v0.2 · hosted",
     "cost": null,
     "plate": "Fig. 03 — lattice print",
-    "question": "What can a shared count promise?",
+    "question": "Can the same point count leave different gaps?",
     "explanation": "Count does not determine coverage, dependence, or suitability for a task. The spacing statistic answers one specific question."
   },
   {

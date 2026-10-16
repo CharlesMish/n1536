@@ -50,12 +50,14 @@
 
         <header class="study-header">
           <div class="study-registration">
-            <a class="series-return" href="/series/index.html" aria-label="Back to SAME series">CMISH / FIELD STUDY 01 ↗</a>
-            <span>N = 1,536</span>
+            <a class="series-return" href="/series/index.html" aria-label="Back to SAME series">← Series</a>
+            <span>Field study 01 · N = 1,536</span>
             <b>v0.2</b>
           </div>
           <h1 id="study-title">SAME N</h1>
-          <p>Same count. Different claims.</p>
+          <p>Same count. Different spacing.</p>
+          <p class="first-question">Can the same 1,536 points leave different gaps?</p>
+          <button type="button" id="compareBtn" class="first-action">Compare with Random →</button>
         </header>
 
         <button
@@ -73,14 +75,14 @@
           <span class="method-index" id="methodIndex">03</span>
           <div>
             <h2 id="methodName">Fibonacci</h2>
-            <div class="method-claim" id="methodClaim">Fixed instrument</div>
+            <div class="method-claim" id="methodClaim">Even local spacing</div>
             <p id="methodNote">
-              A lattice organized by the golden angle. The set is the thing you keep.
+              A golden-angle spiral spreads this full set with similar nearest-neighbor distances.
             </p>
             <dl>
               <div>
                 <dt>
-                  <abbr title="Coefficient of variation of nearest-neighbor chord distances">NN CV</abbr>
+                  <abbr title="Coefficient of variation of nearest-neighbor chord distances">Spacing variation</abbr>
                 </dt>
                 <dd id="methodCv">—</dd>
               </div>
@@ -93,6 +95,7 @@
                 <dd id="walkVal">0001 / 1536</dd>
               </div>
             </dl>
+            <p class="spacing-explanation">Lower means more even nearest-neighbor spacing—not a best-method score. <span>NN CV: standard deviation ÷ mean nearest-neighbor distance.</span></p>
           </div>
         </aside>
 
@@ -170,7 +173,7 @@
         <p class="sr-only" id="field-instructions">
           Drag to rotate the sphere. When the sphere is focused, use the arrow keys to rotate it.
           The 1, 2, and 3 keys select a method; P toggles spacing, O toggles order, and T switches
-          Paper and UV presentations. On compact screens, Inspect opens the figure plate.
+          Paper and UV presentations. On compact screens, Inspect opens the figure plate below the controls.
         </p>
         <p class="sr-only" id="method-limitations">
           Nearest-neighbor coefficient of variation is a local spacing statistic, not a universal
@@ -185,7 +188,7 @@
         <h3>What changes</h3>
         <p>Random uses a deterministic seeded random construction; New random chooses another seed. Sobol uses a deterministic low-discrepancy sequence mapped to the sphere. Fibonacci uses a fixed golden-angle construction. These are different ways of placing the same number of points.</p>
         <h3>Try this</h3>
-        <p>Switch between Random, Sobol, and Fibonacci. Turn on Spacing to inspect local variation, or Order to inspect the sequence. Drag the sphere to turn it. On compact screens, Inspect opens the figure plate.</p>
+        <p>Start with Compare with Random: look for close pairs and open patches, then compare with Fibonacci again. Switch to Sobol for a third construction. Turn on Spacing to inspect local variation, or Order to inspect the sequence. Drag the sphere to turn it. On compact screens, Inspect opens the figure plate below the controls.</p>
         <h3>Reading the measurements</h3>
         <p>NN CV is the standard deviation divided by the mean of the nearest-neighbor chord distances. A lower value means more uniform nearest-neighbor spacing for this point set. It does not establish the best method for integration, coverage, or every other task.</p>
         <h3>Boundary of the claim</h3>

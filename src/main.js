@@ -26,7 +26,7 @@ const METHODS = Object.freeze({
   random: {
     index: "01",
     name: "Random",
-    claim: "Independent-draw model",
+    claim: "Clumps and gaps",
     note:
       "Seeded pseudorandom surface draws. Close pairs and open patches are expected in a finite field.",
     plateTitle: "Fig. 01 — resampled field",
@@ -39,7 +39,7 @@ const METHODS = Object.freeze({
     name: "Sobol",
     claim: "Prefix coverage",
     note:
-      "A canonical low-discrepancy square, wrapped with equal area. The 128 and 512 prefixes remain nested.",
+      "An ordered sequence mapped from a square to the sphere with equal area. The 128 and 512 prefixes remain nested.",
     plateTitle: "Fig. 02 — generating square",
     plateKey: "unit square + disk",
     plateCaption: "128 / 512 / 1,536. Square origin (0,0) sits on a pole.",
@@ -48,9 +48,9 @@ const METHODS = Object.freeze({
   fibonacci: {
     index: "03",
     name: "Fibonacci",
-    claim: "Fixed instrument",
+    claim: "Even local spacing",
     note:
-      "A lattice organized by the golden angle. The set is the thing you keep.",
+      "A golden-angle spiral spreads this full set with similar nearest-neighbor distances.",
     plateTitle: "Fig. 03 — lattice print",
     plateKey: "equal-area disk",
     plateCaption: "A single N, evenly seated.",
@@ -145,6 +145,7 @@ async function initializeExhibit() {
   const walkValue = requiredElement("walkVal");
   const inspectButton = requiredElement("inspectBtn");
   const reseedButton = requiredElement("reseedBtn");
+  const compareButton = requiredElement("compareBtn");
   const liveRegion = requiredElement("live");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
@@ -278,6 +279,8 @@ async function initializeExhibit() {
     requiredElement("methodName").textContent = metadata.name;
     requiredElement("methodClaim").textContent = metadata.claim;
     requiredElement("methodNote").textContent = metadata.note;
+    compareButton.textContent = currentMethod === "random"
+      ? "Compare with Fibonacci →" : "Compare with Random →";
     requiredElement("methodCv").textContent = `${percent}%`;
     requiredElement("methodSeed").textContent =
       currentMethod === "random" ? String(randomSeed).padStart(5, "0") : "fixed";
@@ -359,6 +362,9 @@ async function initializeExhibit() {
     button.addEventListener("click", () => selectMethod(button.dataset.method));
   }
 
+  compareButton.addEventListener("click", () =>
+    selectMethod(currentMethod === "random" ? "fibonacci" : "random"));
+
   spacingButton.addEventListener("click", () => setSpacing(!spacing));
   walkButton.addEventListener("click", () => setWalking(!walking));
   reseedButton.addEventListener("click", () => {
@@ -394,7 +400,7 @@ async function initializeExhibit() {
   let updatePlateClip = () => {};
 
   function resize() {
-    const bounds = stage.getBoundingClientRect();
+    const bounds = canvas.getBoundingClientRect();
     width = Math.max(1, Math.round(bounds.width));
     height = Math.max(1, Math.round(bounds.height));
     pixelRatio = Math.min(window.devicePixelRatio || 1, 1.75);
@@ -403,14 +409,14 @@ async function initializeExhibit() {
     renderer.resize(canvas.width, canvas.height);
     pointScale = Math.max(22, Math.min(36, Math.min(width, height) * 0.042)) *
       pixelRatio;
-    if (!isCompactPlateViewport(width, height) && mobilePlateOpen) {
+    if (!isCompactPlateViewport(window.innerWidth, window.innerHeight) && mobilePlateOpen) {
       setMobilePlate(false);
     }
     updatePlateClip();
   }
 
   const stageResizeObserver = new ResizeObserver(resize);
-  stageResizeObserver.observe(stage);
+  stageResizeObserver.observe(canvas);
   resize();
 
   updatePlateClip = () => {
@@ -419,7 +425,7 @@ async function initializeExhibit() {
       return;
     }
 
-    const stageBounds = stage.getBoundingClientRect();
+    const stageBounds = canvas.getBoundingClientRect();
     const plateBounds = usePlate.getBoundingClientRect();
     const left = plateBounds.left - stageBounds.left;
     const top = plateBounds.top - stageBounds.top;
@@ -443,11 +449,13 @@ async function initializeExhibit() {
   }
 
   function setMobilePlate(open) {
-    mobilePlateOpen = open && isCompactPlateViewport(width, height);
+    mobilePlateOpen = open && isCompactPlateViewport(window.innerWidth, window.innerHeight);
     usePlate.classList.toggle("is-mobile-open", mobilePlateOpen);
     setPressedState(inspectButton, mobilePlateOpen);
     inspectButton.setAttribute("aria-expanded", String(mobilePlateOpen));
     syncPlateInspection();
+    if (mobilePlateOpen) usePlate.focus();
+    else if (usePlate.contains(document.activeElement)) inspectButton.focus({ preventScroll: true });
     liveRegion.textContent = `Inspection plate ${mobilePlateOpen ? "opened" : "closed"}.`;
   }
 
@@ -488,6 +496,7 @@ async function initializeExhibit() {
 
   stage.addEventListener("pointerdown", (event) => {
     if (
+      event.target !== canvas ||
       event.button !== 0 ||
       event.isPrimary === false ||
       activePointerId !== null ||

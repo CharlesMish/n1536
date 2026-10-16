@@ -57,3 +57,16 @@ The second independent review of f9fc180 identified failures at 844 × 390 and i
 - FIT's comparison-to-explanation transition preserves the original comparison link as the focus-return target. A direct `#quartetCompare` URL opens the comparison view; audit deep links retain their existing behavior.
 
 Validation correction: the old `reduced-motion` project placed `reducedMotion` directly under `use`, which Playwright did not pass to its browser context. Earlier results for that project are **not evidence of actual reduced-motion coverage**. It now uses `contextOptions.reducedMotion`, and the timed worker tests assert the browser's media preference before proceeding. Those tests use the real solver code with outgoing messages held/released to control completion/failure timing; they do not substitute invented numerical results.
+
+## N entrance repair after the offline Argon review
+
+Charlie prefers keeping N. This pass retains the starting six and the opening Fibonacci specimen, and repairs N before revisiting its editorial placement.
+
+- N's sphere has its own grid area. The method explanation, inset, navigation, and tools no longer occupy its drawing surface. Compact layouts scroll, with a dedicated drag surface; text and controls do not initiate sphere dragging.
+- The first question is about gaps, with a direct Random/Fibonacci comparison action. The method tabs, reseeding, Spacing, Order, Paper/UV, and the detailed study remain available. The index question uses the same concrete invitation.
+- The readout leads with “Spacing variation,” retains NN CV's definition, and explicitly says that a lower value is not a best-method score. Sampling algorithms, seeds, point count, measured values, and transition semantics are unchanged.
+- The return link visibly says “← Series.” Its compact target is enlarged and isolated from the oversized heading's hit area. Inspect opens the separate figure below the controls, focuses it, and Escape returns focus to Inspect.
+
+This is a repair of the exhibit's presentation, not evidence that N is the best lead study. Argon's alternative curation and proposed solver wording have not been adopted wholesale.
+
+Validation: `npm run validate` passes (76 unit tests, 58 series checks, build and CSP). All 16 N browser checks pass across the eight configured projects using packaged Chromium 153, with video disabled locally. These exercise WebGL2/Canvas2D, all three constructions, twelve deterministic reseeds, comparison, drag/keyboard controls, inspection focus, actual reduced motion, and layout separation at 1440×900, 390×844, 844×390, 667×375, 320×568, and 568×320. Three additional N reading checks pass (1440px, 320px, and no JavaScript). Local screenshots were inspected at desktop, portrait, and landscape sizes. Real touch, Safari, Firefox, screen readers, and first-time visitor comprehension were not tested.

@@ -106,7 +106,7 @@ async function openExhibit(page, expectedRenderer) {
   await expect(page.locator("#stage")).toHaveAttribute("aria-busy", "false");
   await expect(page.locator("#fallback")).toBeHidden();
   await expect(page.getByRole("heading", { level: 1, name: "SAME N" })).toBeVisible();
-  await expect(page.getByText("Same count. Different claims.")).toBeVisible();
+  await expect(page.getByText("Same count. Different spacing.")).toBeVisible();
   await expect(canvas).toHaveAttribute("tabindex", "0");
   await expect(canvas).toHaveAttribute("aria-describedby", /field-instructions/);
   await expect(
@@ -148,15 +148,15 @@ async function expectNoViewportOverflow(page) {
   });
 
   expect(layout.scrollWidth).toBeLessThanOrEqual(layout.innerWidth + 1);
-  expect(layout.scrollHeight).toBeLessThanOrEqual(layout.innerHeight + 1);
+  // N scrolls on compact screens; no element may escape the document horizontally.
   for (const rect of layout.visibleRects) {
     expect(rect.left, `${rect.selector} should stay inside the left edge`).toBeGreaterThanOrEqual(-1);
-    expect(rect.top, `${rect.selector} should stay inside the top edge`).toBeGreaterThanOrEqual(-1);
+    // Vertical scrolling may put an earlier element above the current viewport.
     expect(rect.right, `${rect.selector} should stay inside the right edge`).toBeLessThanOrEqual(
       layout.innerWidth + 1,
     );
     expect(rect.bottom, `${rect.selector} should stay inside the bottom edge`).toBeLessThanOrEqual(
-      layout.innerHeight + 1,
+      layout.scrollHeight + 1,
     );
   }
 }
@@ -204,11 +204,11 @@ async function expectBottomControlsDoNotOverlap(page) {
 async function expectOpenPlateClearsTools(page) {
   const clearance = await page.evaluate(() => {
     const plate = document.querySelector(".use-plate.is-mobile-open")?.getBoundingClientRect();
-    const toolTops = Array.from(
+    const toolBottoms = Array.from(
       document.querySelectorAll(".study-tools button:not([hidden])"),
-      (element) => element.getBoundingClientRect().top,
+      (element) => element.getBoundingClientRect().bottom,
     );
-    return plate && toolTops.length ? Math.min(...toolTops) - plate.bottom : null;
+    return plate && toolBottoms.length ? plate.top - Math.max(...toolBottoms) : null;
   });
 
   expect(clearance, "the open inspection plate should not cover compact controls").not.toBeNull();
@@ -224,7 +224,8 @@ async function attachScreenshot(page, testInfo, label) {
 
 async function dragSphere(page, delta = { x: 130, y: -70 }) {
   const stage = page.locator("#stage");
-  const stageBox = await stage.boundingBox();
+  await page.locator("#field").scrollIntoViewIfNeeded();
+  const stageBox = await page.locator("#field").boundingBox();
   expect(stageBox).not.toBeNull();
   const dragStart = {
     x: stageBox.x + stageBox.width * 0.52,
@@ -366,7 +367,7 @@ test("@canvas2d forced Canvas2D preserves data and inspection controls", async (
 
   expect(await page.evaluate(() => globalThis.__sameNBlockedWebgl2Contexts)).toBeGreaterThan(0);
   await expect(canvas).toHaveAttribute("data-webgl2-fallback", "initialization-failed");
-  await page.getByRole("button", { name: /Random/ }).click();
+  await page.locator(".method-nav").getByRole("button", { name: /Random/ }).click();
   await expect(app).toHaveAttribute("data-method", "random");
   await page.locator("#spacingBtn").click();
   await expect(page.locator("#spacingBtn")).toHaveAttribute("aria-pressed", "true");
@@ -422,7 +423,7 @@ test("@mobile portrait and landscape retain reachable, non-overlapping controls"
   await expect(page.locator(".drag-note")).toBeHidden();
   await expect(page.locator(".method-nav button")).toHaveCount(3);
   for (const method of ["Random", "Sobol", "Fibonacci"]) {
-    await expect(page.getByRole("button", { name: new RegExp(method) })).toBeVisible();
+    await expect(page.locator(".method-nav").getByRole("button", { name: new RegExp(method) })).toBeVisible();
   }
   await expect(page.locator("#spacingBtn")).toBeVisible();
   await expect(page.locator("#walkBtn")).toBeVisible();
@@ -430,11 +431,7 @@ test("@mobile portrait and landscape retain reachable, non-overlapping controls"
 
   await page.getByRole("button", { name: /Sobol/ }).click();
   await expect(app).toHaveAttribute("data-method", "sobol");
-  if (viewport.height > 500) {
-    await expect(page.locator("#methodNote")).toBeVisible();
-  } else {
-    await expect(page.locator("#methodNote")).toBeHidden();
-  }
+  await expect(page.locator("#methodNote")).toBeVisible();
   await page.locator("#spacingBtn").click();
   await expect(page.locator("#spacingBtn")).toHaveAttribute("aria-pressed", "true");
   const firstOrder = await app.getAttribute("data-order");
@@ -445,7 +442,7 @@ test("@mobile portrait and landscape retain reachable, non-overlapping controls"
   if (compactPlate) {
     await page.locator("#inspectBtn").click();
     await expect(page.locator("#usePlate")).toBeVisible();
-    await expect(page.locator(".field-keys")).toBeHidden();
+    await expect(page.locator("#usePlate")).toBeFocused();
     await page.locator("#inspectBtn").click();
     await expect(page.locator("#usePlate")).toBeHidden();
   }
@@ -475,7 +472,7 @@ test("@reduced reduced motion removes morphs while keeping order inspection avai
   const { app } = await openExhibit(page, "webgl2");
 
   await expect(app).toHaveAttribute("data-reduced-motion", "true");
-  await page.getByRole("button", { name: /Random/ }).click();
+  await page.locator(".method-nav").getByRole("button", { name: /Random/ }).click();
   await expect(app).toHaveAttribute("data-method", "random");
   await expect(app).toHaveAttribute("data-transitioning", "false");
   await page.getByRole("button", { name: /Sobol/ }).click();
@@ -494,4 +491,33 @@ test("@reduced reduced motion removes morphs while keeping order inspection avai
   await expectNoViewportOverflow(page);
   await attachScreenshot(page, testInfo, "reduced-motion-order");
   await expectCleanPage(page, findings);
+});
+
+
+test('@desktop @mobile @reduced N comparison keeps the sphere clear of text and controls', async ({page}) => {
+  await openExhibit(page, 'webgl2');
+  const compare = page.locator('#compareBtn');
+  await compare.click();
+  await expect(page.locator('#app')).toHaveAttribute('data-method', 'random');
+  await expect(compare).toHaveText('Compare with Fibonacci →');
+  await expect(page.locator('#methodCv')).not.toHaveText('1.7%');
+  await compare.click();
+  await expect(page.locator('#app')).toHaveAttribute('data-method', 'fibonacci');
+  await expect(page.locator('#methodCv')).toHaveText('1.7%');
+  await expect(page.locator('.spacing-explanation')).toContainText('not a best-method score');
+  for (const method of ['random', 'sobol', 'fibonacci']) {
+    await page.locator(`.method-nav [data-method="${method}"]`).click();
+    const collisions = await page.evaluate(() => {
+      const sphere = document.querySelector('#field').getBoundingClientRect();
+      return ['.study-header','.method-reading','.use-plate','.method-nav','.study-tools','.field-keys'].filter(selector => {
+        const el = document.querySelector(selector);
+        if (!el.getClientRects().length) return false;
+        const r = el.getBoundingClientRect();
+        return r.width && r.height && r.left < sphere.right - 1 && r.right > sphere.left + 1 && r.top < sphere.bottom - 1 && r.bottom > sphere.top + 1;
+      });
+    });
+    expect(collisions).toEqual([]);
+  }
+  await page.getByRole('link', {name:'Back to SAME series'}).click();
+  await expect(page).toHaveURL(/series\/index.html/);
 });
