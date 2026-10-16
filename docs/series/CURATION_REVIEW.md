@@ -46,3 +46,14 @@ Environment note: the pinned Playwright browser download returned invalid archiv
 - The starting six remain unchanged. Replacing N with AVERAGE is a useful editorial hypothesis about grouping coverage, not an established usability fix. N’s pre-existing layout issue remains separate.
 
 Follow-up validation: `npm run validate` passes (76 unit tests, 58 series checks, build and CSP checks). The 19 curation browser checks pass across desktop, 390px phone, 320px phone, and reduced motion, using packaged Chromium 153. Inspected desktop FIT and desktop/phone SHADOW screenshots. This is local automated interaction testing, not real touch or screen-reader testing.
+
+## Behavior-review follow-up
+
+The second independent review of f9fc180 identified failures at 844 × 390 and in worker error recovery that the original local test selection missed.
+
+- SHADOW and FIT use their scrolling presentation at widths up to 900px when the viewport is at most 500px tall. SHADOW's depth figure is focusable and visible without relying on focus to reveal a hidden element. Its landscape figure is limited to 560px so the cavity explanation can remain alongside the drawing. FIT's comparison entry stays beside the dataset choices; its compact dialog reserves room for Close.
+- VOLUME worker failures stop the loader and offer an explicit Retry solve action. A primary retry restarts all three designs; completed results are retained until retry. Structural retries restart the current case, and selecting another case clears the old error panel. Missing-canvas/worker support retains its separate capability explanation.
+- Primary completion/failure in the appendix updates only the status and live announcement. Reduced-motion appendix readouts also withhold intermediate values during other readout updates. Worker shutdown calls name their mode explicitly.
+- FIT's comparison-to-explanation transition preserves the original comparison link as the focus-return target. A direct `#quartetCompare` URL opens the comparison view; audit deep links retain their existing behavior.
+
+Validation correction: the old `reduced-motion` project placed `reducedMotion` directly under `use`, which Playwright did not pass to its browser context. Earlier results for that project are **not evidence of actual reduced-motion coverage**. It now uses `contextOptions.reducedMotion`, and the timed worker tests assert the browser's media preference before proceeding. Those tests use the real solver code with outgoing messages held/released to control completion/failure timing; they do not substitute invented numerical results.

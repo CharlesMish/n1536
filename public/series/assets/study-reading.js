@@ -26,6 +26,15 @@
         dialog.scrollTop = 0;
         close.focus({ preventScroll: true });
       };
+      // Moving within an open reading must retain its original return target.
+      for (const trigger of dialog.querySelectorAll('[data-reading-target]')) {
+        trigger.addEventListener('click', () => {
+          const target = document.getElementById(trigger.dataset.readingTarget);
+          if (!target || !dialog.contains(target)) return;
+          open(trigger);
+          if (target !== notes) target.scrollIntoView({ block: 'start' });
+        });
+      }
       for (const link of document.querySelectorAll('a[href="#study-notes"]')) {
         link.setAttribute('aria-haspopup', 'dialog');
         link.setAttribute('aria-controls', dialog.id);
@@ -44,12 +53,18 @@
           event.preventDefault();
           open(link);
           if (target instanceof HTMLDetailsElement) target.open = true;
-          target.scrollIntoView({ block: 'start' });
+          if (!link.dataset.readingView) target.scrollIntoView({ block: 'start' });
         });
       }
       // Direct note links and in-study audit links remain valid entry points.
       notes.addEventListener('toggle', () => { if (notes.open && !dialog.open) open(document.activeElement); });
-      if (notes.open || location.hash === '#study-notes') open(document.querySelector('a[href="#study-notes"]'));
+      const fragmentTarget = location.hash && document.getElementById(location.hash.slice(1));
+      const fragmentTrigger = [...document.querySelectorAll('a[href^="#"]')].find(link => !dialog.contains(link) && link.hash === location.hash);
+      if (fragmentTarget && notes.contains(fragmentTarget) && fragmentTrigger) {
+        open(fragmentTrigger);
+        if (fragmentTarget instanceof HTMLDetailsElement) fragmentTarget.open = true;
+        if (fragmentTarget !== notes && !fragmentTrigger.dataset.readingView) fragmentTarget.scrollIntoView({ block: 'start' });
+      } else if (notes.open || location.hash === '#study-notes') open(document.querySelector('a[href="#study-notes"]'));
     }
     if (!dialog) return;
     dialog.dataset.sharedReading = '';

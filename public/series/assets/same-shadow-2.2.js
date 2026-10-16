@@ -21,7 +21,7 @@
  const topNodes=[document.querySelector('.study-header'),document.querySelector('.theme-switch')];
  const flowNodes=['.method-nav','.study-tools','.method-reading','.field-keys','.use-plate'].map(s=>document.querySelector(s)).filter(Boolean);
  const homes=new Map();for(const n of [...topNodes,...flowNodes]){const marker=document.createComment('responsive home');n.before(marker);homes.set(n,marker);}
- const mq=matchMedia('(max-width:700px)');
+ const mq=matchMedia('(max-width:700px), (max-width:900px) and (max-height:500px)');
  const layout=()=>{
    document.documentElement.classList.toggle('mobile-reading',mq.matches);
    if(mq.matches){app.insertBefore(heading,stage);stage.after(flow);for(const n of topNodes)heading.append(n);for(const n of flowNodes)flow.append(n);}

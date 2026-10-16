@@ -38,7 +38,7 @@ test('@desktop @mobile @reduced FIT enters the quartet directly and preserves co
   const check=await watch(page);
   await page.goto('/series/same-fit.html');
   const compare=page.getByRole('link',{name:'Compare all four'});
-  if(page.viewportSize().width<=760){
+  if(page.viewportSize().width<=760||(page.viewportSize().width<=900&&page.viewportSize().height<=500)){
     const tabs=await page.locator('.fit-datasets').boundingBox();
     const link=await compare.boundingBox();
     expect(link.y-tabs.y-tabs.height).toBeGreaterThanOrEqual(0);
@@ -47,6 +47,11 @@ test('@desktop @mobile @reduced FIT enters the quartet directly and preserves co
   await compare.click();
   await expect(page.getByRole('dialog')).toBeVisible();
   await expect(page.locator('#sceneTitle')).toBeInViewport();
+  if(page.viewportSize().width<=900){
+    const close=await page.getByRole('button',{name:'Close study explanation'}).boundingBox();
+    const heading=await page.locator('#sceneTitle').boundingBox();
+    expect(heading.y).toBeGreaterThanOrEqual(close.y+close.height);
+  }
   await expect(page.locator('#compareRoundedLine')).toHaveText('y = 3.00 + 0.50x');
   await expect(page.locator('#compareRoundedLine').locator('..')).toContainText('(2 decimal places); actual fitted coefficients differ');
   await expect(page.locator('#plots svg')).toHaveCount(4);
@@ -60,7 +65,20 @@ test('@desktop @mobile @reduced FIT enters the quartet directly and preserves co
   await expect(page.locator('button[data-view="residual"]')).toHaveAttribute('aria-pressed','true');
   await compare.click();
   await expect(page.locator('[data-compare-view="residual"]')).toHaveAttribute('aria-pressed','true');
+  await page.locator('#compareExplanation').click();
+  await expect(page.getByRole('dialog')).toHaveAttribute('data-reading-view','');
+  await page.keyboard.press('Escape');
+  await expect(compare).toBeFocused();
   await check();
+});
+
+test('@desktop @mobile FIT comparison fragment opens the comparison directly',async({page})=>{
+  await page.goto('/series/same-fit.html#quartetCompare');
+  await expect(page.getByRole('dialog')).toHaveAttribute('data-reading-view','comparison');
+  await expect(page.locator('#sceneTitle')).toBeInViewport();
+  await expect(page.locator('#compareRoundedLine')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('link',{name:'Compare all four'})).toBeFocused();
 });
 
 test('@desktop @mobile @reduced SHADOW separates the exterior turn and cavity witness',async({page},info)=>{
@@ -76,6 +94,7 @@ test('@desktop @mobile @reduced SHADOW separates the exterior turn and cavity wi
   await expect(page.locator('#usePlate')).toBeInViewport();
   await expect(page.locator('#depthExplanation')).toBeVisible();
   await expect(page.locator('#depthExplanation')).toContainText('two occupied intervals separated by an enclosed cavity');
+  if(page.viewportSize().width>700&&page.viewportSize().width<=900&&page.viewportSize().height<=500)await expect(page.locator('#depthExplanation')).toBeInViewport({ratio:1});
   await page.screenshot({path:info.outputPath('shadow-cavity.png')});
   await page.locator('#faceBtn').click();
   await expect(page.locator('#statView')).toHaveText('FACE');
@@ -144,7 +163,8 @@ test('@desktop collection remains complete without JavaScript',async({browser})=
 });
 
 test('@desktop VOLUME reports a primary failure during an appendix visit without replacing the appendix',async({page})=>{
-  await page.route('**/volume-obligations.worker.js',route=>route.fulfill({
+  let attempts=0;
+  await page.route('**/volume-obligations.worker.js',route=>++attempts>1?route.continue():route.fulfill({
     contentType:'text/javascript',body:'onmessage=()=>setTimeout(()=>{throw new Error("Injected primary worker failure")},3000);'
   }));
   await page.goto('/series/same-volume-series-pass.html');
@@ -157,4 +177,60 @@ test('@desktop VOLUME reports a primary failure during an appendix visit without
   await expect(page.locator('#methodPending')).toContainText('Solve interrupted');
   await expect(page.locator('#fallback')).toBeVisible();
   await expect(page.locator('#loader')).toHaveAttribute('aria-hidden','true');
+  await expect(page.locator('#fallback')).toContainText('solve was interrupted');
+  for(const method of ['conduct','share']){
+    await page.locator(`[data-method="${method}"]`).click();
+    await expect(page.locator('#loader')).toHaveAttribute('aria-hidden','true');
+    await expect(page.locator('#methodPending')).toContainText('unavailable');
+  }
+  await page.getByRole('button',{name:'Retry solve'}).click();
+  await expect(page.locator('#fallback')).toBeHidden();
+  await expect(page.locator('[data-method="share"]')).toBeFocused();
+  await expect(page.locator('#methodPending')).toContainText('All three runs complete.',{timeout:100_000});
+  expect(attempts).toBe(2);
+  await expect(page.locator('#loader')).toHaveAttribute('aria-hidden','true');
+});
+
+test('@desktop VOLUME clears a structural failure when a different case succeeds',async({page})=>{
+  let attempts=0;
+  await page.route('**/volume-structural.worker.js',route=>++attempts>1?route.continue():route.fulfill({
+    contentType:'text/javascript',body:'onmessage=()=>{throw new Error("Injected structural failure")};'
+  }));
+  await page.goto('/series/same-volume-series-pass.html');
+  await page.locator('#studyModeBtn').click();
+  await expect(page.locator('#fallback')).toBeVisible();
+  await page.locator('[data-method="mbb"]').click();
+  await expect(page.locator('#fallback')).toBeHidden();
+  await expect(page.locator('#methodPending')).toContainText('Structural case complete.',{timeout:100_000});
+  await expect(page.locator('#fallback')).toBeHidden();
+  expect(attempts).toBe(2);
+});
+
+for(const outcome of ['completion','failure'])test(`@reduced VOLUME background ${outcome} preserves the withheld appendix readout`,async({page})=>{
+  const workers={};
+  page.on('worker',worker=>{workers[worker.url().includes('obligations')?'primary':'appendix']=worker;});
+  for(const kind of ['obligations','structural'])await page.route(`**/volume-${kind}.worker.js`,async route=>{
+    const response=await route.fetch();
+    const wrapper=kind==='obligations'
+      ? 'self.__send=self.postMessage.bind(self);self.postMessage=msg=>{if(msg.type==="done")self.__heldDone=msg;};\n'
+      : 'self.__send=self.postMessage.bind(self);self.postMessage=msg=>{if(msg.type==="state"&&!self.__heldState){self.__heldState=msg;self.__send(msg);}};\n';
+    await route.fulfill({response,body:wrapper+await response.text()});
+  });
+  await page.goto('/series/same-volume-series-pass.html');
+  expect(await page.evaluate(()=>matchMedia('(prefers-reduced-motion: reduce)').matches)).toBeTruthy();
+  await page.locator('#studyModeBtn').click();
+  await expect.poll(async()=>Boolean(workers.appendix&&await workers.appendix.evaluate(()=>Boolean(self.__heldState))),{timeout:100_000}).toBeTruthy();
+  await expect(page.locator('#statC')).toHaveText('—');
+  await expect(page.locator('#statIter')).toHaveText('00');
+  const before=await page.locator('.method-reading dl').innerText();
+  await expect.poll(async()=>Boolean(workers.primary&&await workers.primary.evaluate(()=>Boolean(self.__heldDone))),{timeout:100_000}).toBeTruthy();
+  await workers.primary.evaluate(outcome=>setTimeout(()=>{
+    if(outcome==='failure')throw new Error('Injected held-primary failure');
+    self.__send(self.__heldDone);
+  },20),outcome);
+  await expect(page.locator('#methodPending')).toContainText(outcome==='completion'?'All three VOLUME designs are kept':'Primary solve interrupted');
+  expect(await page.locator('.method-reading dl').innerText()).toBe(before);
+  await expect(page.locator('#loader')).toHaveAttribute('aria-hidden','false');
+  await expect(page.locator('#fallback')).toBeHidden();
+  await expect(page.locator('#live')).toContainText(outcome==='completion'?'completed in the background':'interrupted');
 });

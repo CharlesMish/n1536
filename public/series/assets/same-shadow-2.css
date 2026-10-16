@@ -110,7 +110,7 @@ button{color:inherit;font:inherit}button:focus-visible{outline:2px solid var(--a
 .study-dialog .focus-values{font:14px/1.6 ui-monospace,monospace;white-space:pre-wrap;background:var(--field);padding:16px}
 .study-dialog canvas{width:100%;height:auto;border:1px solid var(--rule)}
 .field-loader.is-hidden{visibility:hidden}.field-loader.is-hidden span{animation:none}
-@media(max-width:700px){
+@media(max-width:700px), (max-width:900px) and (max-height:500px){
  html.mobile-reading,html.mobile-reading body{height:auto;min-height:100svh;overflow:auto}
  html.mobile-reading body>[id=app]{height:auto;min-height:100svh;padding-bottom:28px}
  .mobile-heading{position:relative;padding:24px 20px 10px}
@@ -148,4 +148,6 @@ button{color:inherit;font:inherit}button:focus-visible{outline:2px solid var(--a
 .study-tools{flex-wrap:wrap;max-width:calc(100% - 40px);gap:8px 14px}
 .study-tools button{min-height:44px}
 #usePlate:focus{outline:2px solid var(--summary);outline-offset:4px}
-@media(min-width:701px) and (max-height:500px){#usePlate:focus{display:block;bottom:150px}}
+@media(min-width:701px) and (max-width:900px) and (max-height:500px){
+ .mobile-flow .use-plate{max-width:560px;align-self:center}
+}

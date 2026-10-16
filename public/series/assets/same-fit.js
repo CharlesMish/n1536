@@ -164,7 +164,7 @@ renderPlots();
 const compareLink = document.querySelector('.compare-link');
 const compareHome = document.createComment('comparison link desktop position');
 compareLink.before(compareHome);
-const compactLayout = matchMedia('(max-width: 760px)');
+const compactLayout = matchMedia('(max-width: 760px), (max-width: 900px) and (max-height: 500px)');
 function placeComparisonLink() {
   if (compactLayout.matches) document.querySelector('.fit-datasets').after(compareLink);
   else compareHome.after(compareLink);
@@ -180,8 +180,5 @@ new ResizeObserver(() => {
 }).observe(document.querySelector('.exhibit-stage'));
 $('study-notes').addEventListener('toggle', renderPlots);
 
-// Re-enter the full explanation through the shared modal navigation.
-$("compareExplanation").addEventListener("click", () => {
-  document.querySelector('.exhibit-tools a[href="#study-notes"]').click();
-  renderPlots();
-});
+// The shared reading handler preserves the original comparison trigger.
+$("compareExplanation").addEventListener("click", () => requestAnimationFrame(renderPlots));
