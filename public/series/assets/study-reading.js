@@ -32,7 +32,7 @@
           const target = document.getElementById(trigger.dataset.readingTarget);
           if (!target || !dialog.contains(target)) return;
           open(trigger);
-          if (target !== notes) target.scrollIntoView({ block: 'start' });
+          if (target !== notes && !trigger.dataset.readingView) target.scrollIntoView({ block: 'start' });
         });
       }
       for (const link of document.querySelectorAll('a[href="#study-notes"]')) {

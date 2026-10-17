@@ -132,3 +132,7 @@
  .same-fit .study-dialog[data-reading-view=comparison] #quartetCompare{clear:both}
  .same-fit .study-dialog[data-reading-view=comparison] .close-reading{margin-bottom:12px}
 }
+
+/* Keep explanation navigation beside its opening text, outside comparison mode. */
+.comparison-return{display:none}
+.same-fit .study-dialog:not([data-reading-view=comparison]) .comparison-return{display:block;clear:both;min-height:44px;margin:0 0 16px;padding:8px 12px;font-size:13px}

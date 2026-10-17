@@ -38,6 +38,7 @@ test('@desktop @mobile @reduced FIT enters the quartet directly and preserves co
   const check=await watch(page);
   await page.goto('/series/same-fit.html');
   const compare=page.getByRole('link',{name:'Compare all four'});
+  await page.locator('#row').selectOption('8');
   if(page.viewportSize().width<=760||(page.viewportSize().width<=900&&page.viewportSize().height<=500)){
     const tabs=await page.locator('.fit-datasets').boundingBox();
     const link=await compare.boundingBox();
@@ -67,6 +68,13 @@ test('@desktop @mobile @reduced FIT enters the quartet directly and preserves co
   await expect(page.locator('[data-compare-view="residual"]')).toHaveAttribute('aria-pressed','true');
   await page.locator('#compareExplanation').click();
   await expect(page.getByRole('dialog')).toHaveAttribute('data-reading-view','');
+  const selectedRow = await page.locator('#row').inputValue();
+  await page.getByRole('button',{name:'Back to four-panel comparison ↑'}).click();
+  await expect(page.getByRole('dialog')).toHaveAttribute('data-reading-view','comparison');
+  await expect(page.locator('#sceneTitle')).toBeInViewport();
+  await expect(page.getByRole('button',{name:'Close study explanation'})).toBeInViewport();
+  await expect(page.locator('#plots svg[data-view="residual"]')).toHaveCount(4);
+  await expect(page.locator('#row')).toHaveValue(selectedRow);
   await page.keyboard.press('Escape');
   await expect(compare).toBeFocused();
   await check();
@@ -233,4 +241,17 @@ for(const outcome of ['completion','failure'])test(`@reduced VOLUME background $
   await expect(page.locator('#loader')).toHaveAttribute('aria-hidden','false');
   await expect(page.locator('#fallback')).toBeHidden();
   await expect(page.locator('#live')).toContainText(outcome==='completion'?'completed in the background':'interrupted');
+});
+
+test('@desktop FIT can enter the comparison from the explanation and retain its original focus target',async({page})=>{
+  await page.goto('/series/same-fit.html');
+  const reading=page.getByRole('link',{name:'Read the study',exact:true});
+  await reading.click();
+  await page.getByRole('button',{name:'Back to four-panel comparison ↑'}).click();
+  await expect(page.getByRole('dialog')).toHaveAttribute('data-reading-view','comparison');
+  await expect(page.locator('#sceneTitle')).toBeInViewport();
+  await page.locator('#compareExplanation').click();
+  await expect(page.getByRole('dialog')).toHaveAttribute('data-reading-view','');
+  await page.keyboard.press('Escape');
+  await expect(reading).toBeFocused();
 });

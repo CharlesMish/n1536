@@ -181,4 +181,6 @@ new ResizeObserver(() => {
 $('study-notes').addEventListener('toggle', renderPlots);
 
 // The shared reading handler preserves the original comparison trigger.
-$("compareExplanation").addEventListener("click", () => requestAnimationFrame(renderPlots));
+for (const id of ["compareExplanation", "returnComparison"]) {
+  $(id).addEventListener("click", () => requestAnimationFrame(renderPlots));
+}

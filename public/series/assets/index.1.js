@@ -6,7 +6,7 @@ const STUDIES = [
     "title": "SAME N",
     "claim": "Same count. Different claims.",
     "frozen": "N = 1,536",
-    "free": "generative story",
+    "free": "point placement: Random · Sobol · Fibonacci",
     "domain": "spherical sampling",
     "methods": [
       "Random",
@@ -416,7 +416,7 @@ function chooseCollection(mode) {
   document.querySelectorAll('.collection-choices [data-collection]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.collection === mode)));
   moreStudies.hidden = mode === 'all';
   document.getElementById('collection-note').textContent = mode === 'start'
-    ? 'Six ways in. Try a view, a distance rule, a network, or a fitted line — then explore all twenty.'
+    ? 'Six ways in: place points, turn a body, change a distance rule, trace a network, compare datasets, or load a beam. Then explore all twenty.'
     : 'All twenty studies, in their original order. The book of plates keeps the longer explanations.';
   focusIndex = 0;
   updateFocus();
