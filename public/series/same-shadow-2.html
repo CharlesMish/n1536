@@ -64,7 +64,7 @@
         </div>
       </aside>
 
-      <figure class="use-plate" id="usePlate" tabindex="0">
+      <figure class="use-plate" id="usePlate" tabindex="0" aria-label="Occupied depth along the selected ray">
         <header>
           <span id="plateTitle">Fig. 01 — depth ray</span>
           <span id="plateKey">same (x, y)</span>
@@ -74,6 +74,7 @@
           <span id="plateCaption">What the shadow discarded.</span>
           <span id="plateSide">occupied z</span>
         </figcaption>
+        <p class="depth-explanation" id="depthExplanation" hidden></p>
       </figure>
 
       <nav class="method-nav" aria-label="Body claim">
@@ -83,7 +84,9 @@
       </nav>
 
       <div class="study-tools">
-        <button type="button" id="faceBtn" class="is-active" aria-pressed="true" aria-label="Return to canonical projection"><span class="tool-dot" aria-hidden="true"></span>Face</button>
+        <button type="button" id="faceBtn" class="is-active" aria-pressed="true" aria-label="Return to canonical projection"><span class="tool-dot" aria-hidden="true"></span>Front view</button>
+        <button type="button" id="turnBtn">Turn the body</button>
+        <button type="button" id="depthBtn" aria-controls="usePlate">Inspect cavity</button>
         <button type="button" id="ghostBtn" class="is-active" aria-pressed="true"><span class="tool-dot" aria-hidden="true"></span>Ghost</button>
         <span class="drag-note" id="dragNote">Drag to turn</span>
       </div>

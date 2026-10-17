@@ -469,6 +469,11 @@ function I() {
     document.getElementById("statVol").textContent = volumes[method].toFixed(2);
     const sel = pin || { x: 0.58, y: 0 };
     const iv = intervals(method, sel.x, sel.y);
+    const cavityVisible = method === 'well' && iv.length === 2;
+    const explanation = document.getElementById('depthExplanation');
+    explanation.hidden = !cavityVisible;
+    document.getElementById('usePlate').classList.toggle('has-cavity', cavityVisible);
+    if (cavityVisible) explanation.textContent = `At x = ${sel.x.toFixed(2)}, y = ${sel.y.toFixed(2)}, this ray passes through two occupied intervals separated by an enclosed cavity. The exterior view need not reveal this gap.`;
     document.getElementById("statRay").textContent = iv.length === 0 ? "void" : (iv.length === 1 ? "1 span" : iv.length + " spans");
     document.getElementById("statView").textContent = isFace() ? "FACE" : "OFF";
     document.getElementById("live").textContent =
@@ -563,6 +568,21 @@ function I() {
     btn.addEventListener("click", () => selectMethod(btn.dataset.method));
   });
   document.getElementById("faceBtn").addEventListener("click", faceView);
+  document.getElementById("turnBtn").addEventListener("click", () => {
+    snapFace = false; vYaw = 0; vPitch = 0;
+    yaw = 0.72; pitch = -0.32;
+    applyMeta();
+    document.getElementById("live").textContent = "Off-axis view. Compare the bodies here, then return to Front view for their shared silhouette.";
+  });
+  document.getElementById("depthBtn").addEventListener("click", () => {
+    method = "well"; pin = { x: 0.58, y: 0 };
+    const plate = document.getElementById("usePlate");
+    plate.classList.add("is-inspecting");
+    applyMeta();
+    plate.focus({ preventScroll: true });
+    plate.scrollIntoView({ block: "nearest" });
+    document.getElementById("live").textContent = 'Well selected. ' + document.getElementById('depthExplanation').textContent;
+  });
   document.getElementById("ghostBtn").addEventListener("click", () => {
     showGhost = !showGhost;
     applyMeta();

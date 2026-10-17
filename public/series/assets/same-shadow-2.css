@@ -49,6 +49,8 @@ button{color:inherit;font:inherit}button:focus-visible{outline:2px solid var(--a
 .use-plate:hover,.use-plate:focus-within,.use-plate.is-inspecting{z-index:6;background:var(--panel);isolation:isolate;opacity:1;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:0 18px 40px #07060f47}
 .use-plate header{color:var(--ink-faint);letter-spacing:.12em;text-transform:uppercase;justify-content:space-between;gap:12px;margin-bottom:8px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:8px;display:flex}
 .use-plate canvas{width:100%;height:auto;display:block}
+.depth-explanation{font-size:13px;line-height:1.5;color:var(--ink);margin:12px 0 0}
+@media(min-width:901px){.use-plate.has-cavity{width:min(400px,32vw)}}
 .use-plate figcaption{color:var(--ink-muted);letter-spacing:.08em;text-transform:uppercase;justify-content:space-between;gap:10px;margin:8px 0 0;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:8px;line-height:1.45;display:flex}
 .field-keys{z-index:4;pointer-events:none;flex-direction:column;align-items:flex-end;gap:12px;display:flex;position:absolute;top:50%;right:clamp(20px,4.6vw,72px);transform:translateY(-50%)}
 .field-key{align-items:center;gap:10px;display:none}
@@ -108,7 +110,7 @@ button{color:inherit;font:inherit}button:focus-visible{outline:2px solid var(--a
 .study-dialog .focus-values{font:14px/1.6 ui-monospace,monospace;white-space:pre-wrap;background:var(--field);padding:16px}
 .study-dialog canvas{width:100%;height:auto;border:1px solid var(--rule)}
 .field-loader.is-hidden{visibility:hidden}.field-loader.is-hidden span{animation:none}
-@media(max-width:700px){
+@media(max-width:700px), (max-width:900px) and (max-height:500px){
  html.mobile-reading,html.mobile-reading body{height:auto;min-height:100svh;overflow:auto}
  html.mobile-reading body>[id=app]{height:auto;min-height:100svh;padding-bottom:28px}
  .mobile-heading{position:relative;padding:24px 20px 10px}
@@ -142,3 +144,10 @@ button{color:inherit;font:inherit}button:focus-visible{outline:2px solid var(--a
 
 
 .pixelated{image-rendering:pixelated}
+
+.study-tools{flex-wrap:wrap;max-width:calc(100% - 40px);gap:8px 14px}
+.study-tools button{min-height:44px}
+#usePlate:focus{outline:2px solid var(--summary);outline-offset:4px}
+@media(min-width:701px) and (max-width:900px) and (max-height:500px){
+ .mobile-flow .use-plate{max-width:560px;align-self:center}
+}

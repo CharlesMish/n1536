@@ -154,3 +154,6 @@ button{color:inherit;font:inherit}button:focus-visible{outline:2px solid var(--a
 
 /* Reserve a clear central field beside the reading and inspection inset. */
 .use-plate{margin:0}
+
+#retrySolve{margin-top:16px;min-height:44px;padding:10px 16px;border:1px solid var(--rule);border-radius:4px;background:var(--panel);color:var(--ink);cursor:pointer}
+#retrySolve[hidden]{display:none}
