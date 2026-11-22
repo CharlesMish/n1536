@@ -31,8 +31,9 @@
     <section class="timing-panel" aria-labelledby="timing-title">
       <div class="timing-heading"><label id="timing-title" for="spacing">Two-pulse spacing</label><output id="spacingOut" for="spacing">1.00 s</output></div>
       <input id="spacing" type="range" min="0.6" max="2.2" step="0.01" value="1" aria-describedby="timing-help">
-      <div class="timing-presets"><button id="halfPeriod" type="button">Spacing 1 s</button><button id="fullPeriod" type="button">Spacing 2 s</button></div>
-      <p id="timing-help">Adjust the gap in case 03 · damped period 2.002 s.</p>
+      <div class="timing-presets"><button id="halfPeriod" type="button">Spacing 1 s</button><button id="fullPeriod" type="button">Spacing 2 s</button><button id="inspectOnset" type="button" aria-describedby="onsetReading">Inspect second push</button></div>
+      <p id="onsetReading"></p>
+      <p id="timing-help">Spacing is measured from onset to onset. Damped period 2.002 s.</p>
     </section>
   </section>
   <p id="announcement" class="sr-only" aria-live="polite"></p>

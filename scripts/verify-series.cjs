@@ -22,9 +22,30 @@ pass('Equal Earth unit area and analytic axis ratio agree with finite difference
 });
 pass('Orthographic and Mercator known-angle checks',()=>{assert(vm.runInContext(`Math.abs(projectionMetrics('globe',Math.PI/3,0).area-.5)<1e-12 && Math.abs(projectionMetrics('globe',Math.PI/3,0).shape-2)<1e-12 && Math.abs(projectionMetrics('mercator',0,Math.PI/3).area-4)<1e-12 && projectionMetrics('mercator',0,.3).shape===1 && Number.isNaN(projectionMetrics('mercator',0,89*RAD).area)`,earth));});
 pass('All disks across rotated seams remain inside projection domains',()=>{assert(vm.runInContext(`(()=>{for(const L0 of [-3,-1,0,1,3])for(const isM of [false,true])for(let i=0;i<N;i++)for(const p of mapDiskParts(disks[i],pts[i].lon,L0,isM))for(let k=0;k<p.length;k++){const q=p[k],r=p[(k+1)%p.length];if(Math.abs(q[0])>Math.PI+1e-12||isM&&Math.abs(q[1])>MERC_MAX+1e-12||Math.abs(q[0]-r[0])>Math.PI)return false;}return true;})()`,earth));});
+const sites = ctx('same-sites3.html');
+pass('The fixed address has three distinct nearest sites with strict margins', () => {
+ const results = vm.runInContext('[2, 1, Infinity].map(p => nearest(p, ADDRESS.x, ADDRESS.y))', sites);
+ [5, 1, 4].forEach((owner, i) => {
+   assert.strictEqual(results[i].owner, owner);
+   assert(results[i].d1 - results[i].d0 > 0.0099);
+ });
+});
 const samples=ctx('same-samples-2.html');pass('All three interpolants retain nodal agreement',()=>{assert(vm.runInContext(`['global','local','periodic'].every(k=>buildCurve(k,Y).resid<1e-12)`,samples));});
 const marg=ctx('same-marginals-2.html');pass('Marginal permutations remain bijective with expected correlations',()=>{assert(vm.runInContext(`['align','oppose','scramble'].every(k=>new Set(permOf(k)).size===N)&&Math.abs(spearman(permOf('scramble'))+0.0002288853284504455)<1e-14`,marg));});
-const mag=ctx('same-magnitude-2.html');pass('Three Fourier reconstructions retain magnitude and realness',()=>{assert(vm.runInContext(`(()=>{const s=spectrumOf(makeSource()),d=spectrumOf(makeDonor()),m=Float64Array.from(s.re,(r,i)=>Math.hypot(r,s.im[i]));return ['source','borrowed','scrambled'].every(k=>{const o=invert(buildSpectrum(m,s,d,k,SEED));return o.imagMax<1e-12&&auditMagnitude(o.field,m).maxRel<1e-12;});})()`,mag));});
+const mag=ctx('same-magnitude-2.html');
+mag.moth = fs.readFileSync(root + 'assets/magnitude-moth.bin');
+mag.violin = fs.readFileSync(root + 'assets/magnitude-violin.bin');
+pass('Moth, violin and scramble retain the source Fourier magnitude and realness', () => {
+  assert(vm.runInContext(`(() => {
+    const source = spectrumOf(decodeSpecimen(moth));
+    const donor = spectrumOf(decodeSpecimen(violin));
+    const magnitude = source.re.map((r, i) => Math.hypot(r, source.im[i]));
+    return ['source', 'borrowed', 'scrambled'].every(mode => {
+      const result = invert(buildSpectrum(magnitude, source, donor, mode, SEED));
+      return result.imagMax < 1e-12 && auditMagnitude(result.field, magnitude).maxRel < 1e-12;
+    });
+  })()`, mag));
+});
 const shadow=ctx('same-shadow-2.html');pass('Canonical shadow masks remain identical',()=>assert(vm.runInContext('auditMasks().mismatch===0',shadow)));
 function newKernel(file){const s=sourceHTML(file).match(/<script>([\s\S]*?)<\/script>/)[1],c=vm.createContext({});vm.runInContext(s.slice(0,s.indexOf('const themeButton=')),c);return c;}
 const law=newKernel('same-law.html'),average=newKernel('same-average.html');

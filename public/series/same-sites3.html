@@ -14,7 +14,7 @@
 <body>
   <div class="same-sites theme-uv" id="app">
     <section class="field-stage" id="stage" aria-labelledby="study-title">
-      <canvas class="field-canvas" id="field" aria-label="Nearest-site partition of a frozen generator set. Click a site to inspect it."></canvas>
+      <canvas class="field-canvas" id="field" aria-label="Nearest-site partition of a frozen generator set. A cross marks the fixed address (0.33, 0.67). Its route follows the current distance rule. Click a site to inspect its territory."></canvas>
       <div class="field-loader" id="loader"><span></span><p>Forming field</p></div>
 <header class="study-header">
         <div class="study-registration">
@@ -53,10 +53,15 @@
               <dd id="statSpread">—</dd>
             </div>
             <div>
-              <dt>Site</dt>
+              <dt>Inspected site</dt>
               <dd id="statSite">01</dd>
             </div>
           </dl>
+          <div class="address-reading">
+            <h3>Who gets this address?</h3>
+            <span class="address-coordinates">✛ (0.33, 0.67)</span>
+            <output id="addressOwner" aria-live="polite"></output>
+          </div>
         </div>
       </aside>
 

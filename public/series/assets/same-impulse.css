@@ -91,10 +91,10 @@
 .same-impulse .timing-panel{position:absolute;right:4.2vw;bottom:162px;width:24%;pointer-events:auto}
 .same-impulse .timing-heading{display:flex;justify-content:space-between;font:11px ui-monospace,monospace;color:var(--muted)}
 .same-impulse .timing-panel input{width:100%;height:30px;accent-color:var(--warm)}
-.same-impulse .timing-presets{display:flex;gap:12px}
+.same-impulse .timing-presets{display:flex;gap:6px;flex-wrap:wrap}
 .same-impulse .timing-presets button{padding:4px 7px;border-radius:0;font:10px ui-monospace,monospace;min-height:32px}
-.same-impulse #timing-help{font:10px/1.4 ui-monospace,monospace;color:var(--faint);margin:7px 0 0}
-.same-impulse .exhibit-stage[data-active-case=pair] .exhibit-reading{bottom:330px}
+.same-impulse #timing-help,.same-impulse #onsetReading{font:10px/1.4 ui-monospace,monospace;color:var(--faint);margin:7px 0 0}
+.same-impulse .exhibit-stage[data-active-case=pair] .exhibit-reading{bottom:384px}
 .same-impulse .equation{font:14px/1.9 ui-monospace,monospace;color:var(--ink)}
 @media(max-width:1050px){.same-impulse .displacement-specimen{left:8%;width:62%;top:45%}.same-impulse .force-specimen{width:25%;bottom:185px}.same-impulse .exhibit-reading,.same-impulse .timing-panel{width:27%}.same-impulse .motion-specimen{top:28%;left:18%;width:44%}}
 @media(max-width:760px){
@@ -126,3 +126,7 @@
 @media(min-width:1051px){.same-impulse .force-specimen{width:20%}}
 .same-impulse .displacement-specimen .curve{vector-effect:non-scaling-stroke;stroke-width:2}
 @media(min-width:761px){.same-impulse .impulse-case{position:absolute;inset:0}}
+
+.motion .velocity path{fill:none;stroke:var(--summary);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.motion .velocity text,.same-impulse #onsetReading{color:var(--summary);fill:var(--summary)}
+@media(min-width:761px) and (max-width:1050px){.same-impulse .exhibit-stage[data-active-case=pair]{min-height:860px}}

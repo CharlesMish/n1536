@@ -90,13 +90,21 @@ test('@desktop Impulse spacing changes residual response while force area stays 
   await page.goto('/series/same-impulse.html');
   await expect(page.locator('#cases')).toContainText('1.000');
   const before = await page.locator('#cases').innerText();
+  await expect(page.locator('#time')).toHaveValue('1.2');
+  await expect(page.locator('#pair-velocity')).toHaveText('v = −0.263 m/s');
   await page.locator('#fullPeriod').click();
+  await expect(page.locator('#time')).toHaveValue('2.2');
+  await expect(page.locator('#pair-velocity')).toHaveText('v = +0.226 m/s');
   await expect(page.locator('#spacing')).toHaveValue('2');
   expect(await page.locator('#cases').innerText()).not.toEqual(before);
   await expect(page.locator('#cases')).toContainText('1.000');
   await page.locator('#time').focus();
   await page.keyboard.press('End');
   await expect(page.locator('#time')).toHaveValue('8');
+  await page.locator('#halfPeriod').click();
+  await expect(page.locator('#time')).toHaveValue('8');
+  await page.locator('#inspectOnset').click();
+  await expect(page.locator('#time')).toHaveValue('1.2');
   await page.locator('#restart').click();
   await expect(page.locator('#time')).toHaveValue('0');
   await check();
@@ -115,6 +123,21 @@ test('@desktop Moves reaches its commuting endpoint and respects range focus', a
   await page.keyboard.press('ArrowRight');
   await expect(page.locator('#lambdaIn')).toHaveValue('0.01');
   await check();
+});
+
+test('@desktop Moves swaps neighbors and reuses the previous walk at the active scale', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/series/same-moves.html');
+  await page.getByRole('button', {name: 'Swap moves 02 and 03'}).press('Enter');
+  await expect(page.locator('#statOrder')).toHaveText('1·3·2·4·5·6');
+  await expect(page.locator('#swapReading')).toContainText('Dashed · 1·2·3·4·5·6');
+  await page.locator('#commuteBtn').click();
+  await expect(page.locator('#swapReading')).toContainText('Endpoint gap 0.0000');
+  await page.getByRole('button', {name: 'Swap moves 03 and 02'}).click();
+  await expect(page.locator('#statOrder')).toHaveText('1·2·3·4·5·6');
+  await expect(page.locator('#swapReading')).toContainText('Dashed · 1·3·2·4·5·6');
+  await page.locator('[data-method=reversed]').click();
+  await expect(page.locator('#swapReading')).toBeEmpty();
 });
 
 test('@desktop Divergence keeps its flux through all three flows', async ({ page }) => {

@@ -7,7 +7,8 @@ const plots = { force: { left: 40, right: 306, top: 16, bottom: 153, width: 320,
 const px = (t, type = 'force') => plots[type].left + (plots[type].right - plots[type].left) * t / SYSTEM.duration;
 const forceY = force => plots.force.bottom - (plots.force.bottom - plots.force.top) * force / 4;
 const displacementY = x => (plots.displacement.top + plots.displacement.bottom) / 2 - (plots.displacement.bottom - plots.displacement.top) * x / 0.72;
-let spacing = SPACING.initial, time = 0, cases = histories(spacing);
+let spacing = SPACING.initial, cases = histories(spacing);
+let time = cases[2].pulses[1].start;
 let activeCase = 'pair';
 let frame = null, timer = null, playing = false, last = null;
 
@@ -40,16 +41,25 @@ function chart(history, type) {
   return result + '</svg>';
 }
 
+function velocityText(v) {
+  if (Math.abs(v) < 0.0005) return '0.000 m/s';
+  return `${v < 0 ? '−' : '+'}${Math.abs(v).toFixed(3)} m/s`;
+}
+
 function mechanicalView(history) {
-  return `<svg class="motion" viewBox="0 0 320 100" role="img" aria-label="${history.name}: mass connected to the same spring and damper; displacement is magnified equally in all three cases.">
+  const pair = history.id === 'pair';
+  const velocity = pair ? `<g class="velocity" aria-hidden="true">
+    <path id="pair-arrow"/><text id="pair-velocity" x="184" y="-14" text-anchor="middle"></text></g>` : '';
+  return `<svg class="motion" viewBox="${pair ? '0 -29 320 130' : '0 0 320 100'}" role="img" aria-label="${history.name}: mass connected to the same spring and damper; displacement is magnified equally in all three cases.">
     <path class="wall" d="M22 12V73"/><path class="mechanism" id="${history.id}-spring" d="M22 28H140"/>
     <path class="mechanism" d="M22 56H66M66 48H91V64H66M80 48V64"/><path class="mechanism" id="${history.id}-damper" d="M80 56H155"/>
-    <path class="neutral" d="M184 7V78"/><g id="${history.id}-mass"><rect class="mass" x="163" y="17" width="42" height="51" rx="4"/><text x="184" y="47" text-anchor="middle">1 kg</text></g>
+    <path class="neutral" d="M184 7V78"/><g id="${history.id}-mass"><rect class="mass" x="163" y="17" width="42" height="51" rx="4"/><text x="184" y="47" text-anchor="middle">1 kg</text>${velocity}</g>
     <path class="mechanism" d="M122 86H246m-4-4 4 4-4 4"/><text x="184" y="99" text-anchor="middle">x = 0 at dotted line</text></svg>`;
 }
 
-function build() {
+function build(followOnset = false) {
   cases = histories(spacing);
+  if (followOnset) time = cases[2].pulses[1].start;
   $('spacingOut').value = `${spacing.toFixed(2)} s`;
   $('spacing').value = spacing;
   $('halfPeriod').setAttribute('aria-pressed', String(Math.abs(spacing - 1) < 1e-9));
@@ -66,7 +76,11 @@ function build() {
       <dl class="case-metrics"><div><dt>Peak |x| · 0–8 s</dt><dd title="At ${peak.time.toFixed(3)} s">${peak.magnitude.toFixed(3)} <small>m</small></dd></div><div><dt>Residual at 3 s</dt><dd>${residual.toFixed(3)} <small>m</small></dd></div><div class="impulse-constant"><dt>Total applied impulse</dt><dd>1.000 <small>N·s</small></dd></div></dl></section>
       <p class="sr-only" id="${history.id}-now"></p></article>`;
   }).join('');
-  const pairResidual = residualAmplitude(cases[2]), earlyResidual = residualAmplitude(cases[0]);
+  const pair = cases[2], onset = pair.pulses[1].start;
+  const onsetVelocity = response(pair, onset).v;
+  const direction = onsetVelocity < 0 ? 'left' : 'right';
+  $('onsetReading').textContent = `At ${onset.toFixed(2)} s the mass moves ${direction} at ${Math.abs(onsetVelocity).toFixed(3)} m/s as the next rightward push begins.`;
+  const pairResidual = residualAmplitude(pair), earlyResidual = residualAmplitude(cases[0]);
   $('currentReading').textContent = `With C’s pulses ${spacing.toFixed(2)} s apart, its residual envelope at 3 s is ${pairResidual.toFixed(3)} m, compared with ${earlyResidual.toFixed(3)} m after A’s early pulse. Try spacings of 1 s and 2 s, then inspect the force and displacement at the second push.`;
   selectCase(activeCase, false);
   drawTime();
@@ -96,6 +110,14 @@ function drawTime() {
     spring += `H${massLeft.toFixed(3)}`;
     $(`${history.id}-spring`).setAttribute('d', spring);
     $(`${history.id}-damper`).setAttribute('d', `M80 56H${massLeft.toFixed(3)}`);
+    if (history.id === 'pair') {
+      const length = 100 * state.v, tip = 184 + length;
+      const head = Math.min(4, Math.abs(length) / 2);
+      const back = tip - Math.sign(length) * head;
+      $('pair-arrow').setAttribute('d', Math.abs(length) < 0.5 ? '' :
+        `M184 -4H${tip} M${back} ${-4 - head}L${tip} -4L${back} ${-4 + head}`);
+      $('pair-velocity').textContent = `v = ${velocityText(state.v)}`;
+    }
     $(`${history.id}-mass`).setAttribute('transform', `translate(${shift.toFixed(3)} 0)`);
     $(`${history.id}-force`).value = `${force.toFixed(3)} N`;
     $(`${history.id}-displacement`).value = `${Math.abs(state.x) < 0.0005 ? '0.000' : state.x.toFixed(3)} m`;
@@ -141,8 +163,17 @@ $('play').addEventListener('click', () => {
 $('restart').addEventListener('click', () => { stop(); time = 0; drawTime(); });
 $('time').addEventListener('input', event => { stop(); time = Number(event.target.value); drawTime(); });
 function setSpacing(value) {
-  stop(); spacing = value; build();
+  const followOnset = !playing && activeCase === 'pair' && Math.abs(time - cases[2].pulses[1].start) < 1e-9;
+  stop();
+  spacing = value;
+  build(followOnset);
 }
+$('inspectOnset').addEventListener('click', () => {
+  stop();
+  time = cases[2].pulses[1].start;
+  drawTime();
+  $('announcement').textContent = `Paused. ${$('onsetReading').textContent}`;
+});
 $('spacing').addEventListener('input', event => setSpacing(Number(event.target.value)));
 $('spacing').addEventListener('change', () => { $('announcement').textContent = `Pulse spacing ${spacing.toFixed(2)} seconds. All three applied impulses remain 1 newton second. C residual at 3 seconds: ${residualAmplitude(cases[2]).toFixed(3)} meters.`; });
 for (const [id, value] of [['halfPeriod', 1], ['fullPeriod', 2]]) $(id).addEventListener('click', () => {
