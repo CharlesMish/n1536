@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 280" fill="#f6f2ff" font-family="monospace" font-size="14" text-anchor="middle" role="img" aria-labelledby="title">
+<title id="title">Five fixed roads and twelve cars under three fleet arrangements</title>
+<rect width="600" height="280" fill="#0d0b18"/>
+<g transform="translate(0,0)">
+  <text x="100" y="34" fill="#c9c0e5">One fleet</text>
+  <g transform="translate(0 48) scale(.51)"><line x1="42" y1="170" x2="195" y2="34" stroke="#736a95" stroke-width="3"/>
+    <line x1="195" y1="34" x2="348" y2="170" stroke="#736a95" stroke-width="3"/>
+    <line x1="42" y1="170" x2="195" y2="306" stroke="#736a95" stroke-width="3"/>
+    <line x1="195" y1="306" x2="348" y2="170" stroke="#736a95" stroke-width="3"/>
+    <line x1="195" y1="34" x2="195" y2="306" stroke="#f2a65a" stroke-width="3" stroke-dasharray="8 6"/>
+    <path d="M37 164.4 L190 28.4 M200 28.4 L353 164.4" fill="none" stroke="#b59bff" stroke-width="1.8"/>
+    <path d="M39 166.6 L192 30.6 M198 30.6 L351 166.6" fill="none" stroke="#b59bff" stroke-width="1.8"/>
+    <path d="M41 168.9 L194 32.9 M196 32.9 L349 168.9" fill="none" stroke="#b59bff" stroke-width="1.8"/>
+    <path d="M43 171.1 L196 35.1 M194 35.1 L347 171.1" fill="none" stroke="#b59bff" stroke-width="1.8"/>
+    <path d="M45 173.4 L198 37.4 M192 37.4 L345 173.4" fill="none" stroke="#b59bff" stroke-width="1.8"/>
+    <path d="M47 164.4 L200 300.4 M190 300.4 L343 164.4" fill="none" stroke="#b59bff" stroke-width="1.8"/>
+    <path d="M45 166.6 L198 302.6 M192 302.6 L345 166.6" fill="none" stroke="#b59bff" stroke-width="1.8"/>
+    <path d="M43 168.9 L196 304.9 M194 304.9 L347 168.9" fill="none" stroke="#b59bff" stroke-width="1.8"/>
+    <path d="M41 171.1 L194 307.1 M196 307.1 L349 171.1" fill="none" stroke="#b59bff" stroke-width="1.8"/>
+    <path d="M39 173.4 L192 309.4 M198 309.4 L351 173.4" fill="none" stroke="#b59bff" stroke-width="1.8"/>
+    <path d="M37 175.6 L190 311.6 M200 311.6 L353 175.6" fill="none" stroke="#b59bff" stroke-width="1.8"/>
+    <path d="M47 175.6 L200 39.6 M190 39.6 L343 175.6" fill="none" stroke="#b59bff" stroke-width="1.8"/>
+    <circle cx="42" cy="170" r="17" fill="#171329" stroke="#c9c0e5"/><text x="42" y="176" font-size="18">W</text>
+    <circle cx="195" cy="34" r="17" fill="#171329" stroke="#c9c0e5"/><text x="195" y="40" font-size="18">N</text>
+    <circle cx="195" cy="306" r="17" fill="#171329" stroke="#c9c0e5"/><text x="195" y="312" font-size="18">S</text>
+    <circle cx="348" cy="170" r="17" fill="#171329" stroke="#c9c0e5"/><text x="348" y="176" font-size="18">E</text></g>
+  <text x="100" y="244" fill="#67d7c4">0 on bridge</text>
+  <text x="100" y="265">504 car-min</text></g>
+<g transform="translate(200,0)">
+  <text x="100" y="34" fill="#c9c0e5">Two fleets</text>
+  <g transform="translate(0 48) scale(.51)"><line x1="42" y1="170" x2="195" y2="34" stroke="#736a95" stroke-width="3"/>
+    <line x1="195" y1="34" x2="348" y2="170" stroke="#736a95" stroke-width="3"/>
+    <line x1="42" y1="170" x2="195" y2="306" stroke="#736a95" stroke-width="3"/>
+    <line x1="195" y1="306" x2="348" y2="170" stroke="#736a95" stroke-width="3"/>
+    <line x1="195" y1="34" x2="195" y2="306" stroke="#f2a65a" stroke-width="3"/>
+    <path d="M39 166.6 L192 30.6 M194 35.1 L347 171.1" fill="none" stroke="#b59bff" stroke-width="1.8"/>
+    <path d="M45 166.6 L198 302.6 M196 307.1 L349 171.1" fill="none" stroke="#b59bff" stroke-width="1.8"/>
+    <path d="M43 168.9 L196 304.9 M198 309.4 L351 173.4" fill="none" stroke="#b59bff" stroke-width="1.8"/>
+    <path d="M43 171.1 L196 35.1 M199.5 34 L199.5 306 M188 298.2 L341 162.2" fill="none" stroke="#b59bff" stroke-width="1.8"/>
+    <path d="M45 173.4 L198 37.4 M196.5 34 L196.5 306 M190 300.4 L343 164.4" fill="none" stroke="#b59bff" stroke-width="1.8"/>
+    <path d="M35 162.2 L188 26.2 M198 30.6 L351 166.6" fill="none" stroke="#a399bf" stroke-width="1.8"/>
+    <path d="M37 164.4 L190 28.4 M196 32.9 L349 168.9" fill="none" stroke="#a399bf" stroke-width="1.8"/>
+    <path d="M41 171.1 L194 307.1 M200 311.6 L353 175.6" fill="none" stroke="#a399bf" stroke-width="1.8"/>
+    <path d="M39 173.4 L192 309.4 M202 313.8 L355 177.8" fill="none" stroke="#a399bf" stroke-width="1.8"/>
+    <path d="M47 175.6 L200 39.6 M193.5 34 L193.5 306 M192 302.6 L345 166.6" fill="none" stroke="#a399bf" stroke-width="1.8"/>
+    <path d="M49 177.8 L202 41.8 M190.5 34 L190.5 306 M194 304.9 L347 168.9" fill="none" stroke="#a399bf" stroke-width="1.8"/>
+    <path d="M41 168.9 L194 32.9 M192 37.4 L345 173.4" fill="none" stroke="#b59bff" stroke-width="1.8"/>
+    <circle cx="42" cy="170" r="17" fill="#171329" stroke="#c9c0e5"/><text x="42" y="176" font-size="18">W</text>
+    <circle cx="195" cy="34" r="17" fill="#171329" stroke="#c9c0e5"/><text x="195" y="40" font-size="18">N</text>
+    <circle cx="195" cy="306" r="17" fill="#171329" stroke="#c9c0e5"/><text x="195" y="312" font-size="18">S</text>
+    <circle cx="348" cy="170" r="17" fill="#171329" stroke="#c9c0e5"/><text x="348" y="176" font-size="18">E</text></g>
+  <text x="100" y="244" fill="#67d7c4">4 on bridge</text>
+  <text x="100" y="265">516 car-min</text></g>
+<g transform="translate(400,0)">
+  <text x="100" y="34" fill="#c9c0e5">Solo drivers</text>
+  <g transform="translate(0 48) scale(.51)"><line x1="42" y1="170" x2="195" y2="34" stroke="#736a95" stroke-width="3"/>
+    <line x1="195" y1="34" x2="348" y2="170" stroke="#736a95" stroke-width="3" stroke-dasharray="8 6"/>
+    <line x1="42" y1="170" x2="195" y2="306" stroke="#736a95" stroke-width="3" stroke-dasharray="8 6"/>
+    <line x1="195" y1="306" x2="348" y2="170" stroke="#736a95" stroke-width="3"/>
+    <line x1="195" y1="34" x2="195" y2="306" stroke="#f2a65a" stroke-width="3"/>
+    <path d="M33 159.9 L186 23.9 M208.5 34 L208.5 306 M186 295.9 L339 159.9" fill="none" stroke="#a399bf" stroke-width="1.8"/>
+    <path d="M35 162.2 L188 26.2 M205.5 34 L205.5 306 M188 298.2 L341 162.2" fill="none" stroke="#a399bf" stroke-width="1.8"/>
+    <path d="M37 164.4 L190 28.4 M202.5 34 L202.5 306 M190 300.4 L343 164.4" fill="none" stroke="#a399bf" stroke-width="1.8"/>
+    <path d="M39 166.6 L192 30.6 M199.5 34 L199.5 306 M192 302.6 L345 166.6" fill="none" stroke="#a399bf" stroke-width="1.8"/>
+    <path d="M41 168.9 L194 32.9 M196.5 34 L196.5 306 M194 304.9 L347 168.9" fill="none" stroke="#a399bf" stroke-width="1.8"/>
+    <path d="M43 171.1 L196 35.1 M193.5 34 L193.5 306 M196 307.1 L349 171.1" fill="none" stroke="#a399bf" stroke-width="1.8"/>
+    <path d="M45 173.4 L198 37.4 M190.5 34 L190.5 306 M198 309.4 L351 173.4" fill="none" stroke="#a399bf" stroke-width="1.8"/>
+    <path d="M47 175.6 L200 39.6 M187.5 34 L187.5 306 M200 311.6 L353 175.6" fill="none" stroke="#a399bf" stroke-width="1.8"/>
+    <path d="M49 177.8 L202 41.8 M184.5 34 L184.5 306 M202 313.8 L355 177.8" fill="none" stroke="#a399bf" stroke-width="1.8"/>
+    <path d="M51 180.1 L204 44.1 M181.5 34 L181.5 306 M204 316.1 L357 180.1" fill="none" stroke="#a399bf" stroke-width="1.8"/>
+    <path d="M53 182.3 L206 46.3 M178.5 34 L178.5 306 M206 318.3 L359 182.3" fill="none" stroke="#a399bf" stroke-width="1.8"/>
+    <path d="M31 157.7 L184 21.7 M211.5 34 L211.5 306 M184 293.7 L337 157.7" fill="none" stroke="#b59bff" stroke-width="1.8"/>
+    <circle cx="42" cy="170" r="17" fill="#171329" stroke="#c9c0e5"/><text x="42" y="176" font-size="18">W</text>
+    <circle cx="195" cy="34" r="17" fill="#171329" stroke="#c9c0e5"/><text x="195" y="40" font-size="18">N</text>
+    <circle cx="195" cy="306" r="17" fill="#171329" stroke="#c9c0e5"/><text x="195" y="312" font-size="18">S</text>
+    <circle cx="348" cy="170" r="17" fill="#171329" stroke="#c9c0e5"/><text x="348" y="176" font-size="18">E</text></g>
+  <text x="100" y="244" fill="#67d7c4">12 on bridge</text>
+  <text x="100" y="265">636 car-min</text></g>
+</svg>

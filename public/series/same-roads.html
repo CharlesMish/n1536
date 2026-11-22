@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en" data-theme="uv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0d0b18">
+  <meta name="description" content="Twelve cars and five fixed roads. Change who dispatches the cars and follow whose minutes count.">
+  <title>SAME ROADS — Field study 21</title>
+  <link rel="stylesheet" href="./assets/same-reactions.css">
+  <link rel="stylesheet" href="./assets/same-roads.css">
+  <link rel="stylesheet" href="./assets/study-reading.css">
+</head>
+<body class="exhibit-page same-roads"><main class="wrap">
+<section class="exhibit-stage" aria-label="SAME ROADS interactive exhibit">
+  <nav class="utility" aria-label="Series navigation">
+    <a href="index.html">← Series</a><a href="plates.html#p21">Plate 21</a>
+    <button type="button" id="theme" aria-label="Switch to Paper presentation">Paper</button>
+  </nav>
+  <header class="hero">
+    <div class="eyebrow">CMISH / Field study 21 · routing / equilibrium</div>
+    <h1>SAME <br>ROADS</h1>
+    <p class="subtitle">Same roads. Different fleets.</p>
+    <p class="frozen-caption"><span>Held fixed</span>Twelve cars · five one-way roads · one open bridge · the travel-time rule on each road.</p>
+  </header>
+  <div class="field">
+    <div class="static-preview" id="staticPreview"><img src="./assets/specimen-21.svg" width="600" height="280" alt="The same bridge carries zero, four and twelve cars as the fleets get smaller."></div>
+    <div id="interactive" hidden>
+      <figure class="road-map"><figcaption><span>01 / Road loads</span><span>One strand per car · W to E</span></figcaption>
+<svg id="map" viewBox="0 0 390 340" role="img" aria-labelledby="map-title map-desc">
+  <title id="map-title">Five one-way roads from West to East, with each of the twelve cars drawn as a line along its route</title>
+  <desc id="map-desc"></desc>
+  <g id="g-roads"></g>
+  <g id="g-strands"></g>
+  <g id="g-nodes"></g>
+  <g id="g-cars"></g>
+  <g id="g-labels"></g>
+  <g id="g-hit" aria-hidden="true"></g>
+</svg>
+      </figure>
+      <div class="road-actions"><button type="button" id="move" aria-pressed="false">Test one car · North → Bridge</button><span id="mapState">Settled assignment</span></div>
+      <div class="roster-label" id="rosterLabel">02 / Minutes per car · all twelve counted</div>
+      <ol class="road-roster" id="roster" aria-labelledby="rosterLabel"></ol>
+    </div>
+  </div>
+  <aside class="exhibit-reading" aria-labelledby="caseName">
+    <span class="small-label" id="caseNumber">01 / One dispatcher</span>
+    <h2 id="caseName">The empty bridge</h2>
+    <p id="caseReading">Six cars take the north route and six take the south. Each trip takes 42 minutes. Why leave the five-minute bridge empty?</p>
+    <dl class="values">
+      <div><dt id="ownerLabel">Dispatcher’s fleet · car-minutes</dt><dd id="owner">504</dd></div>
+      <div><dt>All twelve · car-minutes</dt><dd id="all">504</dd></div>
+      <div><dt>North · South · Bridge / cars</dt><dd id="split">6 / 6 / 0</dd></div>
+    </dl>
+    <p class="invariant-line">Decision rule<strong>Each dispatcher counts their own cars’ minutes.</strong></p>
+  </aside>
+  <div class="exhibit-tools"><a href="#study-notes" id="readingLink">Read the study</a><span>Choose a fleet arrangement. Test a move and follow its cost.</span></div>
+  <div class="exhibit-switcher" role="group" aria-label="Fleet arrangement">
+    <button type="button" data-case="one" aria-pressed="true"><span>01</span>One fleet<small>1 × 12 cars</small></button>
+    <button type="button" data-case="two" aria-pressed="false"><span>02</span>Two fleets<small>2 × 6 cars</small></button>
+    <button type="button" data-case="solo" aria-pressed="false"><span>03</span>Solo drivers<small>12 × 1 car</small></button>
+  </div>
+</section>
+<p id="announcement" class="sr-only" aria-live="polite"></p>
+<details class="study-notes" id="study-notes"><summary>Read the study</summary>
+  <p class="study-intro">Whose minutes count when a car changes route?</p>
+  <div class="contract"><span><strong>Frozen</strong> · cars, roads and travel-time rules</span><span><strong>Free</strong> · who dispatches the cars</span></div>
+  <section id="routeAudit" hidden><h3 id="routeTitle">Selected routes</h3>
+    <table class="road-route-table"><thead><tr><th>Route</th><th>Path</th><th>Cars</th><th>Minutes</th></tr></thead><tbody id="routes"></tbody></table>
+  </section>
+<h3>Road laws</h3>
+<p>Twelve whole cars travel from West (<strong>W</strong>) to East (<strong>E</strong>) across five one-way roads that stay fixed across all three cases:</p>
+<ul>
+  <li><strong>W → N</strong> and <strong>S → E</strong> depend on traffic: carrying <em>k</em> cars, each takes <strong>2k minutes</strong>.</li>
+  <li><strong>N → E</strong> and <strong>W → S</strong> are constant: each always takes <strong>30 minutes</strong>.</li>
+  <li>The central bridge <strong>N → S</strong> always takes <strong>5 minutes</strong>.</li>
+</ul>
+<p>Three routes connect W to E: <strong>North</strong> (W → N → E), <strong>South</strong> (W → S → E), and <strong>Bridge</strong> (W → N → S → E, which uses both congestible roads).</p>
+
+<h3>Reading the drawing</h3>
+<p>Each car is one line from W to E, with a bead on the road only its route uses. The number of lines on a road is its load <em>k</em>. Filled round beads belong to the decision-maker whose move is being tested; hollow beads belong to someone else. A solid tag is a change that enters the decision-maker’s sum, and a dashed tag is one that does not.</p>
+
+<h3>Equilibrium</h3>
+<p>Each dispatcher assigns whole cars to minimize the total minutes of the cars they control. A case shows a <strong>settled assignment</strong>: with every other dispatcher’s assignment held fixed, no dispatcher can reduce their own fleet’s total minutes by reassigning any subset of their cars.</p>
+<p>In all three cases, the illustrated single-car move changes the decision-maker’s counted ledger by <strong>+1</strong>, so it is rejected, even though the effect on all twelve cars runs from +1 to −21.</p>
+
+<div class="audit">
+  <table class="tbl">
+    <thead><tr><th>Case</th><th>N / S / B</th><th>Route min</th><th>Mean</th><th>All 12</th></tr></thead>
+    <tbody>
+      <tr><td>One fleet of 12</td><td>6 / 6 / 0</td><td>42 / 42 / 29</td><td>42 min</td><td>504</td></tr>
+      <tr><td>Two fleets of 6</td><td>4 / 4 / 4</td><td>46 / 46 / 37</td><td>43 min*</td><td>516</td></tr>
+      <tr><td>Solo drivers</td><td>0 / 0 / 12</td><td>54 / 54 / 53</td><td>53 min</td><td>636</td></tr>
+    </tbody>
+  </table>
+</div>
+<p class="fine">*In Two fleets, each dispatcher sends 2 cars on each route; actual trips take 37 or 46 minutes.</p>
+
+<div class="audit">
+  <table class="tbl">
+    <thead><tr><th>Case</th><th>Move</th><th>Mover</th><th>In fleet</th><th>Outside</th><th>Counted</th><th>All 12</th></tr></thead>
+    <tbody>
+      <tr><td>One fleet</td><td>N → B</td><td>−11</td><td>+12</td><td>0</td><td>+1</td><td>+1</td></tr>
+      <tr><td>Two fleets</td><td>N → B</td><td>−7</td><td>+8</td><td>+8</td><td>+1</td><td>+9</td></tr>
+      <tr><td>Solo drivers</td><td>B → N</td><td>+1</td><td>0</td><td>−22</td><td>+1</td><td>−21</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<h3>Limits of this twelve-car example</h3>
+<p>The bridge stays open in every case. Changing who dispatches the cars changes which delays each dispatcher counts. It uses whole cars rather than divisible flow, symmetric fleet sizes (1×12, 2×6, 12×1), linear congestion (2k), and one simultaneous departure wave. Real networks have variable demand, staggered departures, asymmetric routes, and incomplete information. Here, the single-car move is an illustration; the equilibrium rule itself checks every multi-car reassignment available to a dispatcher.</p>
+</details>
+<footer class="footer"><a href="same-reactions.html">← Same Reactions</a><a href="plates.html#p21">Book of plates</a><a href="index.html">Series →</a></footer>
+</main>
+<script type="module" src="./assets/same-roads.js"></script>
+<script src="./assets/study-reading.js" defer></script>
+</body></html>
