@@ -1,0 +1,97 @@
+/* Layout, typography, palettes and case rail come directly from REACTIONS. */
+.same-roads {
+  --bed: var(--field);
+  --road-fixed: var(--faint);
+  --road-congest: var(--muted);
+  --road-bridge: var(--warm);
+  --fleet-counted: var(--accent);
+  --fleet-uncounted: var(--muted);
+  --strand-uncounted: var(--faint);
+  --cost: var(--warm);
+  --save: var(--summary);
+  --on-cost: var(--field);
+  --on-save: var(--field);
+  --cost-bg: color-mix(in srgb, var(--cost) 12%, var(--field));
+  --save-bg: color-mix(in srgb, var(--save) 12%, var(--field));
+  --ink-muted: var(--muted);
+  --font-mono: ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+.road-map { margin: 0; }
+.road-map svg { display: block; width: 100%; height: clamp(285px,47svh,560px); font-family: var(--font-mono); }
+.road-map figcaption, .road-actions, .roster-label { font: 10px/1.5 var(--font-mono); color: var(--faint); }
+.road-map figcaption, .road-actions { display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:6px 14px; }
+.road-actions { align-items:center; border-top:1px solid var(--rule); margin-top:10px; }
+.road-actions button { font:11px var(--font-mono); border:0; border-radius:0; padding:5px 0; text-align:left; color:var(--accent); }
+.road-actions button:hover { text-decoration:underline; }
+.road-roster { list-style:none; display:grid; grid-template-columns:repeat(12,minmax(0,1fr)); padding:0; margin:6px 0 0; }
+.road-roster li { border-top:2px solid var(--accent); text-align:center; color:var(--ink); font:11px/1.65 var(--font-mono); }
+.road-roster li.other { border-top:2px dashed var(--faint); color:var(--muted); }
+.road-roster .mover { background:color-mix(in srgb,var(--accent) 13%,transparent); }
+.road-roster span { display:block; font-size:10px; color:var(--faint); }
+.road-roster .save { color:var(--summary); }
+.road-roster .cost { color:var(--warm); }
+.road-roster .route { font-weight:normal; }
+.road-route-table { width:100%; border-collapse:collapse; }
+.road-route-table th,.road-route-table td { text-align:left; padding:6px; border-bottom:1px solid var(--rule); }
+.road-route-table small { display:block; }
+@media(max-width:760px) {
+  .road-map svg { height:auto; max-height:44svh; }
+  .road-actions { margin-top:5px; }
+}
+@media(prefers-reduced-motion:reduce) { .strand.is-mover.is-test,.pill { animation:none !important; } }
+
+.bed { stroke: var(--bed); stroke-linecap: butt; }
+.casing { stroke-linecap: butt; }
+.casing.is-congest { stroke: var(--road-congest); }
+.casing.is-fixed { stroke: var(--road-fixed); stroke-dasharray: 7 5; }
+.casing.is-bridge { stroke: var(--road-bridge); }
+.casing.is-bridge.is-empty { stroke-dasharray: 7 5; }
+.casing.is-cost { stroke: var(--cost); }
+.casing.is-save { stroke: var(--save); }
+.bed.is-cost { stroke: var(--cost-bg); }
+.bed.is-save { stroke: var(--save-bg); }
+.bedbase { stroke: var(--bed); }
+.chev { fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.chev.is-fixed { stroke: var(--road-fixed); }
+.chev.is-bridge { stroke: var(--road-bridge); }
+.chev.is-congest { stroke: var(--road-congest); }
+.strand { fill: none; stroke-width: 2; stroke-linejoin: round; }
+.strand.is-counted { stroke: var(--fleet-counted); }
+.strand.is-uncounted { stroke: var(--strand-uncounted); }
+.strand.is-mover.is-test { stroke-width: 3.2; stroke-dasharray: 1; stroke-dashoffset: 0; animation: draw 620ms cubic-bezier(0.4, 0, 0.2, 1) both; }
+.strand.is-ghost { stroke: var(--fleet-counted); stroke-width: 1.4; stroke-dasharray: 3 3.5; opacity: 0.8; }
+.node circle { fill: var(--bed); stroke: var(--ink); stroke-width: 2; }
+.node text { font-family: var(--font-mono); font-size: 15px; font-weight: 700; fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
+.bead-dot { fill: var(--fleet-counted); stroke: var(--bed); stroke-width: 1.5; }
+.bead-hollow { fill: var(--bed); stroke: var(--fleet-uncounted); stroke-width: 1.8; }
+.bead-halo { fill: none; stroke: var(--fleet-counted); stroke-width: 1.5; stroke-dasharray: 3 2.5; }
+.bead-ghost { fill: var(--bed); stroke: var(--fleet-counted); stroke-width: 1.5; stroke-dasharray: 2.6 2.2; }
+.pill { animation: pop 260ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.pill rect { stroke-width: 1.2; }
+.pill text { font-family: var(--font-mono); font-size: 10.5px; font-weight: 700; text-anchor: middle; dominant-baseline: central; }
+.pill.is-big text { font-size: 12.5px; }
+.pill.is-counted.is-cost rect { fill: var(--cost); stroke: var(--cost); }
+.pill.is-counted.is-save rect { fill: var(--save); stroke: var(--save); }
+.pill.is-counted.is-cost text { fill: var(--on-cost); }
+.pill.is-counted.is-save text { fill: var(--on-save); }
+.pill.is-uncounted rect { fill: var(--bed); stroke-dasharray: 3 2; }
+.pill.is-uncounted.is-cost rect { stroke: var(--cost); }
+.pill.is-uncounted.is-save rect { stroke: var(--save); }
+.pill.is-uncounted.is-cost text { fill: var(--cost); }
+.pill.is-uncounted.is-save text { fill: var(--save); }
+.lbl { font-family: var(--font-mono); font-size: 11px; fill: var(--ink-muted); }
+.lbl .l1 { font-weight: 700; fill: var(--ink); }
+.lbl.is-cost .l2 { fill: var(--cost); font-weight: 700; }
+.lbl.is-save .l2 { fill: var(--save); font-weight: 700; }
+.lbl.is-bridge .l1 { fill: var(--road-bridge); font-size: 11.5px; letter-spacing: 0.04em; }
+.lbl.is-bridge .l4 { font-weight: 700; fill: var(--ink); }
+.lblchip rect { stroke-width: 1.2; }
+.lblchip text { font-family: var(--font-mono); font-size: 11px; font-weight: 700; text-anchor: middle; dominant-baseline: central; }
+.lblchip.is-cost rect { fill: var(--cost-bg); stroke: var(--cost); }
+.lblchip.is-save rect { fill: var(--save-bg); stroke: var(--save); }
+.lblchip.is-cost text { fill: var(--cost); }
+.lblchip.is-save text { fill: var(--save); }
+.hit { fill: transparent; cursor: pointer; }
+
+@keyframes draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes pop { from { opacity: 0; transform: scale(0.6); } to { opacity: 1; transform: scale(1); } }
