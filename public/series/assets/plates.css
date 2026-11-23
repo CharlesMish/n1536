@@ -15,7 +15,7 @@
   --alert:#e57fa6;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:auto}
 html,body{margin:0;background:var(--field);color:var(--ink)}
 body{
   font-family:Helvetica Neue,Helvetica,Arial,sans-serif;
@@ -177,9 +177,21 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-off
 
 .pixelated{image-rendering:pixelated}
 
-/* The eighteen-plate rail wraps; anchor offsets follow its measured height. */
+/* The plate rail wraps; anchor offsets follow its measured height. */
 .leaf,.spread{scroll-margin-top:var(--rail-height,180px)}
 .plate{margin:0;padding:22px 18px}
 .plate-stage img{display:block;width:100%;height:auto}
 .caption{position:static;margin-top:18px}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+.rail .now { min-width: 22ch; text-align: right; white-space: nowrap; }
+@media (max-width: 1320px) {
+  .rail { display: grid; grid-template-columns: auto 1fr auto; }
+  .rail .toc { grid-column: 1 / -1; grid-row: 2; }
+  .rail .now { grid-column: 3; grid-row: 1; }
+}
+@media (max-width: 560px) {
+  .rail { grid-template-columns: 1fr auto; column-gap: 8px; }
+  .rail > span:not(.now) { display: none; }
+  .rail .now { grid-column: 2; min-width: 0; }
+}

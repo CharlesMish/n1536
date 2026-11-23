@@ -418,37 +418,55 @@ if (!book.querySelector(".spread")) book.innerHTML = PLATES.map((p, i) => {
 const now = document.getElementById("now");
 const jumps = ["title", ...PLATES.map(p => p.id)];
 const rail = document.querySelector(".rail");
-let currentPlate = "title";
+const spreads = jumps.map(id => document.getElementById(id));
+let marked = "";
+
+function visibleIndex() {
+  if (window.scrollY < 1) return 0;
+  const railBottom = rail.getBoundingClientRect().bottom;
+  const readingLine = railBottom + (window.innerHeight - railBottom) * 0.42;
+  return spreads.findLastIndex(el => el.getBoundingClientRect().top <= readingLine);
+}
+
+function mark() {
+  const index = Math.max(0, visibleIndex());
+  const id = jumps[index];
+  if (id === marked) return;
+  marked = id;
+  now.textContent = index ? PLATES[index - 1].n + " " + PLATES[index - 1].title : "Title";
+  for (const link of toc.querySelectorAll("a")) {
+    const active = link.hash === "#" + id;
+    link.classList.toggle("is-on", active);
+    if (active) link.setAttribute("aria-current", "location");
+    else link.removeAttribute("aria-current");
+  }
+}
+
 function updateRail() {
-  document.documentElement.style.setProperty("--rail-height", `${rail.offsetHeight + 16}px`);
+  document.documentElement.style.setProperty("--rail-height", (rail.offsetHeight + 16) + "px");
   mark();
 }
 if (typeof ResizeObserver !== "undefined") new ResizeObserver(updateRail).observe(rail);
-else window.addEventListener("resize", updateRail);
-function mark() {
-  const y = window.scrollY + rail.offsetHeight + 16;
-  let cur = "Title";
-  let on = "title";
-  if (window.scrollY < 40) { cur = "Title"; on = "title"; }
-  else {
-    for (const p of PLATES) {
-      const el = document.getElementById(p.id);
-      if (el && el.offsetTop <= y) { cur = `${p.n} ${p.title}`; on = p.id; }
-    }
-  }
-  currentPlate = on;
-  now.textContent = cur;
-  toc.querySelectorAll("a").forEach(a => a.classList.toggle("is-on", a.getAttribute("href") === "#"+on));
-}
-document.addEventListener("scroll", mark, {passive:true});
+window.addEventListener("resize", updateRail);
+document.addEventListener("scroll", mark, { passive: true });
 updateRail();
 
-document.addEventListener("keydown", (e) => {
- if(e.repeat||e.altKey||e.ctrlKey||e.metaKey||e.shiftKey||e.target.closest('input,textarea,select,button,a,[contenteditable]'))return;
- if(/^[0-9]$/.test(e.key)){e.preventDefault();location.hash=PLATES[e.key==='0'?9:Number(e.key)-1].id;}
- else if(['j','k','ArrowDown','ArrowRight','ArrowUp','ArrowLeft'].includes(e.key)){
-  e.preventDefault();const i=jumps.indexOf(currentPlate);
-  const d=['j','ArrowDown','ArrowRight'].includes(e.key)?1:-1;
-  location.hash=jumps[Math.max(0,Math.min(jumps.length-1,Math.max(0,i)+d))];
- }
+function goTo(index) {
+  const target = spreads[Math.max(0, Math.min(index, spreads.length - 1))];
+  if (location.hash !== "#" + target.id) location.hash = target.id;
+  // Scrolling is also necessary when the reader has moved away from the current hash.
+  target.scrollIntoView({ block: "start", behavior: "instant" });
+  mark();
+}
+
+document.addEventListener("keydown", event => {
+  if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.defaultPrevented ||
+      event.target.closest("input, textarea, select, button, [contenteditable]")) return;
+  let index;
+  if (/^[0-9]$/.test(event.key)) index = event.key === "0" ? 10 : Number(event.key);
+  else if (["j", "ArrowDown", "ArrowRight"].includes(event.key)) index = visibleIndex() + 1;
+  else if (["k", "ArrowUp", "ArrowLeft"].includes(event.key)) index = visibleIndex() - 1;
+  else return;
+  event.preventDefault();
+  goTo(index);
 });

@@ -45,11 +45,11 @@
           <p id="methodNote">The silhouette is given one depth and kept. Every ray through the mask meets a single slab.</p>
           <dl>
             <div>
-              <dt>Mask Δ</dt>
+              <dt id="maskLabel">Mask Δ</dt>
               <dd id="statMask">0 px</dd>
             </div>
             <div>
-              <dt>Volume</dt>
+              <dt id="volumeLabel">Volume</dt>
               <dd id="statVol">—</dd>
             </div>
             <div>
@@ -61,6 +61,11 @@
               <dd id="statView">FACE</dd>
             </div>
           </dl>
+          <div class="cut-controls" id="cutControls" hidden>
+            <label for="cutY">Section plane <span>y = <output id="cutValue" for="cutY">0.00</output></span></label>
+            <input id="cutY" aria-describedby="cutDescription" type="range" min="-1" max="1" step="0.01" value="0">
+            <p id="cutDescription"></p>
+          </div>
         </div>
       </aside>
 
@@ -85,6 +90,7 @@
       <div class="study-tools">
         <button type="button" id="faceBtn" class="is-active" aria-pressed="true" aria-label="Return to canonical projection"><span class="tool-dot" aria-hidden="true"></span>Face</button>
         <button type="button" id="ghostBtn" class="is-active" aria-pressed="true"><span class="tool-dot" aria-hidden="true"></span>Ghost</button>
+        <button type="button" id="cutBtn" aria-pressed="false" aria-controls="cutControls"><span class="tool-dot" aria-hidden="true"></span>Section</button>
         <span class="drag-note" id="dragNote">Drag to turn</span>
       </div>
 
@@ -107,7 +113,7 @@
         S is a rounded cross with a circular hub, defined by a shared signed-distance mask.
         Canonical projection is orthographic along −Z, up +Y. Occupancy of a pixel is the binary
         test that the ray through that pixel meets any occupied z-interval. By construction the
-        three masks agree exactly on any raster of S. Off-axis views are inspection; the invariant
+        three masks agree exactly on any raster of S. Prism and Well enclose the same outer surface. Their opaque exterior silhouettes coincide from every angle. The cut removes material on the positive-y side for inspection. Mask and volume refer to the uncut body. For all three cases together, the invariant
         applies only to that named projection. Paper and UV change presentation, not geometry.
         Not a manufacturable part. The field is a 64² column tessellation of those intervals,
         not a second geometry. Seams are the raster of S.

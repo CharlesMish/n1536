@@ -39,15 +39,53 @@ function lawFieldSVG(paths,t,selected){
  return svg+'</svg>';
 }
 
+const precisionCases = [
+  { bits: 12, label: "2⁻¹²", color: "var(--warm)", dash: "2 3" },
+  { bits: 24, label: "2⁻²⁴", color: "var(--summary)", dash: "7 3" },
+  { bits: 40, label: "2⁻⁴⁰", color: "var(--accent)", dash: "" }
+].map(spec => {
+  const paths = trajectories(spec.bits);
+  const distances = [1, 2].map(j => paths[0].map((a, i) => distance(a, paths[j][i])));
+  return { ...spec, paths, distances, crossings: distances.map(ds => ds.findIndex(d => d >= 0.1)) };
+});
+
+function drawPrecisionChart(start, bits, time) {
+  // A is the common reference. Show the x-offset comparison B until C is selected.
+  const j = start === 2 ? 1 : 0;
+  const pair = j ? "C from A" : "B from A";
+  const left = 42, right = 457, top = 14, bottom = 108;
+  const x = i => left + i * (right - left) / 80;
+  const y = d => top - Math.log2(d) * (bottom - top) / 40;
+  let svg = '<svg viewBox="0 0 466 130" role="img" aria-label="All three starting precisions. Log distance of ' + pair + ', steps 0 to 80.">';
+  for (const [value, label] of [[1, '1'], [2 ** -20, '2⁻²⁰'], [2 ** -40, '2⁻⁴⁰']]) {
+    svg += `<path class="plot-grid" d="M${left} ${y(value)}H${right}"/><text x="${left-5}" y="${y(value)+4}" text-anchor="end">${label}</text>`;
+  }
+  for (const i of [0, 20, 40, 60, 80]) {
+    svg += `<text x="${x(i)}" y="125" text-anchor="middle">${i}</text>`;
+  }
+  svg += `<path class="threshold" d="M${left} ${y(.1)}H${right}"/><path class="cursor" d="M${x(time)} ${top}V${bottom}"/>`;
+  for (const c of [...precisionCases.filter(c => c.bits !== bits), precisionCases.find(c => c.bits === bits)]) {
+    const ds = c.distances[j], hit = c.crossings[j];
+    const path = ds.map((d, i) => (i ? "L" : "M") + x(i).toFixed(2) + " " + y(d).toFixed(2)).join(" ");
+    svg += `<path data-precision="${c.bits}" d="${path}" fill="none" stroke="${c.color}" stroke-dasharray="${c.dash}" stroke-width="${c.bits === bits ? 2.3 : 1.5}"/>
+      <circle cx="${x(hit)}" cy="${y(ds[hit])}" r="2.8" stroke="${c.color}" fill="var(--field)"/>`;
+    if (c.bits === bits) svg += `<circle cx="${x(time)}" cy="${y(ds[time])}" r="3.4" fill="${c.color}" stroke="var(--field)"/>`;
+  }
+  $('precisionPlot').innerHTML = svg + '</svg>';
+  $('precisionPair').textContent = pair + ' · log distance';
+  $('crossings').innerHTML = precisionCases.map(c => `<span data-bits-key="${c.bits}" data-selected="${c.bits === bits}"><i aria-hidden="true"></i>${c.label} · step ${c.crossings[j]}</span>`).join('');
+}
+
 const themeButton=document.getElementById('theme');
 function setTheme(value){document.documentElement.dataset.theme=value;themeButton.textContent=value==='uv'?'Paper':'UV';themeButton.setAttribute('aria-label','Switch to '+(value==='uv'?'Paper':'UV')+' presentation');try{localStorage.setItem('same-reading-theme',value);}catch{}}
 let saved='uv';try{saved=localStorage.getItem('same-reading-theme')||'uv';}catch{}setTheme(saved==='paper'?'paper':'uv');themeButton.addEventListener('click',()=>setTheme(document.documentElement.dataset.theme==='paper'?'uv':'paper'));
 
-let bits=40,t=32,paths=trajectories(bits),timer=null,selectedStart=0;
+let bits=40,t=32,paths=precisionCases[2].paths,timer=null,selectedStart=0;
 const $=id=>document.getElementById(id);
 function stop(){if(timer!==null)clearInterval(timer);timer=null;$('play').textContent='Play';$('play').setAttribute('aria-pressed','false');}
 function drawLaw(){
  const names=['Reference A','Near B','Near C'],readings=['One frozen start. Compare its history with two nearby starts.','Only the initial x coordinate changes by ε. Every later step uses the same rule.','Only the initial y coordinate changes by ε. Every later step uses the same rule.'];
+ drawPrecisionChart(selectedStart, bits, t);
  $('lawField').innerHTML=lawFieldSVG(paths,t,selectedStart);
  $('caseNumber').textContent=`0${selectedStart+1} / START`;$('caseName').textContent=names[selectedStart];$('caseReading').textContent=readings[selectedStart];
  $('selectedX').textContent=(Number(paths[selectedStart][t][0])/Number(Q)).toFixed(9);$('selectedY').textContent=(Number(paths[selectedStart][t][1])/Number(Q)).toFixed(9);
@@ -61,14 +99,14 @@ function drawLaw(){
  $('distanceC').textContent=distance(paths[0][t],paths[2][t]).toExponential(3);
  const first=[1,2].map(j=>paths[0].findIndex((p,i)=>distance(p,paths[j][i])>=.1));
  $('horizon').textContent=`B at step ${first[0]} · C at step ${first[1]}`;
- $('currentReading').textContent=t===0?'At the start, all three points overlap at this display scale. Their coordinates are distinct.':t<Math.min(...first)?'The starts differ by less than a pixel. Their separation is already growing; the log plot reveals it.':'The same update has carried the nearby starts to visibly different states. Separation fluctuates after wrapping around the square.';
+ $('currentReading').textContent=t===0?'At the start, all three points overlap at this display scale. Their coordinates are distinct.':t<Math.min(...first)?'Both nearby starts are still within 0.1 of A. The log plot shows their separation growing.':'The same update has carried the nearby starts to visibly different states. Separation fluctuates after wrapping around the square.';
  document.querySelectorAll('[data-bits]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.bits)===bits)));
 }
 function play(){if(timer!==null){stop();return;}if(t>=80)t=0;$('play').textContent='Pause';$('play').setAttribute('aria-pressed','true');drawLaw();timer=setInterval(()=>{t++;drawLaw();if(t>=80)stop();},220);}
 $('play').addEventListener('click',play);
 $('restart').addEventListener('click',()=>{stop();t=0;drawLaw();});
 $('time').addEventListener('input',e=>{stop();t=Number(e.target.value);drawLaw();});
-document.querySelectorAll('[data-bits]').forEach(b=>b.addEventListener('click',()=>{stop();bits=Number(b.dataset.bits);paths=trajectories(bits);drawLaw();}));
+document.querySelectorAll('[data-bits]').forEach(b=>b.addEventListener('click',()=>{stop();bits=Number(b.dataset.bits);paths=precisionCases.find(c=>c.bits===bits).paths;drawLaw();}));
 document.querySelectorAll('[data-start]').forEach(b=>b.addEventListener('click',()=>{selectedStart=Number(b.dataset.start);drawLaw();$('announcement').textContent=$('caseName').textContent+'. '+$('caseReading').textContent+' Time and starting separation are unchanged.';}));
 document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});
 drawLaw();

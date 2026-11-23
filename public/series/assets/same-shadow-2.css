@@ -142,3 +142,14 @@ button{color:inherit;font:inherit}button:focus-visible{outline:2px solid var(--a
 
 
 .pixelated{image-rendering:pixelated}
+.cut-controls {
+  pointer-events: auto; margin-top: 14px; padding-top: 10px;
+  border-top: 1px solid var(--rule); color: var(--ink-muted);
+  font: 11px/1.5 ui-monospace, Consolas, monospace;
+}
+.cut-controls label { display: flex; justify-content: space-between; gap: 10px; }
+.cut-controls output { color: var(--summary); font-variant-numeric: tabular-nums; }
+.cut-controls input { display: block; width: 100%; margin: 0; height: 32px; accent-color: var(--summary); }
+.same-shadow .cut-controls p { display: block; margin: 0; font: inherit; }
+@media (max-width: 700px) { .cut-controls input { height: 44px; } }
+.mobile-flow > .cut-controls { margin: 0; padding-top: 8px; }

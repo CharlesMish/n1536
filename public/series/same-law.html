@@ -5,7 +5,15 @@
 <section class="exhibit-stage" aria-label="Interactive SAME LAW exhibit">
 <nav class="utility" aria-label="Series"><a href="index.html">← Series</a><a class="plate-link" href="plates.html#p10">Plate 10</a><button id="theme" type="button">Paper</button></nav>
 <header class="hero exhibit-heading"><div class="eyebrow">CMISH / Field study 10</div><h1>SAME LAW</h1><p class="subtitle">Same rule. Different histories.</p><p class="frozen-caption"><span>Held constant</span>(x, y) → (2x + y, x + y) mod 1</p></header>
-<figure class="law-field exhibit-field exhibit-visual"><div id="lawField"></div><figcaption>One wrapped square · last 13 discrete states · other starts shown faintly</figcaption></figure>
+<div class="law-field exhibit-field exhibit-visual">
+  <figure class="orbit-view"><div id="lawField"></div><figcaption>Wrapped square · last 13 discrete states</figcaption></figure>
+  <figure class="precision-view" aria-labelledby="precisionPair">
+    <figcaption><strong id="precisionPair">B from A · log distance</strong><span>Step →</span></figcaption>
+    <div id="precisionPlot"></div>
+    <div class="threshold-key">First distance ≥ 0.1</div>
+    <div id="crossings" class="crossing-keys"></div>
+  </figure>
+</div>
 <aside class="exhibit-reading" aria-label="Selected initial position"><span class="small-label" id="caseNumber">01 / START</span><h2 id="caseName">Reference</h2><p id="caseReading">One frozen start. Compare its history with two nearby starts.</p><div class="law-position"><span class="small-label">Position · rounded to 9 places</span><p><span>x</span><output id="selectedX"></output></p><p><span>y</span><output id="selectedY"></output></p></div><div class="invariant-line"><span>Distance from A</span><strong id="selectedDistance">0</strong></div></aside>
 <div class="exhibit-tools"><div class="time-controls"><button id="play" aria-pressed="false">Play</button><button id="restart">Restart</button><label class="sr-only" for="time">Time step</label><input id="time" type="range" min="0" max="80" step="1" value="32"><output id="timeOut" for="time">Step 32 / 80</output></div><div class="controls precision-controls" role="group" aria-label="Initial separation"><span class="small-label">Starting ε</span><button data-bits="12" aria-pressed="false">2⁻¹²</button><button data-bits="24" aria-pressed="false">2⁻²⁴</button><button data-bits="40" aria-pressed="true">2⁻⁴⁰</button></div><a href="#study-notes" class="study-link">Read the study ↗</a></div>
 <nav class="controls exhibit-switcher" aria-label="Initial position"><button data-start="0" aria-label="01 Reference A" aria-pressed="true"><span>01</span>Reference A</button><button data-start="1" aria-label="02 Near B" aria-pressed="false"><span>02</span>Near B <small>x + ε</small></button><button data-start="2" aria-label="03 Near C" aria-pressed="false"><span>03</span>Near C <small>y + ε</small></button></nav>
