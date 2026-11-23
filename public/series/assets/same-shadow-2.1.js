@@ -589,13 +589,20 @@ function I() {
     applyMeta();
   }
   function faceView() {
+    // Section has its own oblique camera. Leaving it is a mode change, so
+    // restore the intact face and its readout together, even between frames.
+    const immediate = cutActive || reduced.matches;
     cutActive = false;
-    snapFace = true;
-    faceT0 = performance.now();
-    faceFromY = yaw;
-    faceFromP = pitch;
     vYaw = 0; vPitch = 0;
-    if (reduced.matches) { yaw = 0; pitch = 0; snapFace = false; }
+    snapFace = !immediate;
+    if (immediate) {
+      yaw = 0; pitch = 0;
+      drawField();
+    } else {
+      faceFromY = yaw;
+      faceFromP = pitch;
+      faceT0 = performance.now();
+    }
     applyMeta();
   }
 
