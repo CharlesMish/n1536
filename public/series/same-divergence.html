@@ -73,6 +73,11 @@
 <dialog class="study-dialog" id="dialog" aria-labelledby="reading-title">
 <button class="close-reading" type="button" id="closeReading">Close</button>
 <h2 id="reading-title">A divergence fixes the flux. It does not fix the flow.</h2>
+<p>Picture a small patch of dye carried along by the arrows. Divergence gives its instantaneous rate of expansion or contraction per unit area. Warm patches expand and teal patches contract. The colors keep their positions when you switch flows, even where the arrows swing around.</p>
+<figure class="reading-plate">
+  <img src="./assets/specimen-12.svg" width="600" height="280" loading="lazy" alt="Three arrow fields over the same expanding and contracting patches, each with the same central witness square.">
+  <figcaption>Read the panels from left to right. Quiet follows the potential gradient. Slide adds a sideways motion that changes with height. Spin adds small circulating flows. In each central square, the signed outward flow still adds up to 1/π².</figcaption>
+</figure>
 <h3>What stays the same</h3>
 <p>The periodic unit square, and ρ(x, y) = cos(2πx) cos(2πy). For any region on this periodic surface, the outward flux across its boundary equals the integral of ρ over that region. A single loop winding around the torus need not bound a region; this statement does not assign it an interior. On the witness square [1/4, 3/4]² that integral is exactly 1/π².</p>
 <h3>What changes</h3>
@@ -85,10 +90,10 @@
 <p>A matching divergence is not a matching velocity, pressure, or energy. These are kinematic fields. They are not solutions of Navier–Stokes, and they are not a weather map. Electrostatics would have required the curl to stay zero. Zero curl is a physical constraint in electrostatics, not a gauge choice. Quiet alone satisfies it; the three velocity fields here are distinct kinematic constructions.</p>
 <p>The witness square’s own circulation is zero in Quiet, Slide, and Spin, because Quiet has zero curl, Slide’s curl is odd across the horizontal centerline, and Spin’s curl is odd across either individual centerline. That square can certify the flux. It cannot certify the flow. Use the pin, or the turn rectangle, for the part that changes. Agreement of curl at one point does not imply agreement of the fields.</p>
 <p>A blend between methods remains a legal flow. Divergence is linear, so every intermediate field keeps ρ. The numbers stay live during the blend because they still describe the field on screen. Until the blend ends, they are not yet the numbers of the named method.</p>
-<h3>Selected state</h3>
+<h3>Your pin and two measuring loops</h3>
 <div class="focus-values" id="focusValues"></div>
 <canvas id="readingFigure" width="680" height="236" aria-label="Snapshot of the plate when this note opened"></canvas>
-<p>The plate above is captured when this note opens. It is not a live view.</p>
+<p>This miniature records the field when you opened the notes. Imagine standing on the solid square’s boundary: for flux, count only the part of each arrow pointing across that boundary, with inward flow counting against outward flow. Turn uses the part pointing along the dashed rectangle. These two measurements can behave differently. The pin samples one location; its t = 3 reading follows a mark released there.</p>
 <details>
 <summary>Construction notes</summary>
 <p>φ = −cos(2πx) cos(2πy) / (8π²), so Δφ = ρ and the Quiet velocity is ∇φ. Slide adds (−A cos(2πy), 0) with A = 0.20. Spin adds (−B sin(2πx) cos(2πy), B cos(2πx) sin(2πy)) with B = 0.16. Both additions are divergence-free on the torus. At load, the page samples a finite-difference divergence of all three fields and of a blend. Flux and turn are closed-form integrals, not line samples. Trails use RK4 with step 0.01 through time 3, then wrap each step into the square. </p>

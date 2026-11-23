@@ -120,6 +120,23 @@
 
 
 
+<template id="figure-reading">
+  <section aria-label="Guide to the figures">
+    <h3>Follow one token across the two lists</h3>
+    <p class="figure-intro">The histogram above the scatterplot counts x values. The one alongside it counts y values. Both histograms survive any rearrangement of the pairings. The scatterplot records which two values actually meet.</p>
+    <figure class="reading-plate">
+      <canvas class="reading-figure" role="img" aria-label="Selected inspection figure"></canvas>
+      <figcaption class="inspection-caption">Read a wire from its x rank on the left to its y rank on the right. Ranks increase downward here. The emphasized wire is the inspected token. Nearby ranks and a sparse set of background wires show how that pairing fits into the whole permutation.</figcaption>
+    </figure>
+    <div class="comparison-example">
+      <h3>Three pairings of the same two lists</h3>
+      <figure class="reading-plate uv-print">
+        <img src="./assets/specimen-07.svg" alt="Three scatterplots for the same x and y lists. Align rises, Oppose falls, and Scramble spreads points across the field." loading="lazy" decoding="async">
+        <figcaption>Start with x rank 001, the smallest x. Align gives it the smallest y, rank 001. Oppose gives it the largest, 256. Scramble sends it to rank 008 by a fixed arithmetic rule. The scattered pattern can give a rank correlation very close to zero even when every partner is predetermined.</figcaption>
+      </figure>
+    </div>
+  </section>
+</template>
 <script src="./assets/same-marginals-2.1.js"></script>
 <script src="./assets/same-marginals-2.2.js"></script>
 <script src="./assets/study-reading.js" defer></script>

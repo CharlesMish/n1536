@@ -125,6 +125,23 @@
 
 
 
+<template id="figure-reading">
+  <section aria-label="Guide to the figures">
+    <h3>What a single ray can see</h3>
+    <p class="figure-intro">Imagine shining parallel light straight through the cross. A spot enters the shadow as soon as its ray hits any material. Twice the material along that ray still gives one occupied spot.</p>
+    <figure class="reading-plate">
+      <canvas class="reading-figure" role="img" aria-label="Selected inspection figure"></canvas>
+      <figcaption class="inspection-caption">The ring on the left selects a location in the face. Read the vertical strips on the right from bottom to top through the body. P, G, and W use that same ray. A filled stretch is material. The break between Well’s two stretches is empty space.</figcaption>
+    </figure>
+    <div class="comparison-example">
+      <h3>Through the middle</h3>
+      <figure class="reading-plate uv-print">
+        <img src="./assets/specimen-02.svg" alt="Sections through Prism, Grade, and Well at y = 0. The wall of Grade slopes. Well has two empty regions on either side of its central pillar." loading="lazy" decoding="async">
+        <figcaption>From left to right, cut all three at y = 0. Prism fills the available depth. Grade spends more thickness toward the right. In Well the end caps, rim, and central pillar enclose empty space. A front view covers the same x and y locations in all three.</figcaption>
+      </figure>
+    </div>
+  </section>
+</template>
 <script src="./assets/same-shadow-2.1.js"></script>
 <script src="./assets/same-shadow-2.2.js"></script>
 <script src="./assets/study-reading.js" defer></script>

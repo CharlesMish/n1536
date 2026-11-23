@@ -4,7 +4,8 @@
  const app=document.getElementById('app'),stage=document.getElementById('stage');
  const guide=["A silhouette cannot determine an interior.", "Binary occupancy under the named orthographic −Z projection.", "The occupied depth intervals behind each point in the mask.", "Switch between Prism, Grade, and Well while Face is active. Turn Prism and Well, then choose Section. Slide y from the outer rim to zero and compare the two bodies at the same cut.", "Mask Δ compares the canonical occupancy functions at 256² ray locations, not the colors of the shaded rendering. Volume is a numerical integral in unit coordinates. Ray counts occupied depth intervals at the selected (x,y). The 64² box rendering is a tessellated approximation. Well has the same closed exterior as Prism, so even rotating an opaque body cannot reveal the cavity. In Section, teal marks material intersected by the plane. The inset evaluates the original occupied intervals at that y. Mask and volume always describe the intact specimen."];
  const dialog=document.createElement('dialog');dialog.className='study-dialog';dialog.setAttribute('aria-labelledby','reading-title');
- dialog.innerHTML=`<button class="close-reading" type="button" aria-label="Close study explanation">Close</button><h2 id="reading-title">${guide[0]}</h2><h3>What stays the same</h3><p>${guide[1]}</p><h3>What changes</h3><p>${guide[2]}</p><h3>Try this</h3><p>${guide[3]}</p><h3>Reading the measurements</h3><p>${guide[4]}</p><h3>Selected state</h3><div class="focus-values"></div><canvas class="reading-figure" aria-label="Snapshot of the selected inspection figure"></canvas><p>The inspection figure and values above are captured when this explanation opens.</p><details><summary>Construction notes</summary><p class="construction"></p></details>`;
+ dialog.innerHTML=`<button class="close-reading" type="button" aria-label="Close study explanation">Close</button><h2 id="reading-title">${guide[0]}</h2><h3>What stays the same</h3><p>${guide[1]}</p><h3>What changes</h3><p>${guide[2]}</p><h3>Try this</h3><p>${guide[3]}</p><h3>Reading the measurements</h3><p>${guide[4]}</p><h3>Selected state</h3><div class="focus-values"></div><details><summary>Construction notes</summary><p class="construction"></p></details>`;
+ dialog.querySelector('h2').after(document.getElementById('figure-reading').content.cloneNode(true));
  app.append(dialog);
  const button=document.createElement('button');button.type='button';button.className='read-study';button.textContent='Read the study';button.setAttribute('aria-haspopup','dialog');
  const mountButton=()=>{const tools=document.querySelector('.study-tools');if(tools&&!tools.contains(button))tools.append(button);};mountButton();
@@ -13,7 +14,15 @@
  button.addEventListener('click',()=>{
    dialog.querySelector('.focus-values').textContent=document.querySelector('.method-reading').innerText;
    const note=document.getElementById('method-limitations');dialog.querySelector('.construction').textContent=note?note.textContent.trim():guide[4];
-   const source=document.getElementById('plate'),target=dialog.querySelector('canvas');target.width=source.width;target.height=source.height;target.getContext('2d').drawImage(source,0,0);
+   const snapshot = dialog.querySelector('.reading-figure');
+   snapshot.setAttribute('aria-label', document.getElementById('plateTitle').textContent + ', ' + document.getElementById('methodName').textContent);
+   dialog.querySelector('.inspection-caption').textContent = document.getElementById('cutBtn').getAttribute('aria-pressed') === 'true'
+     ? 'The horizontal line locates the plane in the original face. In the section at right, read x across and depth z upward. The filled regions are where the plane crosses material. A plane through the rim can miss the cavity entirely.'
+     : document.getElementById('figure-reading').content.querySelector('figcaption').textContent;
+   const source = document.getElementById('plate');
+   snapshot.width = source.width;
+   snapshot.height = source.height;
+   snapshot.getContext('2d').drawImage(source, 0, 0);
    dialog.showModal();dialog.querySelector('.close-reading').focus();
  });
  const heading=document.createElement('div');heading.className='mobile-heading';

@@ -69,7 +69,15 @@
   <details class="study-notes" id="study-notes">
     <summary>Read the study</summary>
     <p class="study-intro">A support scale measures what the entire load does to the beam as a whole. The beam's interior answers a finer question: where that load enters and how its effects accumulate along the span.</p>
-    <div class="contract"><span><strong>Frozen</strong> · simply supported beam, L, constant EI, total downward W, load centroid L/2</span><span><strong>Free</strong> · distribution of that load across the span</span><span class="retained">R<sub>A</sub> = R<sub>B</sub> = W/2 · every case</span></div>
+    <section aria-labelledby="reading-figure-heading">
+  <h3 id="reading-figure-heading">Read straight down the beam</h3>
+  <p>Pick a horizontal location and keep it as you read the three rows. Downward arrows apply the load and upward arrows show what the supports carry. The middle row gives the bending moment at your location. The bottom row gives the resulting downward displacement. Both lower rows span the full beam, from the left support to the right.</p>
+  <figure class="reading-plate">
+  <img src="./assets/specimen-20.svg" width="600" height="330" alt="Three load patterns with equal support reactions. The quarter-point pair and the uniform load both reach a peak moment of one eighth; their midspan deflections are 11/768 and 10/768.">
+  <figcaption>Compare the quarter-point pair with the uniform load. Between the two concentrated loads the moment stays at its maximum. The uniform curve only touches that height at the center. More of the paired beam therefore bends at high curvature, leaving its center 10% farther down. On stage, the dashed line holds the uniform case in place while you move the pair.</figcaption>
+</figure>
+</section>
+<div class="contract"><span><strong>Frozen</strong> · simply supported beam, L, constant EI, total downward W, load centroid L/2</span><span><strong>Free</strong> · distribution of that load across the span</span><span class="retained">R<sub>A</sub> = R<sub>B</sub> = W/2 · every case</span></div>
     <div class="notes-grid">
       <section><h3>What the supports know</h3><p>For each pattern, the downward loads sum to W and their first moment about the left support is WL/2. Vertical equilibrium gives R<sub>A</sub> + R<sub>B</sub> = W. Moment equilibrium gives R<sub>B</sub>L = WL/2. Thus both reactions equal W/2, exactly, in this ideal model.</p><p>These are three statically equivalent external loadings. Their matching resultants and reactions say nothing by themselves about the entire internal moment or deflected shape.</p></section>
       <section><h3>Three authored arrangements</h3><p><strong>Center point:</strong> W at x = L/2. <strong>Symmetric pair:</strong> W/2 at x = a and x = L − a; the initial setting is a = L/4. <strong>Uniform:</strong> q = W/L throughout 0 ≤ x ≤ L. The paired slider spans 0.10 ≤ a/L ≤ 0.50. At the right endpoint, the two idealized half-loads coincide and reproduce the center point.</p><p>The total load, beam length, supports, material stiffness and units are held fixed between cases. The drawings of concentrated forces use arrows, not finite-width pressure patches.</p></section>

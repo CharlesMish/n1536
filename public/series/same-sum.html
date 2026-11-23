@@ -84,7 +84,37 @@
   <details class="study-notes" id="study-notes">
     <summary>Read the study</summary>
     <p class="study-intro">Real addition does not care about order. A binary64 accumulator does: each addition is rounded to the nearest representable binary64 value, with ties to even. The spacing between those values depends on the result’s magnitude. Each new addition starts from the previously rounded result.</p>
-    <div class="contract">
+    <section aria-labelledby="reading-figure-heading">
+  <h3 id="reading-figure-heading">Catch the first rounded addition</h3>
+  <p>Choose <b>Given</b>, press <b>Restart</b>, then <b>Next rounding</b>. At step 385 the large positive value enters. On the top ruler each lit square contributes the power of two at its column. Compare the exact-addition row with the stored row: the 53-bit window now stops at 2⁻¹², so the stored result falls short by 57 units of the specimen’s 2⁻²⁰ grid.</p>
+  <figure class="reading-plate">
+  <svg viewBox="0 0 470 135" role="img" aria-labelledby="roundingScaleTitle roundingScaleDesc" fill="currentColor">
+    <title id="roundingScaleTitle">Between two representable sums at step 385</title>
+    <desc id="roundingScaleDesc">The two possible neighboring stored totals are 256 grid units apart. The exact sum sits 57 units above the lower one and 199 below the upper one. Rounding selects the lower one.</desc>
+    <g stroke="var(--muted)" fill="none">
+      <path d="M34 65H436M34 58V72M436 58V72"/>
+      <path d="M235 43V76" stroke-dasharray="3 4"/>
+    </g>
+    <circle cx="34" cy="65" r="5" fill="var(--accent)"/>
+    <path d="M123.51 58l7 7-7 7-7-7Z" fill="var(--summary)"/>
+    <g font-family="system-ui, sans-serif" font-size="14">
+      <text x="123.51" y="45" text-anchor="middle">exact sum</text>
+      <text x="235" y="34" text-anchor="middle">halfway</text>
+      <text x="34" y="94" text-anchor="middle">0</text>
+      <text x="123.51" y="94" text-anchor="middle">57</text>
+      <text x="235" y="94" text-anchor="middle">128</text>
+      <text x="436" y="94" text-anchor="middle">256</text>
+      <text x="235" y="125" text-anchor="middle">Grid units above the lower representable sum</text>
+    </g>
+  </svg>
+  <figcaption>The two nearest representable totals here are 256 grid units apart. The exact addition lands 57 units above the lower one, short of the halfway mark. Rounding stores the lower total. This is one addition, magnified.</figcaption>
+</figure>
+  <figure class="reading-plate">
+  <img src="./assets/specimen-19.svg" width="560" height="330" alt="Drift of the three addition orders over 1,536 steps. Given ends 670 grid units low, Ascending 101 high and Descending exactly at zero.">
+  <figcaption>The lower plot keeps a running balance of all the rounding so far. At step 385 the correction row reads +57 grid units, the amount needed to restore the exact result. The Given trace steps down to −57 grid units because it plots <em>stored minus exact</em>. When the large pair cancels at step 1,153, the earlier drift remains.</figcaption>
+</figure>
+</section>
+<div class="contract">
       <span><strong>Frozen</strong> · one multiset of 1,536 binary64 values; binary64 addition, round to nearest, ties to even; one accumulator starting at 0</span>
       <span><strong>Free</strong> · order of addition</span>
       <span class="retained">exact total 7,919.23452281951904296875</span>

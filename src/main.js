@@ -262,6 +262,21 @@ async function initializeExhibit() {
     });
   }
 
+  // The reading uses the same coordinates and inspection renderer as the stage.
+  // The default-seed illustrations also work when scripting is unavailable.
+  const studyNotes = requiredElement("study-notes");
+  function renderReadingFigures() {
+    for (const figure of studyNotes.querySelectorAll("canvas[data-reading-method]")) {
+      if (!figure.getContext("2d")) continue;
+      drawUsePlate(figure, { theme, method: figure.dataset.readingMethod, datasets });
+      figure.hidden = false;
+      figure.previousElementSibling.hidden = true;
+    }
+    requiredElement("n-reading-seed").textContent = String(randomSeed);
+    requiredElement("n-reading-cv").textContent =
+      (100 * datasets.random.nearestNeighborCv).toFixed(1) + "%";
+  }
+
   function updateOrderValue() {
     walkValue.textContent = formatOrder(walkHead);
     app.dataset.order = String(
@@ -322,6 +337,7 @@ async function initializeExhibit() {
     });
     updateStateAttributes();
     redrawPlate();
+    renderReadingFigures();
     if (announce) {
       liveRegion.textContent = `${theme === "paper" ? "Paper" : "UV"} presentation.`;
     }
@@ -364,6 +380,7 @@ async function initializeExhibit() {
   reseedButton.addEventListener("click", () => {
     randomSeed = nextRandomSeed(randomSeed);
     datasets = createSamplingDatasets(POINT_COUNT, randomSeed, fixedDatasets);
+    renderReadingFigures();
     currentMethod = "random";
     transitionTo(datasets.random);
     updateReading();

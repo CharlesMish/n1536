@@ -18,6 +18,10 @@ for (const width of [1440, 320]) for (const slug of pages) {
     expect(box.x).toBeGreaterThanOrEqual(0);
     expect(box.x + box.width).toBeLessThanOrEqual(width + 1);
     expect(box.y + box.height).toBeLessThanOrEqual(901);
+    if (slug === '../same-n') {
+      await expect(dialog.locator('canvas[data-reading-method]:visible')).toHaveCount(3);
+      await expect(dialog.locator('.n-inspection img:visible')).toHaveCount(0);
+    }
     const selection = await page.locator('[aria-pressed="true"]').evaluateAll(nodes => nodes.map(n => n.id + n.textContent));
     await page.keyboard.press('3');
     expect(await page.locator('[aria-pressed="true"]').evaluateAll(nodes => nodes.map(n => n.id + n.textContent))).toEqual(selection);
@@ -67,6 +71,8 @@ test('@desktop SAME N notes remain reachable without JavaScript', async ({ brows
   await page.locator('#study-notes > summary').click();
   await expect(page.locator('#study-notes')).toContainText('NN CV');
   await expect(page.locator('#study-notes')).toHaveAttribute('open', '');
+  await expect(page.locator('.n-inspection img:visible')).toHaveCount(3);
+  await expect(page.locator('.n-inspection canvas:visible')).toHaveCount(0);
   const rect = await page.locator('#study-notes').boundingBox();
   expect(rect.y).toBeGreaterThanOrEqual(0);
   expect(rect.y + rect.height).toBeLessThanOrEqual(844);

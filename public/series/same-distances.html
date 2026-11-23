@@ -41,7 +41,27 @@
 
 <p aria-live="polite" class="sr-only" id="announcement"></p>
 <noscript><p class="fallback">This interactive study needs JavaScript. The fixed tetrahedron and its labeled mirror have the same six distances and signed volumes −8/3 and +8/3. Their smallest possible 3D RMS error under rotations and translations is 1 unit. Allowing reflection reduces it to zero.</p></noscript>
-<details class="study-notes" id="study-notes"><summary>Read the study</summary><p class="study-intro">Every edge agrees. Every label has its partner. Try turning this tetrahedron onto its mirror, then ask for the best rotation possible.</p><div class="contract">
+<details class="study-notes" id="study-notes"><summary>Read the study</summary><p class="study-intro">Every edge agrees. Every label has its partner. Try turning this tetrahedron onto its mirror, then ask for the best rotation possible.</p><section aria-labelledby="reading-figure-heading">
+  <h3 id="reading-figure-heading">What happens when three corners match?</h3>
+  <p>Follow a warm connector from a target circle to the moving diamond with the same letter. <b>Seat face ABC</b> closes three connectors. The fourth now spans 4.067 units in space. Because RMS squares the four gaps, averages them and takes the square root, that lone gap gives an RMS of 4.067 ÷ 2 ≈ 2.033. The opening pose scored 1.894 with no seated face.</p>
+  <figure class="reading-plate">
+  <svg viewBox="0 0 480 151" role="img" aria-labelledby="faceSliceTitle faceSliceDesc" fill="currentColor">
+    <title id="faceSliceTitle">The gap perpendicular to the seated face</title>
+    <desc id="faceSliceDesc">All three seated vertices have height zero. Target D is at minus 2.033 units and moving D at plus 2.033 units, a gap of 4.067 units before rounding.</desc>
+    <g font-family="system-ui, sans-serif" font-size="15" text-anchor="middle">
+      <line x1="55" x2="425" y1="76" y2="76" stroke="var(--muted)" stroke-width="1"/>
+      <line x1="240" x2="240" y1="48" y2="105" stroke="var(--muted)" stroke-dasharray="3 3"/>
+      <text x="240" y="31">Face ABC</text>
+      <g fill="var(--accent)"><text x="64" y="55">Target D</text><circle cx="64" cy="76" r="5"/></g>
+      <g fill="var(--summary)"><text x="416" y="55">Moving D</text><path d="M416 69l7 7-7 7-7-7Z"/></g>
+      <text x="64" y="103">−2.033</text><text x="240" y="123">0</text><text x="416" y="103">+2.033</text>
+      <text x="240" y="148" font-size="13">Signed height above face ABC (units)</text>
+    </g>
+  </svg>
+  <figcaption>Think of ABC as a tabletop. After seating, A, B and C touch their partners. The two D vertices sit equally far from the tabletop on opposite sides. This ruler measures only the perpendicular direction.</figcaption>
+</figure>
+</section>
+<div class="contract">
 <span><strong>Frozen</strong> · six pairwise distances; labels A–D; units</span>
 <span><strong>Free</strong> · orientation; permission to reflect</span>
 <span class="retained">Distance keeps shape. It forgets which hand.</span>

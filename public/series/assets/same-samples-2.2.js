@@ -4,7 +4,8 @@
  const app=document.getElementById('app'),stage=document.getElementById('stage');
  const guide=["What does one measurement control?", "The nine sample locations and measured values.", "The interpolating family and its assumptions between samples.", "Select a sample with Influence on, then change the interpolating family. The inset cardinal curve, on its own labeled scale, is the response to a hypothetical +1 change at that sample, with every other value fixed. It exposes the assumption behind the reconstruction; the frozen measured values themselves are not edited.", "Resid is the maximum absolute nodal interpolation residual. Span is the fitted curve’s sampled maximum minus minimum, not the range of the influence function. Bend approximates the integral of |y″| over [0,1] using finite differences; it is not geometric curvature or the squared-curvature energy. Global is one degree-8 polynomial. Local is a natural cubic spline whose influence decays but is not compactly supported. Periodic uses period 9/8 so x=0 and x=1 remain distinct measured nodes. Faint curves show the other completed reconstructions. Transitions crossfade finished curves."];
  const dialog=document.createElement('dialog');dialog.className='study-dialog';dialog.setAttribute('aria-labelledby','reading-title');
- dialog.innerHTML=`<button class="close-reading" type="button" aria-label="Close study explanation">Close</button><h2 id="reading-title">${guide[0]}</h2><h3>What stays the same</h3><p>${guide[1]}</p><h3>What changes</h3><p>${guide[2]}</p><h3>Try this</h3><p>${guide[3]}</p><h3>Reading the measurements</h3><p>${guide[4]}</p><h3>Selected state</h3><div class="focus-values"></div><canvas class="reading-figure" aria-label="Snapshot of the selected inspection figure"></canvas><p>The inspection figure and values above are captured when this explanation opens.</p><details><summary>Construction notes</summary><p class="construction"></p></details>`;
+ dialog.innerHTML=`<button class="close-reading" type="button" aria-label="Close study explanation">Close</button><h2 id="reading-title">${guide[0]}</h2><h3>What stays the same</h3><p>${guide[1]}</p><h3>What changes</h3><p>${guide[2]}</p><h3>Try this</h3><p>${guide[3]}</p><h3>Reading the measurements</h3><p>${guide[4]}</p><h3>Selected state</h3><div class="focus-values"></div><details><summary>Construction notes</summary><p class="construction"></p></details>`;
+ dialog.querySelector('h2').after(document.getElementById('figure-reading').content.cloneNode(true));
  app.append(dialog);
  const button=document.createElement('button');button.type='button';button.className='read-study';button.textContent='Read the study';button.setAttribute('aria-haspopup','dialog');
  const mountButton=()=>{const tools=document.querySelector('.study-tools');if(tools&&!tools.contains(button))tools.append(button);};mountButton();
@@ -13,7 +14,12 @@
  button.addEventListener('click',()=>{
    dialog.querySelector('.focus-values').textContent=document.querySelector('.method-reading').innerText;
    const note=document.getElementById('method-limitations');dialog.querySelector('.construction').textContent=note?note.textContent.trim():guide[4];
-   const source=document.getElementById('plate'),target=dialog.querySelector('canvas');target.width=source.width;target.height=source.height;target.getContext('2d').drawImage(source,0,0);
+   const snapshot = dialog.querySelector('.reading-figure');
+   snapshot.setAttribute('aria-label', document.getElementById('plateTitle').textContent + ', ' + document.getElementById('methodName').textContent);
+   const source = document.getElementById('plate');
+   snapshot.width = source.width;
+   snapshot.height = source.height;
+   snapshot.getContext('2d').drawImage(source, 0, 0);
    dialog.showModal();dialog.querySelector('.close-reading').focus();
  });
  const heading=document.createElement('div');heading.className='mobile-heading';

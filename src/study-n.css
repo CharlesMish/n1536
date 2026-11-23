@@ -39,3 +39,6 @@
   .same-n .use-plate.is-mobile-open { bottom:calc(202px + var(--safe-bottom)); }
   .same-n .field-keys { bottom:calc(372px + var(--safe-bottom)); }
 }
+
+.n-inspection canvas, .n-inspection img { border: 1px solid var(--rule); }
+.n-inspection [hidden] { display: none !important; }
