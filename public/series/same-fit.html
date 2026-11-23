@@ -31,7 +31,20 @@
 <noscript><p class="fallback">This study needs JavaScript to draw its computed fits and residuals. Anscombe’s quartet contains four sets of eleven points. Their regression lines round to y = 3.00 + 0.50x, but their point arrangements differ. The underlying statistics are close, not all exactly equal. The original observations are available in the source linked below.</p></noscript>
 <details class="study-notes" id="study-notes">
 <summary>Read the study</summary>
-<p class="study-intro">Four sets of eleven points. Their familiar summaries agree when rounded. Put the pictures beside one another, then look at what each fitted line leaves behind.</p><div class="contract">
+<p class="study-intro">Four sets of eleven points. Their familiar summaries agree when rounded. Put the pictures beside one another, then look at what each fitted line leaves behind.</p><section aria-labelledby="sceneTitle" class="quartet-overview">
+<div class="scene-header"><h2 id="sceneTitle">Inspect the four datasets together</h2><p id="scaleNote">Shared axes · x: 0–20 · y: 0–15</p></div>
+
+
+<p>Read the same x position across the four panels. In <b>Points + fit</b>, the middle observations in II bow above the line and the outer ones fall below it. In <b>Residuals</b>, that fitted line becomes a horizontal zero and the bend remains. These panels follow the view selected on stage.</p>
+<div class="quartet" id="plots">
+<figure class="quartet-panel dataset-0"><figcaption><span><b>I</b> Scattered</span><span>11 points</span></figcaption><div class="plot" id="plot0"></div><p class="panel-reading" id="reading0"></p><p class="panel-note">Variation around a rising line.</p></figure>
+<figure class="quartet-panel dataset-1"><figcaption><span><b>II</b> Curved</span><span>11 points</span></figcaption><div class="plot" id="plot1"></div><p class="panel-reading" id="reading1"></p><p class="panel-note">A clear bend remains in the residuals.</p></figure>
+<figure class="quartet-panel dataset-2"><figcaption><span><b>III</b> One departure</span><span>11 points</span></figcaption><div class="plot" id="plot2"></div><p class="panel-reading" id="reading2"></p><p class="panel-note">One point sits above the otherwise narrow trend.</p></figure>
+<figure class="quartet-panel dataset-3"><figcaption><span><b>IV</b> One distant x</span><span>11 points</span></figcaption><div class="plot" id="plot3"></div><p class="panel-reading" id="reading3"></p><p class="panel-note">Ten points share x = 8. One point sets the span.</p></figure>
+</div>
+<p class="plot-help" id="viewHelp">Solid lines are each dataset’s actual least-squares fit. The selected point has a larger outline; its vertical segment is y minus fitted y.</p>
+</section>
+<div class="contract">
 <span><strong>Frozen</strong> · eleven points; shared summary at the stated precision</span>
 <span><strong>Free</strong> · arrangement of the observations</span>
 <span class="retained">Anscombe’s quartet · a finite, published specimen</span>
@@ -45,20 +58,9 @@
 <div class="summary-heading"><h2 id="summaryTitle">A shared numerical portrait.</h2><p>Rounded agreement, not exact equality.</p></div>
 <dl class="summary-values" id="sharedSummary"></dl>
 <p class="summary-foot">OLS line at 2 decimal places: <strong id="roundedLine">—</strong>. Variances use n − 1. <a href="#audit" id="openAudit">Audit the rounding ↓</a></p>
-</section><section aria-labelledby="sceneTitle" class="quartet-overview">
-<div class="scene-header"><h2 id="sceneTitle">Inspect the four datasets together</h2><p id="scaleNote">Shared axes · x: 0–20 · y: 0–15</p></div>
-
-
-<div class="quartet" id="plots">
-<figure class="quartet-panel dataset-0"><figcaption><span><b>I</b> Scattered</span><span>11 points</span></figcaption><div class="plot" id="plot0"></div><p class="panel-reading" id="reading0"></p><p class="panel-note">Variation around a rising line.</p></figure>
-<figure class="quartet-panel dataset-1"><figcaption><span><b>II</b> Curved</span><span>11 points</span></figcaption><div class="plot" id="plot1"></div><p class="panel-reading" id="reading1"></p><p class="panel-note">A clear bend remains in the residuals.</p></figure>
-<figure class="quartet-panel dataset-2"><figcaption><span><b>III</b> One departure</span><span>11 points</span></figcaption><div class="plot" id="plot2"></div><p class="panel-reading" id="reading2"></p><p class="panel-note">One point sits above the otherwise narrow trend.</p></figure>
-<figure class="quartet-panel dataset-3"><figcaption><span><b>IV</b> One distant x</span><span>11 points</span></figcaption><div class="plot" id="plot3"></div><p class="panel-reading" id="reading3"></p><p class="panel-note">Ten points share x = 8. One point sets the span.</p></figure>
-</div>
-<p class="plot-help" id="viewHelp">Solid lines are each dataset’s actual least-squares fit. The selected point has a larger outline; its vertical segment is y minus fitted y.</p>
 </section><section class="readout">
 <div><h2>The line is a summary.</h2><p>It carries a slope and an intercept. It does not carry the curve in II, the unusual point in III, or the concentration at a single x in IV. The residual view makes those differences easier to inspect.</p><p class="verdict">The numbers agree at a stated resolution.<br/>The structures remain different.</p></div>
-<div><h2>Inspect a consequential row.</h2><div class="inspection-presets"><button id="inspectIII" type="button">III · high point, row 3</button><button id="inspectIV" type="button">IV · distant point, row 8</button></div><p>These buttons highlight existing observations. No points are removed, moved, or replaced; the fit and its summary continue to use all eleven.</p></div>
+<div><h2>Inspect a consequential row.</h2><div class="inspection-presets"><button id="inspectIII" type="button">III · high point, row 3</button><button id="inspectIV" type="button">IV · distant point, row 8</button></div><p>In III, row 3 sits about 3.241 units above its fitted line. In IV, row 8 lies on the line to the displayed precision. Yet its x = 19 supplies the only horizontal separation from the ten points at x = 8. One point stands out by its vertical miss, the other by its horizontal position. The buttons highlight rows in the original eleven-point fits.</p></div>
 </section><details class="study-notes audit" id="audit">
 <summary>Audit the numbers · actual fits and rounding</summary>
 <p class="audit-intro">Every value below is recomputed from the displayed observations. Six decimal places expose differences hidden in the summary above; they are still a decimal display, not an assertion of exact equality. Scroll the table sideways on smaller screens to compare all four.</p>

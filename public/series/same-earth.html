@@ -111,6 +111,23 @@
 
 
 
+<template id="figure-reading">
+  <section aria-label="Guide to the figures">
+    <h3>What happens to a disk of land or sea?</h3>
+    <p class="figure-intro">Each small patch starts as a circular disk on the sphere. Follow a disk away from the equator. A change in its area and a change in how long and thin it looks are two different effects.</p>
+    <figure class="reading-plate">
+      <canvas class="reading-figure" role="img" aria-label="Selected inspection figure"></canvas>
+      <figcaption class="inspection-caption">The horizontal axis runs from the south pole through the equator to the north pole. The upright marker is the selected latitude. The rising curve gives the local Mercator area factor. The horizontal line at 1 belongs to Equal Earth. The plot stops at 8 even though the Mercator factor keeps rising.</figcaption>
+    </figure>
+    <div class="comparison-example">
+      <h3>The same disks on two maps</h3>
+      <figure class="reading-plate uv-print">
+        <img src="./assets/specimen-03.svg" alt="The same spherical disks mapped into Mercator and Equal Earth panels. High-latitude disks expand on Mercator while their shapes stretch on Equal Earth." loading="lazy" decoding="async">
+        <figcaption>At 60° latitude Mercator doubles each local length scale, so a tiny patch takes four times its equatorial map area. Equal Earth keeps the area factor at 1 while allowing disks to stretch. Each panel fits its own frame. Use the factors to compare distortion across maps.</figcaption>
+      </figure>
+    </div>
+  </section>
+</template>
 <script src="./assets/same-earth.1.js"></script>
 <script src="./assets/same-earth.2.js"></script>
 <script src="./assets/study-reading.js" defer></script>

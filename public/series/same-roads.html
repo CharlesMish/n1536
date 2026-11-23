@@ -63,7 +63,15 @@
 <p id="announcement" class="sr-only" aria-live="polite"></p>
 <details class="study-notes" id="study-notes"><summary>Read the study</summary>
   <p class="study-intro">Whose minutes count when a car changes route?</p>
-  <div class="contract"><span><strong>Frozen</strong> · cars, roads and travel-time rules</span><span><strong>Free</strong> · who dispatches the cars</span></div>
+  <section aria-labelledby="reading-figure-heading">
+  <h3 id="reading-figure-heading">Follow the car that wants the empty bridge</h3>
+  <p>In <b>One fleet</b>, trace the upper route from W through N to E: 12 minutes on its first road and 30 on its second. Now choose <b>Test one car</b>. The driver still needs 12 minutes to reach N, spends 5 on the bridge, and becomes the seventh car on S → E. That last road now takes 14 minutes, bringing the trip to 31. The driver saves 11 minutes; six other drivers each lose 2. The dispatcher counts all seven changes: one extra car-minute.</p>
+  <figure class="reading-plate">
+  <img src="./assets/specimen-21.svg" width="600" height="280" alt="The same five roads in three settled assignments. Zero, four and twelve cars respectively use the central bridge.">
+  <figcaption>Count the strands on the central bridge as responsibility moves from one dispatcher to two to twelve. In the last panel everyone takes it. Test a solo driver leaving the bridge: the roster shows one driver spending an extra minute and eleven each saving two. The total falls by 21 car-minutes, but the driver making the choice would arrive a minute later.</figcaption>
+</figure>
+</section>
+<div class="contract"><span><strong>Frozen</strong> · cars, roads and travel-time rules</span><span><strong>Free</strong> · who dispatches the cars</span></div>
   <section id="routeAudit" hidden><h3 id="routeTitle">Selected routes</h3>
     <table class="road-route-table"><thead><tr><th>Route</th><th>Path</th><th>Cars</th><th>Minutes</th></tr></thead><tbody id="routes"></tbody></table>
   </section>

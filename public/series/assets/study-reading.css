@@ -39,3 +39,50 @@ html [data-study-reading-trigger] { display:inline-flex; align-items:center; min
 @media(prefers-reduced-motion:reduce) { html dialog.study-dialog[data-shared-reading] { scroll-behavior:auto; } }
 /* SAME N otherwise fills a fixed viewport: keep its unenhanced notes reachable. */
 .same-n > #study-notes { position:fixed; z-index:10; inset:auto 16px 16px; max-height:85svh; overflow:auto; padding:16px; background:var(--panel,var(--field)); color:var(--ink); border:1px solid var(--rule); }
+
+/* Captions belong with their specimen, including when notes are read inline. */
+:is(.study-dialog, .study-notes, #study-notes) figure.reading-plate {
+  display: block;
+  position: static;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  margin: 18px 0 24px;
+  padding: 0;
+}
+:is(.study-dialog, .study-notes, #study-notes) .reading-plate :is(img, svg, canvas) {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+.reading-plate img[src*="specimen-"][src$=".svg"],
+.reading-plate.uv-print :is(img, svg) {
+  background: #171329;
+}
+:is(.study-dialog, .study-notes, #study-notes) .reading-plate figcaption {
+  display: block;
+  position: static;
+  margin: 0;
+  padding: 9px 0 0;
+  max-width: 68ch;
+  color: var(--muted, var(--ink-muted, currentColor));
+  font: 14px/1.55 "Helvetica Neue", Helvetica, Arial, sans-serif;
+  letter-spacing: normal;
+  text-align: left;
+  text-transform: none;
+}
+:is(.study-dialog, .study-notes, #study-notes) .reading-plate figcaption p {
+  margin: 4px 0 0;
+  font: inherit;
+}
+.reading-triptych {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: 12px;
+}
+.reading-triptych > figure { min-width: 0; margin-inline: 0; }
+@media (max-width: 560px) {
+  .reading-triptych { grid-template-columns: 1fr; gap: 4px; }
+}

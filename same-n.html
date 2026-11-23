@@ -180,16 +180,39 @@
       </section>
       <details id="study-notes">
         <summary>Read the study</summary>
-        <h3>What stays the same</h3>
-        <p>Each method places 1,536 points on the same unit sphere. The displayed count and radius stay fixed while the construction changes.</p>
-        <h3>What changes</h3>
-        <p>Random uses a deterministic seeded random construction; New random chooses another seed. Sobol uses a deterministic low-discrepancy sequence mapped to the sphere. Fibonacci uses a fixed golden-angle construction. These are different ways of placing the same number of points.</p>
-        <h3>Try this</h3>
-        <p>Switch between Random, Sobol, and Fibonacci. Turn on Spacing to inspect local variation, or Order to inspect the sequence. Drag the sphere to turn it. On compact screens, Inspect opens the figure plate.</p>
-        <h3>Reading the measurements</h3>
-        <p>NN CV is the standard deviation divided by the mean of the nearest-neighbor chord distances. A lower value means more uniform nearest-neighbor spacing for this point set. It does not establish the best method for integration, coverage, or every other task.</p>
-        <h3>Boundary of the claim</h3>
-        <p>These are the displayed finite point sets. Sobol’s dyadic prefixes and Fibonacci’s fixed full set support different uses. The animated transition uses a spatially arranged presentation correspondence; it is not mathematical point transport.</p>
+        <p>Every sphere holds 1,536 points. Turn one until you see a gap or a close pair. Is it a chance feature of this draw, a consequence of the order in which points arrive, or part of a fixed pattern? The three inspection figures give you different ways to tell.</p>
+
+        <h3>How to read the disk</h3>
+        <p>The disk unfolds the whole surface, including the side facing away from you. A point’s angle around the center records its longitude. Its distance from the center records how far it lies from the north pole, with southern latitudes near the rim. The equal-area mapping gives equal patches of the sphere equal space on the disk. Shapes and separations can stretch, especially near the rim. The figure stays fixed when you turn the sphere.</p>
+
+        <figure class="reading-plate n-inspection">
+          <h3>Fig. 01 · Random draws</h3>
+          <img src="/series/assets/n-reading-random.png" alt="Random points on a disk with two fainter draws behind them. The spacing histogram at right spreads across many bins." width="560" height="220" loading="lazy">
+          <canvas data-reading-method="random" width="560" height="220" hidden role="img" aria-label="Current random draw on the equal-area disk with two comparison seeds and its spacing histogram"></canvas>
+          <figcaption>The bright dots belong to the sphere on stage. Each faint layer is a separate set of 1,536 points generated with another seed. Look for a patch that is empty in the bright layer but filled in a faint one.</figcaption>
+        </figure>
+        <p>A seed is the starting number for the pseudorandom generator. The generator picks longitude and height for each point. Reuse seed <span id="n-reading-seed">4217</span> and you get this bright layer again. Choose <strong>New random</strong> and the first faint draw becomes the bright one. Its gaps move, while the rule and count stay fixed.</p>
+
+        <figure class="reading-plate n-inspection">
+          <h3>Fig. 02 · The Sobol generating square</h3>
+          <img src="/series/assets/n-reading-sobol.png" alt="Sobol points on a disk and the unit square that generated them. Three groups mark successive additions to the sequence." width="560" height="220" loading="lazy">
+          <canvas data-reading-method="sobol" width="560" height="220" hidden role="img" aria-label="Sobol points on the equal-area disk and the generating square in three successive groups"></canvas>
+          <figcaption>Read the square at right first. From left to right, its coordinate makes one turn in longitude. From top to bottom, its other coordinate takes you from the north pole to the south pole. The top-left point lands at the center of the disk.</figcaption>
+        </figure>
+        <p>The square shows one sequence growing. Faint dots are the first 128, teal adds points 129–512, and the accent color adds 513–1,536. Keeping the first 512 includes every one of the first 128 at exactly the same address. Turn on <strong>Order</strong> with Sobol selected to follow one point in both drawings.</p>
+
+        <figure class="reading-plate n-inspection">
+          <h3>Fig. 03 · The Fibonacci lattice print</h3>
+          <img src="/series/assets/n-reading-fibonacci.png" alt="A regular spiral-like disk of Fibonacci points connected in generation order, beside a concentrated spacing histogram." width="560" height="220" loading="lazy">
+          <canvas data-reading-method="fibonacci" width="560" height="220" hidden role="img" aria-label="Fibonacci lattice on the equal-area disk with generation-order lines and its spacing histogram"></canvas>
+          <figcaption>Each new point sits one equal step lower in height and turns about 137.5° in longitude. On the disk the points start near the center and work outward. The faint line joins successive placements, so it often jumps across the disk even where the local spacing looks even.</figcaption>
+        </figure>
+        <p>The height step is set by the final count. Rebuild the recipe for a smaller count and the old points change latitude. That makes this evenly spaced full set useful in a different way from a Sobol prefix.</p>
+
+        <h3>What the bars measure</h3>
+        <p>For each point, find its closest neighbor on the sphere and measure the straight chord joining them through space. The bars in figures 01 and 03 count those lengths from short to long. Each histogram fits its own longest chord and tallest bar. To compare the two spreads numerically, use <strong>NN CV</strong>, the standard deviation divided by the mean. It is <span id="n-reading-cv">52.8%</span> for the displayed Random draw and 1.7% for Fibonacci.</p>
+        <p>Turn on <strong>Spacing</strong> to locate points whose nearest chord falls below the exhibit’s reference spacing. A low NN CV tells you the lengths are similar. An integration error, the size of the largest empty patch, or a probability claim about repeated draws would each need its own measurement.</p>
+        <p>Drag to rotate the sphere. On a phone, <strong>Inspect</strong> opens the selected figure. The moving dots during a method switch show a visual correspondence between two finished sets. Return to a settled set to inspect its spacing.</p>
       </details>
     </div>
 

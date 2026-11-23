@@ -4,7 +4,8 @@
  const app=document.getElementById('app'),stage=document.getElementById('stage');
  const guide=["A common budget answers different obligations.", "The domain, supports, loads, heat source, heat sink, and target mean physical density of 0.40.", "Which objective the material allocation serves.", "Compare Carry, Conduct, and Share. A ratio of 1 is the corresponding specialist reference; larger compliance is worse for that objective.", "Mech / ref compares mechanical compliance to Carry. Therm / ref compares thermal compliance to Conduct. Share minimizes a fixed 50/50 sum of these normalized objectives. Gray is mean 4ρ(1−ρ), not a convergence score. Load and Heat overlays use separate within-design scales; their colors do not compare absolute magnitudes between designs. Mean ρ is the achieved mean density, shown to eight decimals. The common target is 0.40; equality is enforced numerically, not exactly. A finished run is a local SIMP result, not a certified optimum. The structural appendix changes the structural case and preserves a designable fraction, a different comparison from the primary exhibit."];
  const dialog=document.createElement('dialog');dialog.className='study-dialog';dialog.setAttribute('aria-labelledby','reading-title');
- dialog.innerHTML=`<button class="close-reading" type="button" aria-label="Close study explanation">Close</button><h2 id="reading-title">${guide[0]}</h2><h3>What stays the same</h3><p>${guide[1]}</p><h3>What changes</h3><p>${guide[2]}</p><h3>Try this</h3><p>${guide[3]}</p><h3>Reading the measurements</h3><p>${guide[4]}</p><h3>Selected state</h3><div class="focus-values"></div><canvas class="reading-figure" aria-label="Snapshot of the selected inspection figure"></canvas><p>The inspection figure and values above are captured when this explanation opens.</p><details><summary>Construction notes</summary><p class="construction"></p></details>`;
+ dialog.innerHTML=`<button class="close-reading" type="button" aria-label="Close study explanation">Close</button><h2 id="reading-title">${guide[0]}</h2><h3>What stays the same</h3><p>${guide[1]}</p><h3>What changes</h3><p>${guide[2]}</p><h3>Try this</h3><p>${guide[3]}</p><h3>Reading the measurements</h3><p>${guide[4]}</p><h3>Selected state</h3><div class="focus-values"></div><details><summary>Construction notes</summary><p class="construction"></p></details>`;
+ dialog.querySelector('h2').after(document.getElementById('figure-reading').content.cloneNode(true));
  app.append(dialog);
  const button=document.createElement('button');button.type='button';button.className='read-study';button.textContent='Read the study';button.setAttribute('aria-haspopup','dialog');
  const mountButton=()=>{const tools=document.querySelector('.study-tools');if(tools&&!tools.contains(button))tools.append(button);};mountButton();
@@ -22,7 +23,17 @@
    dialog.querySelectorAll(':scope > h3 + p').forEach((p,i)=>p.textContent=currentGuide[i+1]);
    dialog.querySelector('.focus-values').textContent=document.querySelector('.method-reading').innerText;
    const note=document.getElementById('method-limitations');dialog.querySelector('.construction').textContent=note?note.textContent.trim():guide[4];
-   const source=document.getElementById('plate'),target=dialog.querySelector('canvas');target.width=source.width;target.height=source.height;target.getContext('2d').drawImage(source,0,0);
+   const snapshot = dialog.querySelector('.reading-figure');
+   snapshot.setAttribute('aria-label', document.getElementById('plateTitle').textContent + ', ' + document.getElementById('methodName').textContent);
+   const appendix = document.getElementById('study-title').textContent === 'SAME FRACTION';
+   const template = document.getElementById('figure-reading').content;
+   dialog.querySelector('.comparison-example').hidden = appendix;
+   dialog.querySelector('.figure-intro').textContent = appendix ? 'Cantilever, MBB, and L-bracket spend a common target fraction on three different structural problems. Trace the loads to the supports in the large field, then inspect the selected element below.' : template.querySelector('.figure-intro').textContent;
+   dialog.querySelector('.inspection-caption').textContent = appendix ? 'The circle shows the neighbors used to filter the selected structural cell. The outlined center marks its location. Read the density and mechanical response for this case alongside its global compliance ratio C/C₀. The denominator is that case’s own uniform starting design.' : template.querySelector('figcaption').textContent;
+   const source = document.getElementById('plate');
+   snapshot.width = source.width;
+   snapshot.height = source.height;
+   snapshot.getContext('2d').drawImage(source, 0, 0);
    dialog.showModal();dialog.querySelector('.close-reading').focus();
  });
  const heading=document.createElement('div');heading.className='mobile-heading';

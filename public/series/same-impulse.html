@@ -39,9 +39,15 @@
   <p id="announcement" class="sr-only" aria-live="polite"></p>
   <details class="study-notes" id="study-notes"><summary>Read the study</summary>
     <div class="contract"><span><strong>Frozen</strong> · mass, spring, damping, starting rest</span><span><strong>Free</strong> · applied-force timing</span><span class="retained">∫₀³ F(t) dt = 1.000 N·s · all three</span></div>
-    <p id="currentReading"></p>
+    <h3>Follow one row from force to motion</h3>
+    <figure class="reading-plate">
+  <img src="./assets/specimen-14.svg" width="640" height="360" loading="lazy" alt="Three force and displacement histories. Identical force areas produce residual amplitudes of 0.207, 0.044 and 0.017 m for the illustrated timings.">
+  <figcaption>The left column shows the applied force. The area under each row totals 1 N·s. Follow the same row into the right column for displacement: above zero puts the mass to the right of its resting position, below zero to the left. At the 3 s line the applied force has ended, yet the mass can keep oscillating.</figcaption>
+</figure>
+    <p>The bottom row uses a 1 s gap. On the stage, choose <em>Two pulses</em> and <em>Inspect second push</em>. The arrow on the block shows its velocity just as the second pulse begins. At a 1 s gap the block is moving left and the new push acts to the right. Change the gap to 2 s and inspect again: the block is already moving right. The residual vibration rises from 0.017 m to 0.243 m.</p>
+    <h3>Your pulse spacing</h3><p id="currentReading"></p>
     <p class="equation">m x″ + c x′ + k x = F(t) · m = 1 kg · k = π² N/m · c = 0.3 N·s/m<br>x(0) = 0, x′(0) = 0</p>
-    <p>Every applied force points right; the spring can pull the mass left. Shaded force area is applied impulse. The dotted line marks 3 s, when all applied forces have ended.</p>
+    <p>The spring pulls toward the resting position and damping opposes velocity. These two forces continue to act after the applied push ends.</p>
     <div class="notes-grid">
       <section><h3>Same area, different timing</h3><p>A delivers one smooth pulse over 0.2–0.8 s. B spreads its push over 0–3 s. C splits the impulse equally between two 0.6 s pulses; its first center is at 0.5 s and the second follows by the selected spacing. Every force is zero outside the common 0–3 s window.</p><p>A pulse starting at a, with width w and impulse j, is F(t) = (j/w)[1 − cos(2π(t − a)/w)] on its support and zero elsewhere. Its exact area is j. A and B each use j = 1 N·s; C uses j = 0.5 N·s twice.</p></section>
       <section><h3>Applied impulse is not net impulse</h3><p>The displayed 1 N·s counts the applied force F alone. Net force also includes −kx and −cx′. The momentum change is the integral of that net force, so equal applied impulse does not force equal final velocity.</p><p>Work is another integral, ∫F dx = ∫F x′ dt. Because the mass moves differently while each force acts, equal applied impulse also does not imply equal work or equal energy supplied.</p></section>

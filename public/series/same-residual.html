@@ -59,7 +59,15 @@
 
 <p aria-live="polite" class="sr-only" id="announcement"></p>
 <noscript><p class="fallback">The figures show the 45° specimen. Interactive direction controls need JavaScript. On the first axis, r = (1, 0) gives error (0.01, 0). On the second axis, r = (0, 1) gives error (0, 1). Both residuals have norm 1 in this same fixed system.</p></noscript>
-<details class="study-notes" id="study-notes"><summary>Read the study</summary><p class="study-intro">The equation misses by the same amount. Turn the direction of that miss, and the solution can move a hundred times farther from the answer.</p><div class="contract">
+<details class="study-notes" id="study-notes"><summary>Read the study</summary><p class="study-intro">The equation misses by the same amount. Turn the direction of that miss, and the solution can move a hundred times farther from the answer.</p><section aria-labelledby="reading-figure-heading">
+  <h3 id="reading-figure-heading">Follow one direction from the circle to the ellipse</h3>
+  <p>In the left plot, the arrow from the origin ends at the miss you would measure by checking the equation. The right arrow shows how far the proposed solution must move to correct that miss. Follow their tips across the two plots at 45°. They have the same height, while the right tip sits almost on the vertical axis.</p>
+  <figure class="reading-plate">
+  <img src="./assets/specimen-17.svg" width="560" height="330" alt="At 45 degrees the residual arrow ends at (0.707107, 0.707107). The error arrow ends at (0.007071, 0.707107).">
+  <figcaption>The narrow outline is the complete set of possible error tips as the unit residual turns. Choose <b>First axis</b> and <b>Second axis</b> to reach its two radii: a one-unit equation miss requires a solution correction of 0.01 horizontally, or 1 vertically. Both panels keep equal units on their own axes.</figcaption>
+</figure>
+</section>
+<div class="contract">
 <span><strong>Frozen</strong> · matrix A, right-hand side b, residual norm 1</span>
 <span><strong>Free</strong> · residual direction θ</span>
 <span class="retained">A = diag(100, 1)   ·   b = (100, 0)   ·   κ₂(A) = 100</span>

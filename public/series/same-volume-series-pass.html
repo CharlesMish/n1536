@@ -158,6 +158,23 @@
 
 
 
+<template id="figure-reading">
+  <section aria-label="Guide to the figures">
+    <h3>How to read one cell</h3>
+    <p class="figure-intro">The large field shows where each design spends its material. First trace the darker voids and the denser bands between the marked supports, load, source, and sink. Then inspect one cell to see what the solver measures there.</p>
+    <figure class="reading-plate">
+      <canvas class="reading-figure" role="img" aria-label="Selected inspection figure"></canvas>
+      <figcaption class="inspection-caption">The square at left magnifies the selected cell and its neighbors. The circle is the density filter’s reach, measured in cell widths. Nearby design values contribute more to the physical density at the center. At right, ρ is the local material fraction. The mechanical and thermal bars show local contributions relative to the strongest cell in this design.</figcaption>
+    </figure>
+    <div class="comparison-example">
+      <h3>What the same budget buys</h3>
+      <figure class="reading-plate uv-print">
+        <img src="./assets/specimen-06-comparison.svg" alt="Three computed density fields. Carry and Conduct form different diagonal paths. Share branches to connect the load and support as well as the heat source and sink." loading="lazy" decoding="async">
+        <figcaption>Carry links the lower-left support to the upper-right load. Conduct links the lower-right heat source to the upper-left sink. Share spends material on both paths. Its mechanical ratio of 1.27 means 27% more compliance than Carry, and its thermal ratio of 1.59 means 59% more than Conduct.</figcaption>
+      </figure>
+    </div>
+  </section>
+</template>
 <script src="./assets/same-volume-series-pass.1.js"></script>
 <script src="./assets/same-volume-series-pass.2.js"></script>
 <script src="./assets/study-reading.js" defer></script>

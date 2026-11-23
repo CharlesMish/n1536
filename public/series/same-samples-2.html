@@ -121,6 +121,23 @@
 
 
 
+<template id="figure-reading">
+  <section aria-label="Guide to the figures">
+    <h3>Between two measurements</h3>
+    <p class="figure-intro">The nine dots are observations. Each curve meets all nine, so agreement at a dot gives you little evidence about where the curve should go halfway to the next one.</p>
+    <figure class="reading-plate">
+      <canvas class="reading-figure" role="img" aria-label="Selected inspection figure"></canvas>
+      <figcaption class="inspection-caption">This curve answers a second question. Suppose the selected measurement rose by one unit and all the others kept their values. Read the change in the reconstructed curve at each x. The response is 1 at the selected node and 0 at every other measured node. Below the zero line, raising the sample would pull the reconstruction downward.</figcaption>
+    </figure>
+    <div class="comparison-example">
+      <h3>The curve and its response</h3>
+      <figure class="reading-plate uv-print">
+        <img src="./assets/specimen-05.svg" alt="Above, three different curves pass through the same nine measurements. Below, three response curves show the effect of changing one selected measurement." loading="lazy" decoding="async">
+        <figcaption>Above are the original reconstructions. Below are responses for one sample. Trace the violet polynomial all the way to an edge. The teal natural spline concentrates much of its response nearby. The amber periodic fit carries influence around a repeating interval of length 9/8.</figcaption>
+      </figure>
+    </div>
+  </section>
+</template>
 <script src="./assets/same-samples-2.1.js"></script>
 <script src="./assets/same-samples-2.2.js"></script>
 <script src="./assets/study-reading.js" defer></script>
