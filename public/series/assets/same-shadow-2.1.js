@@ -137,6 +137,8 @@ function I() {
   let theme = "uv";
   let method = "prism";
   let showGhost = true;
+  let cutActive = false, cutY = 0;
+  let exteriorAngles = [0, 0];
   let yaw = 0, pitch = 0;
   let vYaw = 0, vPitch = 0;
   let dragging = false, lx = 0, ly = 0, lt = 0, moved = 0;
@@ -181,7 +183,7 @@ function I() {
     };
   }
 
-  function isFace() { return Math.abs(yaw) < 0.018 && Math.abs(pitch) < 0.018; }
+  function isFace() { return !cutActive && Math.abs(yaw) < 0.018 && Math.abs(pitch) < 0.018; }
 
   function viewPoint(x, y, z) {
     const cp = Math.cos(pitch), sp = Math.sin(pitch);
@@ -239,7 +241,9 @@ function I() {
     for (let i = 0; i < list.length; i++) {
       const b = list[i];
       const x0 = b.x - b.hx, x1 = b.x + b.hx;
-      const y0 = b.y - b.hy, y1 = b.y + b.hy;
+      const y0 = b.y - b.hy, outerY = b.y + b.hy;
+      if (cutActive && y0 >= cutY) continue;
+      const y1 = cutActive ? Math.min(outerY, cutY) : outerY;
       const z0 = b.z0, z1 = b.z1;
       const specs = [
         { n: [0, 0, 1], q: [[x0, y0, z1], [x1, y0, z1], [x1, y1, z1], [x0, y1, z1]] },
@@ -260,7 +264,7 @@ function I() {
         const zc = 0.25 * (p0[2] + p1[2] + p2[2] + p3[2]);
         const lambert = Math.max(0, n[0] * light[0] + n[1] * light[1] + n[2] * light[2]);
         const faceZ = 0.25 * (sp.q[0][2] + sp.q[1][2] + sp.q[2][2] + sp.q[3][2]);
-        faces.push({ zc, p0, p1, p2, p3, lambert, faceZ, cap: Math.abs(sp.n[2]) > 0.9, x: b.x, y: b.y });
+        faces.push({ cutFace: cutActive && sp.n[1] === 1 && outerY > cutY, zc, p0, p1, p2, p3, lambert, faceZ, cap: Math.abs(sp.n[2]) > 0.9, x: b.x, y: b.y });
       }
     }
     faces.sort((a, b) => a.zc - b.zc);
@@ -303,9 +307,8 @@ function I() {
         const gt = Math.max(0, Math.min(1, (f.x + 0.96) / 1.92));
         rgb = lerp3(rgb, warm, 0.14 * gt * (1 - facing));
       }
-      if (method === "well" && !f.cap) {
-        rgb = lerp3(rgb, summary, 0.10 * (1 - facing));
-      }
+      if (cutActive && !f.cutFace) rgb = lerp3(rgb, voidc, 0.35);
+      if (f.cutFace) rgb = lerp3(rgb, summary, 0.85);
       const a = 1;
       ctx.beginPath();
       ctx.moveTo(L.cx + f.p0[0] * L.s, L.cy - f.p0[1] * L.s);
@@ -317,7 +320,41 @@ function I() {
       ctx.fill();
     }
 
-    if (pin) {
+    // Everything retained lies behind this plane when its normal faces the viewer.
+    // Draw its true intersection last so long column side faces cannot overpaint the cap.
+    if (cutActive && viewNormal(0, 1, 0)[2] > .02) {
+      ctx.fillStyle = col.summary;
+      const width = 2 * EXT / GRID;
+      for (let i = 0; i < GRID; i++) {
+        const x = -EXT + (i + .5) * width;
+        for (const [lo, hi] of intervals(method, x, cutY)) {
+          ctx.beginPath();
+          for (const [k, [xx, zz]] of [[x-width*.51, lo], [x+width*.51, lo], [x+width*.51, hi], [x-width*.51, hi]].entries()) {
+            const p = viewPoint(xx, cutY, zz);
+            if (k === 0) ctx.moveTo(L.cx + p[0] * L.s, L.cy - p[1] * L.s);
+            else ctx.lineTo(L.cx + p[0] * L.s, L.cy - p[1] * L.s);
+          }
+          ctx.closePath();
+          ctx.fill();
+        }
+      }
+    }
+    if (cutActive) {
+      ctx.save();
+      ctx.strokeStyle = col.summary;
+      ctx.globalAlpha = .65;
+      ctx.setLineDash([4, 5]);
+      ctx.beginPath();
+      for (const [i, [x, z]] of [[-1.03, -1.05], [1.03, -1.05], [1.03, 1.05], [-1.03, 1.05]].entries()) {
+        const p = viewPoint(x, cutY, z);
+        if (i === 0) ctx.moveTo(L.cx + p[0] * L.s, L.cy - p[1] * L.s);
+        else ctx.lineTo(L.cx + p[0] * L.s, L.cy - p[1] * L.s);
+      }
+      ctx.closePath();
+      ctx.stroke();
+      ctx.restore();
+    }
+    if (pin && !cutActive) {
       const p = viewPoint(pin.x, pin.y, 0);
       const px = L.cx + p[0] * L.s, py = L.cy - p[1] * L.s;
       ctx.beginPath();
@@ -361,6 +398,44 @@ function I() {
     }
     pctx.strokeStyle = col.rule;
     pctx.strokeRect(px0, py0, side, side);
+
+    if (cutActive) {
+      // Left: locate y in the original mask. Right: intersect the same occupied intervals with that plane.
+      const markerY = py0 + (0.5 - cutY / 2.2) * side;
+      pctx.strokeStyle = col.summary;
+      pctx.lineWidth = 2;
+      pctx.beginPath();
+      pctx.moveTo(px0, markerY);
+      pctx.lineTo(px0 + side, markerY);
+      pctx.stroke();
+      const left = 228, top = 26, size = 168, cells = 240;
+      pctx.fillStyle = col.muted;
+      pctx.fillText("x–z section   y = " + cutY.toFixed(2), left, 16);
+      pctx.fillText("+z", left - 20, top + 6);
+      pctx.fillText("−z", left - 20, top + size);
+      pctx.fillText("−x", left, top + size + 15);
+      pctx.fillText("+x", left + size - 10, top + size + 15);
+      pctx.fillStyle = col.summary;
+      let splits = 0, occupied = 0;
+      for (let i = 0; i < cells; i++) {
+        const x = ((i + .5) / cells - .5) * 2.2;
+        const spans = intervals(method, x, cutY);
+        if (spans.length) occupied++;
+        if (spans.length > 1) splits++;
+        for (const [lo, hi] of spans) {
+          pctx.fillRect(left + size * i / cells, top + size * (.5 - hi / 2.2),
+            size / cells + .2, (hi - lo) * size / 2.2);
+        }
+      }
+      pctx.strokeStyle = col.rule;
+      pctx.lineWidth = 1;
+      pctx.strokeRect(left, top, size, size);
+      const reading = !occupied ? "Plane outside the body." : splits ? "The cut opens the enclosed cavity." :
+        method === "grade" ? "The cut follows the graded thickness." : "Continuous material across this cut.";
+      document.getElementById("cutDescription").textContent = reading;
+      plate.setAttribute("aria-label", META[method].name + ", section at y = " + cutY.toFixed(2) + ". " + reading);
+      return;
+    }
 
     const sel = pin || { x: 0.58, y: 0 };
     const sx = px0 + (sel.x / 2.2 + 0.5) * side;
@@ -419,6 +494,7 @@ function I() {
     let best = null, bd = 0.085;
     for (let i = 0; i < list.length; i++) {
       const b = list[i];
+      if (cutActive && b.y - b.hy >= cutY) continue;
       const zm = 0.5 * (b.z0 + b.z1);
       const p = viewPoint(b.x, b.y, zm);
       const d = (p[0] - sx) * (p[0] - sx) + (p[1] - sy) * (p[1] - sy);
@@ -449,9 +525,18 @@ function I() {
     document.getElementById("methodName").textContent = e.name;
     document.getElementById("methodClaim").textContent = e.claim;
     document.getElementById("methodNote").textContent = e.note;
-    document.getElementById("plateTitle").textContent = e.plateTitle;
-    document.getElementById("plateCaption").textContent = e.plateCaption;
-    document.getElementById("plateSide").textContent = e.plateSide;
+    document.getElementById("cutBtn").classList.toggle("is-active", cutActive);
+    document.getElementById("cutBtn").setAttribute("aria-pressed", String(cutActive));
+    document.getElementById("cutControls").hidden = !cutActive;
+    document.getElementById("cutValue").value = cutY.toFixed(2);
+    document.getElementById("maskLabel").textContent = cutActive ? "Uncut mask Δ" : "Mask Δ";
+    document.getElementById("volumeLabel").textContent = cutActive ? "Uncut volume" : "Volume";
+    document.getElementById("plateKey").textContent = cutActive ? "x–z at fixed y" : "same (x, y)";
+    plate.setAttribute("aria-label", e.name + " depth ray");
+    canvas.setAttribute("aria-label", cutActive ? "Cutaway of " + e.name + ". Drag the section slider to sweep the plane, or drag the body to turn." : "Interactive orthographic field. Drag to turn.");
+    document.getElementById("plateTitle").textContent = cutActive ? "Section through " + e.name : e.plateTitle;
+    document.getElementById("plateCaption").textContent = cutActive ? "Teal marks material in the plane." : e.plateCaption;
+    document.getElementById("plateSide").textContent = cutActive ? "occupied x–z" : e.plateSide;
     document.querySelectorAll(".method-nav button").forEach(btn => {
       const on = btn.dataset.method === method;
       btn.classList.toggle("is-active", on);
@@ -470,7 +555,7 @@ function I() {
     const sel = pin || { x: 0.58, y: 0 };
     const iv = intervals(method, sel.x, sel.y);
     document.getElementById("statRay").textContent = iv.length === 0 ? "void" : (iv.length === 1 ? "1 span" : iv.length + " spans");
-    document.getElementById("statView").textContent = isFace() ? "FACE" : "OFF";
+    document.getElementById("statView").textContent = cutActive ? "CUT" : isFace() ? "FACE" : "OFF";
     document.getElementById("live").textContent =
       e.name + ". " + e.claim + ". Canonical mask mismatch " + audit.mismatch +
       " pixels at " + AUDIT + " square. Volume " + volumes[method].toFixed(2) + ".";
@@ -492,7 +577,19 @@ function I() {
     method = next;
     applyMeta();
   }
+  function toggleCut() {
+    cutActive = !cutActive;
+    snapFace = false; vYaw = 0; vPitch = 0;
+    if (cutActive) {
+      exteriorAngles = [yaw, pitch];
+      yaw = .22; pitch = 1.09;
+    } else {
+      [yaw, pitch] = exteriorAngles;
+    }
+    applyMeta();
+  }
   function faceView() {
+    cutActive = false;
     snapFace = true;
     faceT0 = performance.now();
     faceFromY = yaw;
@@ -515,7 +612,7 @@ function I() {
   }
 
   function overChrome(el) {
-    return !!el.closest?.(".use-plate, .method-nav, .study-tools, .theme-switch, .field-fallback, .series-chip, .study-registration, .study-header, a");
+    return !!el.closest?.(".use-plate, .method-nav, .study-tools, .cut-controls, .theme-switch, .field-fallback, .series-chip, .study-registration, .study-header, a");
   }
 
   stage.addEventListener("pointerdown", ev => {
@@ -538,7 +635,7 @@ function I() {
     vYaw = dx / dt * 16 * 0.008;
     vPitch = dy / dt * 16 * 0.006;
     lx = ev.clientX; ly = ev.clientY; lt = now;
-    document.getElementById("statView").textContent = isFace() ? "FACE" : "OFF";
+    document.getElementById("statView").textContent = cutActive ? "CUT" : isFace() ? "FACE" : "OFF";
     document.getElementById("faceBtn").classList.toggle("is-active", isFace());
   });
   function endDrag(ev) {
@@ -562,6 +659,12 @@ function I() {
   document.querySelectorAll(".method-nav button").forEach(btn => {
     btn.addEventListener("click", () => selectMethod(btn.dataset.method));
   });
+  document.getElementById("cutBtn").addEventListener("click", toggleCut);
+  document.getElementById("cutY").addEventListener("input", event => {
+    cutY = Number(event.target.value);
+    document.getElementById("cutValue").value = cutY.toFixed(2);
+    drawPlate();
+  });
   document.getElementById("faceBtn").addEventListener("click", faceView);
   document.getElementById("ghostBtn").addEventListener("click", () => {
     showGhost = !showGhost;
@@ -569,7 +672,8 @@ function I() {
   });
 
   window.addEventListener("keydown", ev => {
-    if (ev.altKey || ev.ctrlKey || ev.metaKey) return;
+    if (ev.altKey || ev.ctrlKey || ev.metaKey || ev.target.closest("dialog,input,textarea,select,[contenteditable]")) return;
+    if (ev.key === " " && ev.target.closest("button")) return;
     if (ev.key === "1") selectMethod("prism");
     else if (ev.key === "2") selectMethod("grade");
     else if (ev.key === "3") selectMethod("well");
@@ -595,6 +699,12 @@ function I() {
       ev.stopPropagation();
       const x = ((mx - px0) / side - 0.5) * 2.2;
       const y = (0.5 - (my - py0) / side) * 2.2;
+      if (cutActive) {
+        const slider = document.getElementById("cutY");
+        slider.value = String(y);
+        slider.dispatchEvent(new Event("input"));
+        return;
+      }
       pin = { x, y };
       plateEl.classList.add("is-inspecting");
       applyMeta();
@@ -603,7 +713,7 @@ function I() {
 
   function syncViewChrome() {
     const face = isFace();
-    const label = face ? "FACE" : "OFF";
+    const label = cutActive ? "CUT" : face ? "FACE" : "OFF";
     if (label !== lastViewLabel) {
       lastViewLabel = label;
       document.getElementById("statView").textContent = label;
@@ -633,7 +743,7 @@ function I() {
       if (Math.abs(vPitch) < 1e-4) vPitch = 0;
     }
     syncViewChrome();
-    const key = method + "|" + theme + "|" + (showGhost ? 1 : 0) + "|" +
+    const key = cutActive + "|" + cutY + "|" + method + "|" + theme + "|" + (showGhost ? 1 : 0) + "|" +
       yaw.toFixed(4) + "|" + pitch.toFixed(4) + "|" +
       (pin ? pin.x.toFixed(3) + "," + pin.y.toFixed(3) : ".") + "|" + W + "x" + H;
     if (key !== lastDrawKey || moving) {
