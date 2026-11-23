@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { TARGET, MIRROR, PRINCIPAL_VARIANCES, BEST_PROPER_RMS, rotationMatrix, transform, placedSource, edgeLengths, centroid, rmsDistance, signedVolume, covariance, determinant, bestProperFit } from '../public/series/assets/same-distances-model.js';
+import { TARGET, MIRROR, PRINCIPAL_VARIANCES, BEST_PROPER_RMS, rotationMatrix, transform, placedSource, edgeLengths, centroid, rmsDistance, signedVolume, covariance, determinant, bestProperFit, seatFaceABC } from '../public/series/assets/same-distances-model.js';
 
 function near(actual, expected, tolerance = 1e-11) { assert.ok(Math.abs(actual - expected) < tolerance, `${actual} ≠ ${expected}`); }
 
@@ -53,4 +53,17 @@ test('DISTANCES allowing reflection aligns corresponding labels exactly', () => 
   near(rmsDistance(reflected, TARGET), 0);
   near(signedVolume(reflected), signedVolume(TARGET));
   MIRROR.forEach((p, i) => transform([[1, 0, 0], [0, 1, 0], [0, 0, -1]], p).forEach((v, j) => near(v, reflected[i][j])));
+});
+
+test('DISTANCES seating ABC fixes the face and puts the fourth label an equal height on each side', () => {
+  const { points, normal, camera, gap } = seatFaceABC();
+  points.slice(0, 3).forEach((p, i) => assert.deepEqual(p, TARGET[i]));
+  const height = p => normal.reduce((sum, n, i) => sum + n * (p[i] - TARGET[0][i]), 0);
+  near(height(points[3]), -height(TARGET[3]));
+  near(gap, 2 * Math.abs(height(TARGET[3])));
+  near(rmsDistance(points, TARGET), gap / 2);
+  assert.ok(gap / 2 > BEST_PROPER_RMS);
+  near(signedVolume(points), signedVolume(MIRROR));
+  edgeLengths(points).forEach((length, i) => near(length, edgeLengths(MIRROR)[i]));
+  near(determinant(camera), 1);
 });

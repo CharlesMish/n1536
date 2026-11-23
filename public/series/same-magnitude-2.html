@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0D0B18">
-  <meta name="description" content="SAME MAGNITUDE v0.1 — one Fourier magnitude, three phases. Source, borrowed, and scrambled as an exhibit.">
+  <meta name="description" content="SAME MAGNITUDE — a moth and a violin reconstructed with one Fourier magnitude array.">
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
-  <title>SAME MAGNITUDE — v0.1.2 exhibit</title>
+  <title>SAME MAGNITUDE — v0.2 exhibit</title>
   
 <link rel="stylesheet" href="./assets/same-magnitude-2.css">
 <link rel="stylesheet" href="./assets/study-reading.css">
@@ -25,7 +25,7 @@
           <a class="series-chip" href="index.html" aria-label="Back to SAME series index">← Series</a>
 <span>CMISH / FIELD STUDY 09</span>
           <span>128 × 128 · |F| shared</span>
-          <b>v0.1.2</b>
+          <b>v0.2</b>
         </div>
         <h1 id="study-title">SAME MAGNITUDE</h1>
         <p>Same Fourier magnitude. Different structure.</p>
@@ -42,7 +42,7 @@
         <div>
           <h2 id="methodName">Source</h2>
           <div class="method-claim" id="methodClaim">Kept phase</div>
-          <p id="methodNote">The original phases retain the source picture. Keep the magnitude and change the phase to see which structure it leaves undetermined.</p>
+          <p id="methodNote">The moth supplies every Fourier magnitude. Choose Borrowed and look for the scroll and waist of a violin.</p>
           <p class="method-pending" id="methodPending" hidden>This claim is still being formed.</p>
           <dl>
             <div>
@@ -58,7 +58,7 @@
               <dd id="statE">—</dd>
             </div>
             <div>
-              <dt>Seed</dt>
+              <dt>Phase from</dt>
               <dd id="statSeed">—</dd>
             </div>
           </dl>
@@ -72,8 +72,8 @@
         </header>
         <canvas id="plate" width="560" height="220"></canvas>
         <figcaption>
-          <span id="plateCaption">Shared magnitude, claim phase.</span>
-          <span id="plateSide">fftshifted</span>
+          <span id="plateCaption">Moth magnitude and moth phase.</span>
+          <span id="plateSide">original φ</span>
         </figcaption>
       </figure>
 
@@ -106,7 +106,7 @@
       <p class="sr-only" id="method-limitations">
         One 128 by 128 real scalar field. Discrete Fourier transform, unnormalized forward, inverse scaled by 1 over N squared.
         Three reconstructions share one magnitude array A(k) taken from the source field.
-        Source keeps source phase. Borrowed takes phase from a second deterministic house field, Hermitian-completed.
+        Source keeps the moth’s phase. Borrowed takes the violin’s phase and pairs each coefficient with its complex conjugate.
         Scrambled uses frozen seed 20260903 with conjugate-pair phases.
         DC is the source DC in every claim. Self-conjugate Nyquist bins stay real.
         Display uses one global affine map from the extrema of the three finished real fields; no per-state normalization.

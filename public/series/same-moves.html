@@ -61,6 +61,22 @@
               <dd id="statOrder">—</dd>
             </div>
           </dl>
+      <div class="lambda-row"><label for="lambdaIn">Turn scale λ</label><input id="lambdaIn" type="range" min="0" max="1" step="0.01" value="1"><output id="lambdaOut" for="lambdaIn">1.00</output></div>
+          <section class="swap-panel" aria-labelledby="swapTitle">
+            <h3 id="swapTitle">Swap neighbors</h3>
+            <div id="swapPairs" role="group" aria-labelledby="swapTitle"></div>
+            <p id="swapReading" aria-live="polite"></p>
+          </section>
+      <div class="field-keys">
+        <div class="field-key" id="traceKey" aria-hidden="true">
+          <span class="key-dot key-dot-warm"></span>
+          <p>All 720 endpoints · same heading</p>
+        </div>
+        <div class="field-key" id="commuteKey" aria-hidden="true">
+          <span class="key-dot key-dot-alert"></span>
+          <p>λ = 0 · every ordering agrees</p>
+        </div>
+      </div>
         </div>
       </aside>
 
@@ -76,7 +92,6 @@
         </figcaption>
       </figure>
 
-      <div class="lambda-row"><label for="lambdaIn">Turn scale λ</label><input id="lambdaIn" type="range" min="0" max="1" step="0.01" value="1"><output id="lambdaOut" for="lambdaIn">1.00</output></div>
       <nav class="method-nav" aria-label="Ordering">
         <button type="button" data-method="given" class="is-active"><span>01</span>Given</button>
         <button type="button" data-method="reversed"><span>02</span>Reversed</button>
@@ -96,16 +111,7 @@
         <output id="stepOut" for="stepRange">step 6 / 6</output>
       </div>
 
-      <div class="field-keys">
-        <div class="field-key" id="traceKey" aria-hidden="true">
-          <span class="key-dot key-dot-warm"></span>
-          <p>All 720 endpoints · same heading</p>
-        </div>
-        <div class="field-key" id="commuteKey" aria-hidden="true">
-          <span class="key-dot key-dot-alert"></span>
-          <p>λ = 0 · every ordering agrees</p>
-        </div>
-      </div>
+
 
       <div class="registration-corner registration-corner-nw" aria-hidden="true"></div>
       <div class="registration-corner registration-corner-se" aria-hidden="true"></div>

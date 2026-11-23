@@ -171,3 +171,56 @@ input:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offs
 .mobile-flow{padding-bottom:max(8px,env(safe-area-inset-bottom,0px))}
 
 .same-moves .field-stage{touch-action:pan-y pinch-zoom}
+
+.swap-panel {
+  pointer-events: auto;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--rule);
+}
+.swap-panel h3 {
+  margin: 0 0 4px;
+  color: var(--ink-muted);
+  font: 11px ui-monospace, monospace;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+#swapPairs { display: flex; flex-wrap: wrap; gap: 4px; }
+#swapPairs button {
+  min-height: 40px;
+  padding: 0 5px;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  background: transparent;
+  font: 12px ui-monospace, monospace;
+  color: var(--ink);
+  cursor: pointer;
+}
+#swapPairs button:hover, #swapPairs button:focus-visible { color: var(--accent); border-color: currentColor; }
+.swap-panel #swapReading {
+  display: block;
+  color: var(--ink-muted);
+  font: 12px/1.5 ui-monospace, monospace;
+  margin: 8px 0 0;
+}
+.swap-panel #swapReading:empty { display: none; }
+.mobile-flow .swap-panel { margin: 0; border-top: 0; padding: 0; }
+.mobile-flow #swapPairs button { min-height: 44px; }
+
+.same-moves .method-reading .lambda-row {
+  position: static;
+  pointer-events: auto;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+.method-reading .field-keys {
+  position: static;
+  transform: none;
+  align-items: flex-start;
+  gap: 6px;
+}
+.method-reading .field-key.is-visible { margin-top: 8px; }
+
+@media (min-width: 1501px) {
+  .same-moves .use-plate { margin-inline: 0; }
+}

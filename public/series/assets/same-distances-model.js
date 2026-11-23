@@ -65,3 +65,25 @@ export function covariance(points) {
 export function bestProperFit() {
   return { angles: [0, 0, 0], translation: [0, 0, 0], rms: BEST_PROPER_RMS, points: MIRROR.map(p => [...p]) };
 }
+
+const subtract = (a, b) => a.map((value, i) => value - b[i]);
+const dot = (a, b) => a.reduce((sum, value, i) => sum + value * b[i], 0);
+const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+const unit = a => a.map(value => value / Math.hypot(...a));
+
+export function seatFaceABC() {
+  const [a, b, c, d] = TARGET;
+  const right = unit(subtract(c, a));
+  const normal = unit(cross(subtract(b, a), subtract(c, a)));
+  const height = dot(subtract(d, a), normal);
+  // Reflecting the target across ABC fixes its first three vertices. Applied
+  // to MIRROR this placement is the composition of two plane reflections,
+  // hence a proper rotation plus translation, with the mirror's hand intact.
+  const movingD = d.map((value, i) => value - 2 * height * normal[i]);
+  const points = [a, b, c, movingD];
+  // Look along AC's in-plane perpendicular, tipped just enough to show ABC.
+  const depth = cross(right, normal);
+  const tilt = 14 * Math.PI / 180;
+  const up = normal.map((value, i) => value * Math.cos(tilt) + depth[i] * Math.sin(tilt));
+  return { points, normal, camera: [right, up, cross(right, up)], gap: 2 * Math.abs(height) };
+}

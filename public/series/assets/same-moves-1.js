@@ -154,6 +154,14 @@ let theme = "uv";
 let methodKey = "given";
 let order = ORDERS.given.slice();
 let step = N;
+let comparison = null;
+const pairButtons = Array.from({length:N-1}, (_, index) => {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.addEventListener("click", () => swapNeighbors(index));
+  document.getElementById("swapPairs").append(button);
+  return button;
+});
 let showTrace = false;
 let commute = false;
 let lam = 1, lamFrom = 1, lamTo = 1, lamMorph = false, lamT0 = 0;
@@ -161,6 +169,7 @@ let seqFrom = null, seqTo = null, seqMorph = false, seqT0 = 0;
 let hoverQ = -1;
 let playing = false, playT0 = 0, playFrom = 0;
 let W=1, H=1, PR=1, dirty = true;
+let fieldLeft=0, fieldRight=1;
 let frameId = 0, hiddenAt = 0;
 const DUR = 620, PLAY_MS = 520;
 
@@ -193,8 +202,9 @@ function orderColor(){
 
 /* ---- view -------------------------------------------------------------- */
 function layout(){
-  const s = Math.min(W*(W<=700?0.90:0.60), H*0.88) / VIEW.side;
-  return { s:s, ox:W*0.5 - VIEW.cx*s, oy:H*0.52 + VIEW.cy*s };
+  const width = fieldRight - fieldLeft;
+  const s = Math.min(width, H*0.88) / VIEW.side;
+  return { s, ox:fieldLeft + width/2 - VIEW.cx*s, oy:H*0.52 + VIEW.cy*s };
 }
 function px(x, y, L){ return [L.ox + x*L.s, L.oy - y*L.s]; }
 
@@ -257,6 +267,26 @@ function drawField(){
       chevron(ctx, sx, sy, NET_TURN*DEG*activeLam, hot?5.4:3.1, hot?c.ink:col, null);
     }
     ctx.globalAlpha = 1;
+  }
+
+  if (comparison) {
+    const previous = walk(comparison.order, activeLam);
+    ctx.save();
+    ctx.strokeStyle = c.muted;
+    ctx.globalAlpha = 0.78;
+    ctx.setLineDash([6, 5]);
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    for (const [index, point] of previous.entries()) {
+      const [x,y] = px(point.x, point.y, L);
+      if (index === 0) ctx.moveTo(x,y);
+      else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    ctx.restore();
+    const end = previous[N];
+    const [x,y] = px(end.x, end.y, L);
+    chevron(ctx, x, y, end.th, 8, null, c.muted);
   }
 
   /* the selected ordering's path */
@@ -372,7 +402,7 @@ function ease(t){ return t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
 
 /* ---- inspection plate: the commutator square --------------------------- */
 function plotPair(){
-  const p = Math.min(Math.max(Math.floor(step),1), N-1);
+  const p = comparison ? comparison.index + 1 : Math.min(Math.max(Math.floor(step),1), N-1);
   return { p:p, i:order[p-1], j:order[p] };
 }
 
@@ -408,6 +438,17 @@ function orderString(o){ return o.map(k=>MARK[k].replace(/^0/,"")).join("·"); }
 
 function updateReadout(){
   const set = (id,v)=>{ document.getElementById(id).textContent = v; };
+  const reading = document.getElementById("swapReading");
+  if (comparison) {
+    const {index, order: previous} = comparison;
+    const distance = commGap(previous[index], previous[index+1], lam);
+    const description = index === N-2 ? "The final headings agree." : "The remaining legs keep their directions.";
+    reading.textContent = "Dashed · " + orderString(previous) + ". " + (morphing()
+      ? "Comparing paths…"
+      : description + " Endpoint gap " + distance.toFixed(4) + " units.");
+  } else {
+    reading.textContent = "";
+  }
   if (morphing()){
     set("statResidual","—"); set("statTurn","—"); set("statEnd","—"); set("statSpread","—");
     set("statLen", TOTAL_LEN.toFixed(3));
@@ -429,7 +470,14 @@ function applyMeta(announce=true){
   document.getElementById("methodIndex").textContent = e.index;
   document.getElementById("methodName").textContent = e.name;
   document.getElementById("methodClaim").textContent = e.claim;
-  document.getElementById("methodNote").textContent = e.note;
+  document.getElementById("methodNote").textContent = comparison
+    ? "Two neighboring moves have traded places. The dashed path keeps their previous order."
+    : e.note;
+  for (const [index, button] of pairButtons.entries()) {
+    const first = MARK[order[index]], second = MARK[order[index+1]];
+    button.textContent = first + "↔" + second;
+    button.setAttribute("aria-label", "Swap moves " + first + " and " + second);
+  }
   const pr = plotPair();
   document.getElementById("plateTitle").textContent = "Fig. "+MARK[pr.i]+" — commutator square";
   document.getElementById("plateCaption").textContent =
@@ -468,19 +516,33 @@ function applyMeta(announce=true){
 }
 
 /* ---- transitions ------------------------------------------------------- */
-function setOrder(next, key){
+function setOrder(next, key, reference=null){
   const same = next.length===order.length && next.every((v,i)=>v===order[i]);
-  if (same && key===methodKey) return;
+  if (same && key===methodKey && comparison===reference) return;
+  comparison = reference;
   if (!reduced.matches && !lamMorph){
     seqFrom = walk(order, lam);
     seqTo   = walk(next, lam);
     seqMorph = true; seqT0 = performance.now();
+  } else {
+    seqMorph = false;
   }
   order = next.slice();
   methodKey = key;
   applyMeta();
 }
 function selectMethod(k){ setOrder(ORDERS[k], k); }
+
+function swapNeighbors(index) {
+  const next = order.slice();
+  [next[index], next[index+1]] = [next[index+1], next[index]];
+  const key = Object.keys(ORDERS).find(name => ORDERS[name].every((v,i) => v===next[i])) || "custom";
+  playing = false;
+  step = N;
+  document.getElementById("playBtn").textContent = "Play";
+  document.getElementById("playBtn").setAttribute("aria-pressed","false");
+  setOrder(next, key, {index, order:order.slice()});
+}
 
 function setCommute(on){
   if (on===commute) return;
@@ -529,6 +591,14 @@ function resize(){
   const r = stage.getBoundingClientRect();
   W = Math.max(1, Math.round(r.width));
   H = Math.max(1, Math.round(r.height));
+  if (stage.contains(document.querySelector(".method-reading")) && W > 1500 && H > 800) {
+    fieldLeft = document.getElementById("usePlate").getBoundingClientRect().right - r.left + 16;
+    fieldRight = document.querySelector(".method-reading").getBoundingClientRect().left - r.left - 16;
+  } else {
+    const margin = W * (W<=700 ? 0.05 : 0.20);
+    fieldLeft = margin;
+    fieldRight = W - margin;
+  }
   PR = Math.min(window.devicePixelRatio||1, 2);
   canvas.width = Math.floor(W*PR);
   canvas.height = Math.floor(H*PR);

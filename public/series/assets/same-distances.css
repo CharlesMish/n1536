@@ -98,3 +98,18 @@
 @media(max-width:760px){.same-distances .distance-specimen{position:relative;inset:auto}.same-distances .field-legend{position:static}.same-distances .exhibit-reading{bottom:auto}}
 
 @media(max-width:760px){.same-distances .fit-panel .current-value{width:auto;margin:0 0 6px}.same-distances .fit-panel .fit-state{width:auto;display:block;margin:0 0 6px}.same-distances .current-value span{font-size:12px}.same-distances .certificate{margin-top:12px}.same-distances .field-legend{font-size:9px}}
+
+.same-distances .seat-face{align-self:center;position:relative;z-index:1;color:var(--ink);font:12px ui-monospace,monospace;min-height:34px;padding:4px 12px;border:1px solid var(--rule);background:var(--panel)}
+.same-distances .seat-face[aria-pressed="true"]{color:var(--summary);border-color:var(--summary)}
+.same-distances .rotation-controls[hidden]{display:none}
+.same-distances .orientation-field.face-seated{touch-action:auto;cursor:default}
+.same-distances .seated-triangle{fill:var(--summary);fill-opacity:.18;stroke:none}
+.same-distances .face-extension,.same-distances .face-foot{fill:none;stroke:var(--summary);stroke-width:1.4}
+.same-distances .face-extension{stroke-dasharray:3 4;opacity:.65}
+@media(min-width:761px){
+ .same-distances .inspecting-face .field-legend{position:static}
+ .same-distances .distance-specimen.inspecting-face{top:clamp(220px,calc(125px + 8vw),270px)}
+}
+@media(max-width:760px){
+ .same-distances .distance-specimen.inspecting-face{height:clamp(295px,82vw,425px)}
+}

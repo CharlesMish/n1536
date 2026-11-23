@@ -816,6 +816,15 @@ function I(){
     if(btn)selectMethod(btn.dataset.method);
   });
 
+  document.getElementById("design-comparison").addEventListener("click", ev => {
+    const inspect = ev.target.closest("button[data-inspect]");
+    if (!inspect) return;
+    selectMethod(inspect.dataset.inspect);
+    const selected = nav.querySelector('[aria-pressed="true"]');
+    selected.focus({preventScroll: true});
+    window.scrollTo(0, 0);
+  });
+
   tools.addEventListener("click",ev=>{
     const btn=ev.target.closest("button");
     if(!btn)return;

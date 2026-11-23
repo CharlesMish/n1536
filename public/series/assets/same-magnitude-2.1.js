@@ -9,15 +9,15 @@
   const META = {
     source: {
       index: "01", name: "Source", claim: "Kept phase",
-      note: "The original phases retain the source picture. Keep the magnitude and change the phase to see which structure it leaves undetermined.",
-      plateTitle: "Fig. 01 — source spectrum", plateCaption: "A face, seated in its own phase.",
-      plateSide: "original φ", seed: "kept"
+      note: "The moth supplies every Fourier magnitude. Choose Borrowed and look for the scroll and waist of a violin.",
+      plateTitle: "Fig. 01 — source spectrum", plateCaption: "Moth magnitude and moth phase.",
+      plateSide: "original φ", seed: "moth"
     },
     borrowed: {
       index: "02", name: "Borrowed", claim: "Foreign phase",
-      note: "Every |F(k)| is the face’s. The angles come from a second deterministic field — a house.",
-      plateTitle: "Fig. 02 — borrowed angles", plateCaption: "Same A(k), house phase.",
-      plateSide: "donor φ", seed: "house"
+      note: "The violin supplies the phase. Its neck, waist, and sound holes take shape using the moth’s magnitudes.",
+      plateTitle: "Fig. 02 — borrowed angles", plateCaption: "Moth magnitude, violin phase.",
+      plateSide: "donor φ", seed: "violin"
     },
     scrambled: {
       index: "03", name: "Scrambled", claim: "Frozen phase",
@@ -90,78 +90,16 @@
     return ph - Math.PI;
   }
 
-  function smoothstep(e0, e1, v) {
-    const t = Math.max(0, Math.min(1, (v - e0) / Math.max(1e-12, e1 - e0)));
-    return t * t * (3 - 2 * t);
+  // Each row-major byte is one frozen grayscale sample of the approved drawing.
+  function decodeSpecimen(bytes) {
+    if (bytes.length !== N2) throw new Error("Expected a 128 × 128 grayscale specimen");
+    return Float64Array.from(bytes, value => value / 255);
   }
 
-  function paintScalar(out, fn) {
-    for (let y = 0; y < N; y++) {
-      const py = (y + 0.5) / N;
-      for (let x = 0; x < N; x++) {
-        const px = (x + 0.5) / N;
-        out[y * N + x] = fn(px, py);
-      }
-    }
-    return out;
-  }
-
-  function disk(px, py, cx, cy, r, soft) {
-    const d = Math.hypot(px - cx, py - cy);
-    return 1 - smoothstep(r - soft, r + soft, d);
-  }
-  function rect(px, py, x0, y0, x1, y1, soft) {
-    return smoothstep(x0, x0 + soft, px) * (1 - smoothstep(x1 - soft, x1, px)) *
-           smoothstep(y0, y0 + soft, py) * (1 - smoothstep(y1 - soft, y1, py));
-  }
-
-  function makeSource() {
-    const out = new Float64Array(N2);
-    paintScalar(out, (px, py) => {
-      let s = 0.16 + 0.10 * (1 - py);
-      s += 0.62 * disk(px, py, 0.50, 0.34, 0.26, 0.016);
-      s += 0.12 * disk(px, py, 0.50, 0.24, 0.24, 0.02) * (py < 0.34 ? 1 : 0);
-      s -= 0.50 * disk(px, py, 0.40, 0.32, 0.055, 0.008);
-      s -= 0.50 * disk(px, py, 0.60, 0.32, 0.055, 0.008);
-      s += 0.18 * disk(px, py, 0.41, 0.31, 0.018, 0.006);
-      s += 0.18 * disk(px, py, 0.61, 0.31, 0.018, 0.006);
-      s -= 0.18 * rect(px, py, 0.33, 0.255, 0.47, 0.275, 0.006);
-      s -= 0.18 * rect(px, py, 0.53, 0.255, 0.67, 0.275, 0.006);
-      s -= 0.16 * disk(px, py, 0.50, 0.40, 0.028, 0.008);
-      const ang = Math.atan2(py - 0.40, px - 0.50);
-      const rad = Math.hypot(px - 0.50, py - 0.40);
-      if (rad > 0.11 && rad < 0.155 && ang > 0.45 && ang < Math.PI - 0.45) s -= 0.42;
-      s += 0.40 * rect(px, py, 0.28, 0.60, 0.72, 0.96, 0.02);
-      s += 0.22 * disk(px, py, 0.50, 0.62, 0.22, 0.02) * (py > 0.55 ? 1 : 0);
-      s += 0.15 * disk(px, py, 0.50, 0.72, 0.018, 0.005);
-      s += 0.15 * disk(px, py, 0.50, 0.80, 0.018, 0.005);
-      s += 0.15 * disk(px, py, 0.50, 0.88, 0.018, 0.005);
-      s += 0.06 * Math.sin(TAU * px * 18) * rect(px, py, 0.28, 0.62, 0.72, 0.96, 0.02);
-      return s;
-    });
-    return out;
-  }
-
-  function makeDonor() {
-    const out = new Float64Array(N2);
-    paintScalar(out, (px, py) => {
-      let s = 0.10 + 0.22 * py;
-      s += 0.12 * smoothstep(0.82, 0.88, py);
-      s += 0.58 * rect(px, py, 0.24, 0.46, 0.76, 0.86, 0.012);
-      const roofD = Math.abs(px - 0.50) / 0.34 + (py - 0.22) / 0.28;
-      if (py < 0.50 && py > 0.18) s += 0.55 * (1 - smoothstep(0.92, 1.05, roofD));
-      s -= 0.28 * rect(px, py, 0.45, 0.64, 0.55, 0.86, 0.008);
-      s += 0.30 * rect(px, py, 0.30, 0.52, 0.40, 0.60, 0.005);
-      s += 0.30 * rect(px, py, 0.62, 0.52, 0.72, 0.60, 0.005);
-      s += 0.30 * rect(px, py, 0.30, 0.62, 0.40, 0.70, 0.005);
-      s += 0.30 * rect(px, py, 0.62, 0.62, 0.72, 0.70, 0.005);
-      s += 0.35 * rect(px, py, 0.62, 0.22, 0.70, 0.40, 0.008);
-      s += 0.50 * disk(px, py, 0.14, 0.16, 0.09, 0.015);
-      const fence = Math.pow(Math.sin(TAU * px * 16), 8);
-      s += 0.16 * fence * rect(px, py, 0.0, 0.84, 1.0, 0.92, 0.01);
-      return s;
-    });
-    return out;
+  async function loadSpecimen(url) {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Could not load " + url);
+    return decodeSpecimen(new Uint8Array(await response.arrayBuffer()));
   }
 
   function spectrumOf(field) {
@@ -352,10 +290,12 @@
       return colors;
     }
 
-    function formField() {
+    async function formField() {
       try {
-        const src = makeSource();
-        const donor = makeDonor();
+        const [src, donor] = await Promise.all([
+          loadSpecimen("./assets/magnitude-moth.bin"),
+          loadSpecimen("./assets/magnitude-violin.bin")
+        ]);
         const Fs = spectrumOf(src);
         const Fd = spectrumOf(donor);
         mag = new Float64Array(N2);
@@ -856,8 +796,8 @@
     applyHash();
     applyMeta();
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        const ok = formField();
+      requestAnimationFrame(async () => {
+        const ok = await formField();
         if (!ok) {
           loader.classList.add("is-hidden");
           fallback.hidden = false;

@@ -8,6 +8,7 @@ const SITES = Object.freeze([
   Object.freeze({ id: 5, mark: "06", x: 0.14, y: 0.76 }),
   Object.freeze({ id: 6, mark: "07", x: 0.64, y: 0.84 })
 ]);
+const ADDRESS = Object.freeze({ x: 0.33, y: 0.67 });
 const N = SITES.length;
 const GS = 360;
 const EPS = 1e-14;
@@ -338,6 +339,35 @@ function I(){
     ctx.restore();
   }
 
+  function drawAddress(L, p, col){
+    const { owner } = nearest(p, ADDRESS.x, ADDRESS.y);
+    const site = SITES[owner];
+    const [x, y] = toXY(ADDRESS.x, ADDRESS.y, L);
+    const [sx, sy] = toXY(site.x, site.y, L);
+    ctx.save();
+    ctx.strokeStyle = col.ink;
+    ctx.lineWidth = 1.7;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    if (p === 1) {
+      ctx.lineTo(sx, y);
+    } else if (isInfP(p)) {
+      const diagonal = Math.min(Math.abs(sx - x), Math.abs(sy - y));
+      ctx.lineTo(x + Math.sign(sx - x) * diagonal, y + Math.sign(sy - y) * diagonal);
+    }
+    ctx.lineTo(sx, sy);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(sx, sy, 8, 0, 2 * Math.PI);
+    ctx.stroke();
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(x - 6, y); ctx.lineTo(x + 6, y);
+    ctx.moveTo(x, y - 6); ctx.lineTo(x, y + 6);
+    ctx.stroke();
+    ctx.restore();
+  }
+
   function drawField(){
     const col=cols();
     ctx.setTransform(PR,0,0,PR,0,0);
@@ -351,6 +381,7 @@ function I(){
     ctx.lineWidth=1;
     ctx.strokeRect(L.x-0.5,L.y-0.5,L.dw+1,L.dh+1);
     if (showBall) drawBalls(L, displayP(), col);
+    drawAddress(L, displayP(), col);
     drawSites(L,col);
   }
 
@@ -430,6 +461,13 @@ function I(){
   }
 
   function updateReadout(){
+    const addressResult = document.getElementById("addressOwner");
+    if (morphing) {
+      addressResult.textContent = "Changing metric…";
+    } else {
+      const { owner, d0 } = nearest(pOf(method), ADDRESS.x, ADDRESS.y);
+      addressResult.textContent = "Site " + SITES[owner].mark + " · distance " + d0.toFixed(4);
+    }
     if(morphing){for(const id of ["statCell","statNeigh","statSpread"])document.getElementById(id).textContent="—";document.getElementById("statSite").textContent=SITES[pinSite].mark;return;}
     const map=canonicalMap();
     document.getElementById("statCell").textContent=(map.frac[pinSite]*100).toFixed(1)+"%";

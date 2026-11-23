@@ -30,6 +30,7 @@
         </div>
         <h1 id="study-title">SAME VOLUME</h1>
         <p id="studySubtitle">Same target budget. Different obligations.</p>
+        <a class="compare-designs-link" href="#design-comparison">Compare the finished designs ↓</a>
       </header>
 
       <button type="button" class="theme-switch" id="themeBtn" aria-label="Switch to Paper presentation">
@@ -113,6 +114,44 @@
         Forced-solid patches are physical density 1 after the filter, in both operators and in V.
         Field transitions between finished designs morph density only; they are not solved states.
       </p>
+    </section>
+
+    <section class="design-comparison" id="design-comparison" aria-labelledby="comparison-title" tabindex="-1">
+      <header>
+        <span class="comparison-eyebrow">FIELD STUDY 06 / FINISHED DENSITY FIELDS</span>
+        <h2 id="comparison-title">Three designs at one material budget</h2>
+        <p>Each design spends the same 40% target on a different task. Follow the material between the four marked corners.</p>
+      </header>
+      <div class="design-grid">
+        <div>
+          <svg viewBox="0 0 360 369" role="img" aria-labelledby="comparison-carry-name comparison-carry-desc">
+            <title id="comparison-carry-name">Carry</title>
+            <desc id="comparison-carry-desc">The load-bearing frame connects the lower-left support to the upper-right load. Relative mechanical compliance 1.00, relative thermal compliance 214.</desc>
+            <use href="./assets/specimen-06-comparison.svg#carry"></use>
+          </svg>
+          <button type="button" data-inspect="carry">Inspect Carry ↑</button>
+        </div>
+        <div>
+          <svg viewBox="0 0 360 369" role="img" aria-labelledby="comparison-conduct-name comparison-conduct-desc">
+            <title id="comparison-conduct-name">Conduct</title>
+            <desc id="comparison-conduct-desc">A broad diagonal joins the lower-right heat source to the upper-left sink. Relative mechanical compliance 4,716, relative thermal compliance 1.00.</desc>
+            <use href="./assets/specimen-06-comparison.svg#conduct"></use>
+          </svg>
+          <button type="button" data-inspect="conduct">Inspect Conduct ↑</button>
+        </div>
+        <div>
+          <svg viewBox="0 0 360 369" role="img" aria-labelledby="comparison-share-name comparison-share-desc">
+            <title id="comparison-share-name">Share</title>
+            <desc id="comparison-share-desc">A branched structure connects all four corner patches. Relative mechanical compliance 1.27, relative thermal compliance 1.59.</desc>
+            <use href="./assets/specimen-06-comparison.svg#share"></use>
+          </svg>
+          <button type="button" data-inspect="share">Inspect Share ↑</button>
+        </div>
+      </div>
+      <div class="comparison-reading">
+        <p>Each ratio uses its specialist as 1.00×. Higher mechanical compliance means more movement under the load. Higher thermal compliance means a greater temperature rise under the same heat input.</p>
+        <a href="./assets/specimen-06-comparison.svg">Open full-size figure ↗</a>
+      </div>
     </section>
   </div>
   

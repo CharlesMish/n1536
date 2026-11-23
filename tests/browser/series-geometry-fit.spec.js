@@ -76,7 +76,13 @@ test('@desktop DISTANCES separates the proper-fit bound from reflection and pres
  const check=await monitor(page);await page.goto('/series/same-distances.html');
  await expect(page.locator('#distanceRows tr')).toHaveCount(6);
  await expect(page.locator('#distanceAudit')).toContainText('6 / 6');
+ await page.getByRole('button',{name:'Seat face ABC'}).click();
+ await expect(page.locator('#currentRms')).toHaveText('2.033');
+ await expect(page.locator('#fitState')).toContainText('4.067');
+ await expect(page.locator('#rotationControls')).toBeHidden();
+ await expect(page.locator('#distanceAudit')).toContainText('6 / 6');
  await page.locator('#bestFit').click();
+ await expect(page.locator('#rotationControls')).toBeVisible();
  await expect(page.locator('#currentRms')).toHaveText(/^1\.0+$/);
  await expect(page.locator('#bestRms')).toHaveText(/^1\.0+ units$/);
  const targetVolume=await page.locator('#targetVolume').textContent();
